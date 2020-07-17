@@ -9,7 +9,7 @@ using Microsoft.Office.Tools.Excel;
 
 namespace Watchdog
 {
-    public partial class ThisAddIn
+    public partial class WatchdogAddIn
     {
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {

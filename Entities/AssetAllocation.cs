@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using Watchdog.Persistence;
 
 namespace Watchdog.Entities
 {
-    class AssetAllocation
+    class AssetAllocation : Persistable
     {
+        private static readonly string tableName = "wdt_asset_allocations";
         public Dictionary<AssetClass, double> AssetClasses { get; }
         public Dictionary<Currency, double> Currencies { get; }
 
@@ -24,6 +26,11 @@ namespace Watchdog.Entities
             {
                 Currencies = new Dictionary<Currency, double>();
             }
+        }
+
+        public string GetTableName()
+        {
+            return tableName;
         }
     }
 }

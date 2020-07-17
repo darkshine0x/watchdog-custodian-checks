@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using Watchdog.Persistence;
 
 namespace Watchdog.Entities
 {
-    class Asset
+    class Asset : Persistable
     {
+        private static readonly string tableName = "wdt_assets";
         public int Id { get; }
         public int SecurityNumber { get; }
         public string Isin { get; }
@@ -87,6 +89,11 @@ namespace Watchdog.Entities
             {
                 Ratings = new List<Rating>();
             }
+        }
+
+        public string GetTableName()
+        {
+            return tableName;
         }
     }
 }

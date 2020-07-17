@@ -158,7 +158,7 @@
   <ItemGroup>
     <Compile Include="Entities\Asset.cs" />
     <Compile Include="Entities\AssetAllocation.cs" />
-    <Compile Include="Entities\AssetAllowanceRule.cs" />
+    <Compile Include="Entities\AllowList.cs" />
     <Compile Include="Entities\AssetClass.cs" />
     <Compile Include="Entities\BanList.cs" />
     <Compile Include="Entities\NumericRule.cs" />
@@ -170,10 +170,19 @@
     <Compile Include="Entities\Rating.cs" />
     <Compile Include="Entities\RatingAgency.cs" />
     <Compile Include="Entities\Rule.cs" />
-    <Compile Include="Entities\SubPosition.cs" />
+    <Compile Include="Forms\Ribbon1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Ribbon1.Designer.cs">
+      <DependentUpon>Ribbon1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Persistence\TableCreator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <EmbeddedResource Include="Forms\Ribbon1.resx">
+      <DependentUpon>Ribbon1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -191,21 +200,31 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="ThisAddIn.cs">
+    <Compile Include="WatchdogAddIn.cs">
       <SubType>Code</SubType>
     </Compile>
-    <None Include="ThisAddIn.Designer.xml">
-      <DependentUpon>ThisAddIn.cs</DependentUpon>
+    <None Include="WatchdogAddIn.Designer.xml">
+      <DependentUpon>WatchdogAddIn.cs</DependentUpon>
     </None>
-    <Compile Include="ThisAddIn.Designer.cs">
-      <DependentUpon>ThisAddIn.Designer.xml</DependentUpon>
+    <Compile Include="WatchdogAddIn.Designer.cs">
+      <DependentUpon>WatchdogAddIn.Designer.xml</DependentUpon>
     </Compile>
     <AppDesigner Include="Properties\" />
+    <None Include="Watchdog_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>Watchdog_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>DC33A30DA2E8A6B348CB21FD73713EE80EE82CDD</ManifestCertificateThumbprint>
   </PropertyGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -217,7 +236,7 @@
       <FlavorProperties GUID="{BAA0C2D2-18E2-41B9-852F-F413020CAA33}">
         <ProjectProperties HostName="Excel" HostPackage="{29A7B9D7-A7F1-4328-8EF0-6B2D1A56B2C1}" OfficeVersion="15.0" VstxVersion="4.0" ApplicationType="Excel" Language="cs" TemplatesPath="" DebugInfoExeName="#Software\Microsoft\Office\16.0\Excel\InstallRoot\Path#excel.exe" DebugInfoCommandLine="/x" AddItemTemplatesGuid="{51063C3A-E220-4D12-8922-BDA915ACD783}" />
         <Host Name="Excel" GeneratedCodeNamespace="Watchdog" IconIndex="0">
-          <HostItem Name="ThisAddIn" Code="ThisAddIn.cs" CanonicalName="AddIn" CanActivate="false" IconIndex="1" Blueprint="ThisAddIn.Designer.xml" GeneratedCode="ThisAddIn.Designer.cs" />
+          <HostItem Name="ThisAddIn" Code="WatchdogAddIn.cs" CanonicalName="AddIn" CanActivate="false" IconIndex="1" Blueprint="WatchdogAddIn.Designer.xml" GeneratedCode="WatchdogAddIn.Designer.cs" />
         </Host>
       </FlavorProperties>
     </VisualStudio>

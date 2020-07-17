@@ -1,7 +1,10 @@
-﻿namespace Watchdog.Entities
+﻿using Watchdog.Persistence;
+
+namespace Watchdog.Entities
 {
-    class Currency
+    class Currency : Persistable
     {
+        private static readonly string tableName = "wdt_currencies";
         public string IsoCode { get; }
         public int NumericValue { get; }
 
@@ -9,6 +12,11 @@
         {
             IsoCode = isoCode;
             NumericValue = numericValue;
+        }
+
+        public string GetTableName()
+        {
+            return tableName;
         }
     }
 }
