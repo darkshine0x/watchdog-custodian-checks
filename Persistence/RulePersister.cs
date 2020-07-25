@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace Watchdog.Persistence
 {
-    interface Persistable
+    class RulePersister
     {
-        string GetTableName();
-        List<string> GetTableHeader();
     }
 }

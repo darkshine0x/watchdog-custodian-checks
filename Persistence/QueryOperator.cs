@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Watchdog.Persistence
 {
-    interface Persistable
+    enum QueryOperator
     {
-        string GetTableName();
-        List<string> GetTableHeader();
+        AND,
+        OR
     }
 }

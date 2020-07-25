@@ -32,5 +32,10 @@ namespace Watchdog.Entities
         {
             return tableName;
         }
+
+        public List<string> GetTableHeader()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

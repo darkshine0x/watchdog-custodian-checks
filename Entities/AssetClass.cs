@@ -2,9 +2,8 @@
 
 namespace Watchdog.Entities
 {
-    class AssetClass : Persistable
+    class AssetClass
     {
-        private static readonly string tableName = "wdt_asset_classes";
         public string Name { get; }
         public int NumericValue { get; }
 
@@ -12,11 +11,6 @@ namespace Watchdog.Entities
         {
             Name = name;
             NumericValue = numericValue;
-        }
-
-        public string GetTableName()
-        {
-            return tableName;
         }
     }
 }

@@ -1,10 +1,11 @@
-﻿using Watchdog.Persistence;
+﻿using System.Collections.Generic;
+using Watchdog.Persistence;
 
 namespace Watchdog.Entities
 {
     class Currency : Persistable
     {
-        private static readonly string tableName = "wdt_currencies";
+        private static string tableName = "wdt_currency";
         public string IsoCode { get; }
         public int NumericValue { get; }
 
@@ -17,6 +18,11 @@ namespace Watchdog.Entities
         public string GetTableName()
         {
             return tableName;
+        }
+
+        public List<string> GetTableHeader()
+        {
+            return null;
         }
     }
 }

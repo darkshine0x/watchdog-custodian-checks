@@ -2,9 +2,8 @@
 
 namespace Watchdog.Entities
 {
-    class Rating : Persistable
+    class Rating
     {
-        private static readonly string tableName = "wdt_ratings";
         public string RatingCode { get; }
         public int RatingNumericValue { get; }
 
@@ -12,11 +11,6 @@ namespace Watchdog.Entities
         {
             RatingCode = ratingCode;
             RatingNumericValue = ratingNumericValue;
-        }
-
-        public string GetTableName()
-        {
-            return tableName;
         }
     }
 }

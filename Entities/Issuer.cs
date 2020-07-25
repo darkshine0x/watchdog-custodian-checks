@@ -3,9 +3,8 @@ using Watchdog.Persistence;
 
 namespace Watchdog.Entities
 {
-    class Issuer : Persistable
+    class Issuer
     {
-        private static readonly string tableName = "wdt_issuers";
         public int Id { get; }
         public string Name { get; }
         public string Domicile { get; }
@@ -23,11 +22,6 @@ namespace Watchdog.Entities
             {
                 Ratings = new List<Rating>();
             }
-        }
-
-        public string GetTableName()
-        {
-            return tableName;
         }
     }
 }

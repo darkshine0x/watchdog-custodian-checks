@@ -6,6 +6,12 @@ namespace Watchdog.Entities
     class Fund : Persistable
     {
         private static readonly string tableName = "wdt_funds";
+        private static readonly List<string> tableHeader = new List<string>()
+        {
+            "name",
+            "custody_nr",
+            "currency"
+        };
         public int Id { get; }
         public string Name { get; set; }
         public string Isin { get; }
@@ -30,6 +36,11 @@ namespace Watchdog.Entities
         public string GetTableName()
         {
             return tableName;
+        }
+
+        public List<string> GetTableHeader()
+        {
+            return tableHeader;
         }
     }
 }

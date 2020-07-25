@@ -1,4 +1,5 @@
-﻿using Watchdog.Persistence;
+﻿using System.Collections.Generic;
+using Watchdog.Persistence;
 
 namespace Watchdog.Entities
 {
@@ -15,6 +16,11 @@ namespace Watchdog.Entities
         public string GetTableName()
         {
             return tableName;
+        }
+
+        public List<string> GetTableHeader()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

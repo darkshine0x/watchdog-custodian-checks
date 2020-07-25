@@ -2,9 +2,8 @@
 
 namespace Watchdog.Entities
 {
-    class Position : Persistable
+    class Position
     {
-        private static readonly string tableName = "wdt_positions";
         public int Id { get; }
         public double Amount { get; }
         public double AccruedInterest { get; }
@@ -22,11 +21,6 @@ namespace Watchdog.Entities
             Asset = asset;
             PosCurrency = posCurrency;
             Legs = new Position[2];
-        }
-
-        public string GetTableName()
-        {
-            return tableName;
         }
     }
 }
