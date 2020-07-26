@@ -162,6 +162,22 @@ namespace Watchdog.Persistence
             return workbook;
         }
 
+        public List<Range> ReadAllRows(string tableName)
+        {
+            List<Range> searchResult = new List<Range>();
+            Worksheet worksheet = FindWorksheet(tableName);
+            if (worksheet == null)
+            {
+                return null;
+            }
+            Range rows = worksheet.UsedRange.Rows;
+            for (int index = 2; index < rows.Count + 1; index++)
+            {
+                searchResult.Add(rows[index]);
+            }
+            return searchResult;
+        }
+
         public  List<Range> ReadTableRow(string tableName, Dictionary<string, string> searchParameters, QueryOperator queryOperator)
         {
             List<Range> searchResult = new List<Range>();
@@ -218,6 +234,24 @@ namespace Watchdog.Persistence
                 
             }
             return searchResult;
+        }
+
+        public List<string[]> ConvertRanges(List<Range> ranges)
+        {
+            List<string[]> list = new List<string[]>();
+            foreach (Range row in ranges)
+            {
+                Range cells = row.Cells;
+                int size = cells.Count - 1;
+                string[] data = new string[size];
+                for (int index = 0; index < size; index++)
+                {
+                    string cellValue = row.Cells[1, index + 2].Value.ToString();
+                    data[index] = cellValue;
+                }
+                list.Add(data);
+            }
+            return list;
         }
 
         public  bool DeleteTableRow(string tableName, Dictionary<string, string> searchParameters, QueryOperator queryOperator)

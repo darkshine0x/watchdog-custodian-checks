@@ -9,6 +9,7 @@ namespace Watchdog.Persistence
     interface Persistable
     {
         string GetTableName();
+        
         List<string> GetTableHeader();
     }
 }

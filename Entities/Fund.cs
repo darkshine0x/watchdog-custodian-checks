@@ -10,9 +10,10 @@ namespace Watchdog.Entities
         {
             "name",
             "custody_nr",
+            "isin",
             "currency"
         };
-        public int Id { get; }
+        private static readonly Fund defaultFund = new Fund();
         public string Name { get; set; }
         public string Isin { get; }
         public string CustodyAccountNumber { get; }
@@ -21,9 +22,8 @@ namespace Watchdog.Entities
         public List<Rule> Rules { get; }
         public AssetAllocation AssetAllocation { get; }
 
-        public Fund(int id, string name, string isin, string custodyAccountNumber, Currency currency)
+        public Fund(string name, string isin, string custodyAccountNumber, Currency currency)
         {
-            Id = id;
             Name = name;
             Isin = isin;
             CustodyAccountNumber = custodyAccountNumber;
@@ -33,6 +33,8 @@ namespace Watchdog.Entities
             AssetAllocation = new AssetAllocation();
         }
 
+        private Fund() { }
+
         public string GetTableName()
         {
             return tableName;
@@ -41,6 +43,11 @@ namespace Watchdog.Entities
         public List<string> GetTableHeader()
         {
             return tableHeader;
+        }
+
+        public static Persistable GetDefaultValue()
+        {
+            return defaultFund;
         }
     }
 }

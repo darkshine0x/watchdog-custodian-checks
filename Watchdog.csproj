@@ -170,18 +170,32 @@
     <Compile Include="Entities\Rating.cs" />
     <Compile Include="Entities\RatingAgency.cs" />
     <Compile Include="Entities\Rule.cs" />
-    <Compile Include="Forms\Ribbon1.cs">
+    <Compile Include="Forms\AddFund.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Ribbon1.Designer.cs">
-      <DependentUpon>Ribbon1.cs</DependentUpon>
+    <Compile Include="Forms\AddFund.Designer.cs">
+      <DependentUpon>AddFund.cs</DependentUpon>
     </Compile>
-    <Compile Include="Persistence\TableCreator.cs" />
+    <Compile Include="Forms\WatchdogRibbon.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\WatchdogRibbon.Designer.cs">
+      <DependentUpon>WatchdogRibbon.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Persistence\FundPersister.cs" />
+    <Compile Include="Persistence\Persistable.cs" />
+    <Compile Include="Persistence\QueryOperator.cs" />
+    <Compile Include="Persistence\RulePersister.cs" />
+    <Compile Include="Persistence\TableUpdateWrapper.cs" />
+    <Compile Include="Persistence\TableUtility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <EmbeddedResource Include="Forms\Ribbon1.resx">
-      <DependentUpon>Ribbon1.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\AddFund.resx">
+      <DependentUpon>AddFund.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\WatchdogRibbon.resx">
+      <DependentUpon>WatchdogRibbon.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
