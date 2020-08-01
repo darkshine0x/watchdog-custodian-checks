@@ -7,6 +7,7 @@ namespace Watchdog.Entities
     {
         private static readonly string tableName = "wdt_rules";
         public RuleKind RuleKind { get; }
+        public double Index { get; set; }
 
         public Rule(RuleKind ruleKind)
         {
@@ -21,6 +22,16 @@ namespace Watchdog.Entities
         public List<string> GetTableHeader()
         {
             throw new System.NotImplementedException();
+        }
+
+        public double GetIndex()
+        {
+            return Index;
+        }
+
+        public void SetIndex(double index)
+        {
+            Index = index;
         }
     }
 }

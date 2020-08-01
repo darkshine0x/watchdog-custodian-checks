@@ -28,8 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.groupBoxFundAttributes = new System.Windows.Forms.GroupBox();
             this.textBoxIsin = new System.Windows.Forms.TextBox();
             this.labelIsin = new System.Windows.Forms.Label();
@@ -42,12 +45,14 @@
             this.buttonSubmit = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.dataGridFunds = new System.Windows.Forms.DataGridView();
-            this.columnFundName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.columnCustodyNr = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.columnIsin = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.columnCurrency = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.isinDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.custodyAccountNumberDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.currencyDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.fundBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.groupBoxFundAttributes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridFunds)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fundBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBoxFundAttributes
@@ -126,6 +131,7 @@
             // 
             this.textBoxFundName.Font = new System.Drawing.Font("Arial", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxFundName.Location = new System.Drawing.Point(267, 69);
+            this.textBoxFundName.Margin = new System.Windows.Forms.Padding(10);
             this.textBoxFundName.Name = "textBoxFundName";
             this.textBoxFundName.Size = new System.Drawing.Size(849, 45);
             this.textBoxFundName.TabIndex = 1;
@@ -164,73 +170,96 @@
             // 
             // dataGridFunds
             // 
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Arial", 9.900001F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridFunds.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            this.dataGridFunds.AutoGenerateColumns = false;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.LightSteelBlue;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Arial Narrow", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.Padding = new System.Windows.Forms.Padding(10);
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridFunds.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridFunds.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridFunds.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.columnFundName,
-            this.columnCustodyNr,
-            this.columnIsin,
-            this.columnCurrency});
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Arial", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridFunds.DefaultCellStyle = dataGridViewCellStyle4;
-            this.dataGridFunds.Location = new System.Drawing.Point(86, 500);
+            this.nameDataGridViewTextBoxColumn,
+            this.isinDataGridViewTextBoxColumn,
+            this.custodyAccountNumberDataGridViewTextBoxColumn,
+            this.currencyDataGridViewTextBoxColumn});
+            this.dataGridFunds.DataSource = this.fundBindingSource;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Arial Narrow", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle3.Padding = new System.Windows.Forms.Padding(10);
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridFunds.DefaultCellStyle = dataGridViewCellStyle3;
+            this.dataGridFunds.EnableHeadersVisualStyles = false;
+            this.dataGridFunds.Location = new System.Drawing.Point(81, 499);
             this.dataGridFunds.Name = "dataGridFunds";
             this.dataGridFunds.ReadOnly = true;
+            this.dataGridFunds.RowHeadersVisible = false;
             this.dataGridFunds.RowHeadersWidth = 102;
+            dataGridViewCellStyle4.Padding = new System.Windows.Forms.Padding(10);
+            this.dataGridFunds.RowsDefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridFunds.RowTemplate.Height = 40;
-            this.dataGridFunds.Size = new System.Drawing.Size(1555, 389);
+            this.dataGridFunds.RowTemplate.ReadOnly = true;
+            this.dataGridFunds.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridFunds.Size = new System.Drawing.Size(1784, 710);
             this.dataGridFunds.TabIndex = 3;
+            this.dataGridFunds.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridFunds_CellMouseClick);
             // 
-            // columnFundName
+            // nameDataGridViewTextBoxColumn
             // 
-            this.columnFundName.HeaderText = "Fondsname";
-            this.columnFundName.MinimumWidth = 700;
-            this.columnFundName.Name = "columnFundName";
-            this.columnFundName.ReadOnly = true;
-            this.columnFundName.Width = 700;
+            this.nameDataGridViewTextBoxColumn.DataPropertyName = "Name";
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Arial Narrow", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.Padding = new System.Windows.Forms.Padding(10);
+            this.nameDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle2;
+            this.nameDataGridViewTextBoxColumn.HeaderText = "Fondsname";
+            this.nameDataGridViewTextBoxColumn.MinimumWidth = 12;
+            this.nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
+            this.nameDataGridViewTextBoxColumn.ReadOnly = true;
+            this.nameDataGridViewTextBoxColumn.Width = 900;
             // 
-            // columnCustodyNr
+            // isinDataGridViewTextBoxColumn
             // 
-            this.columnCustodyNr.HeaderText = "Depotnummer";
-            this.columnCustodyNr.MinimumWidth = 12;
-            this.columnCustodyNr.Name = "columnCustodyNr";
-            this.columnCustodyNr.ReadOnly = true;
-            this.columnCustodyNr.Width = 250;
+            this.isinDataGridViewTextBoxColumn.DataPropertyName = "Isin";
+            this.isinDataGridViewTextBoxColumn.HeaderText = "ISIN";
+            this.isinDataGridViewTextBoxColumn.MinimumWidth = 12;
+            this.isinDataGridViewTextBoxColumn.Name = "isinDataGridViewTextBoxColumn";
+            this.isinDataGridViewTextBoxColumn.ReadOnly = true;
+            this.isinDataGridViewTextBoxColumn.Width = 280;
             // 
-            // columnIsin
+            // custodyAccountNumberDataGridViewTextBoxColumn
             // 
-            this.columnIsin.HeaderText = "ISIN";
-            this.columnIsin.MinimumWidth = 12;
-            this.columnIsin.Name = "columnIsin";
-            this.columnIsin.ReadOnly = true;
-            this.columnIsin.Width = 250;
+            this.custodyAccountNumberDataGridViewTextBoxColumn.DataPropertyName = "CustodyAccountNumber";
+            this.custodyAccountNumberDataGridViewTextBoxColumn.HeaderText = "Depotnummer";
+            this.custodyAccountNumberDataGridViewTextBoxColumn.MinimumWidth = 12;
+            this.custodyAccountNumberDataGridViewTextBoxColumn.Name = "custodyAccountNumberDataGridViewTextBoxColumn";
+            this.custodyAccountNumberDataGridViewTextBoxColumn.ReadOnly = true;
+            this.custodyAccountNumberDataGridViewTextBoxColumn.Width = 250;
             // 
-            // columnCurrency
+            // currencyDataGridViewTextBoxColumn
             // 
-            this.columnCurrency.HeaderText = "Währung";
-            this.columnCurrency.MinimumWidth = 12;
-            this.columnCurrency.Name = "columnCurrency";
-            this.columnCurrency.ReadOnly = true;
-            this.columnCurrency.Width = 250;
+            this.currencyDataGridViewTextBoxColumn.DataPropertyName = "Currency";
+            this.currencyDataGridViewTextBoxColumn.HeaderText = "Währung";
+            this.currencyDataGridViewTextBoxColumn.MinimumWidth = 12;
+            this.currencyDataGridViewTextBoxColumn.Name = "currencyDataGridViewTextBoxColumn";
+            this.currencyDataGridViewTextBoxColumn.ReadOnly = true;
+            this.currencyDataGridViewTextBoxColumn.Width = 250;
+            // 
+            // fundBindingSource
+            // 
+            this.fundBindingSource.DataSource = typeof(Watchdog.Entities.Fund);
+            this.fundBindingSource.CurrentChanged += new System.EventHandler(this.FundBindingSource_CurrentChanged);
             // 
             // AddFundForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1936, 956);
+            this.ClientSize = new System.Drawing.Size(1936, 1266);
             this.Controls.Add(this.dataGridFunds);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonSubmit);
@@ -240,6 +269,7 @@
             this.groupBoxFundAttributes.ResumeLayout(false);
             this.groupBoxFundAttributes.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridFunds)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fundBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -258,9 +288,10 @@
         private System.Windows.Forms.DataGridView dataGridFunds;
         private System.Windows.Forms.TextBox textBoxIsin;
         private System.Windows.Forms.Label labelIsin;
-        private System.Windows.Forms.DataGridViewTextBoxColumn columnFundName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn columnCustodyNr;
-        private System.Windows.Forms.DataGridViewTextBoxColumn columnIsin;
-        private System.Windows.Forms.DataGridViewTextBoxColumn columnCurrency;
+        private System.Windows.Forms.BindingSource fundBindingSource;
+        private System.Windows.Forms.DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn isinDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn custodyAccountNumberDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn currencyDataGridViewTextBoxColumn;
     }
 }

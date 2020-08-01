@@ -1,16 +1,58 @@
-﻿using Watchdog.Persistence;
+﻿using System.Collections.Generic;
+using Watchdog.Persistence;
 
 namespace Watchdog.Entities
 {
-    class AssetClass
+    class AssetClass : Persistable
     {
-        public string Name { get; }
-        public int NumericValue { get; }
+        private static readonly string tableName = "wdt_asset_classes";
+        private static readonly List<string> tableHeader = new List<string>()
+        {
+            "name"
+        };
+        private static readonly AssetClass defaultAssetClass = new AssetClass();
 
-        public AssetClass(string name, int numericValue)
+        public string Name { get; set; }
+        public double Index { get; set; }
+
+        public AssetClass()
+        {
+
+        }
+
+        public AssetClass(string name)
         {
             Name = name;
-            NumericValue = numericValue;
+        }
+
+        public string GetTableName()
+        {
+            return tableName;
+        }
+
+        public List<string> GetTableHeader()
+        {
+            return tableHeader;
+        }
+
+        public override string ToString()
+        {
+            return Name;
+        }
+
+        public static Persistable GetDefaultValue()
+        {
+            return defaultAssetClass;
+        }
+
+        public double GetIndex()
+        {
+            return Index;
+        }
+
+        public void SetIndex(double index)
+        {
+            Index = index;
         }
     }
 }

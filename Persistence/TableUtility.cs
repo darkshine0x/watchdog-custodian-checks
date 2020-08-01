@@ -1,8 +1,11 @@
 ﻿using Microsoft.Office.Interop.Excel;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
+using Watchdog.Entities;
 
 namespace Watchdog.Persistence
 {
@@ -88,7 +91,7 @@ namespace Watchdog.Persistence
             return i;
         }
 
-        private  int FindOrCreateRowCounterColumn(Persistable persistable)
+        private int FindOrCreateRowCounterColumn(Persistable persistable)
         {
             Worksheet ws = FindWorksheet(sequenceTableName);
             if (ws == null)
@@ -154,7 +157,9 @@ namespace Watchdog.Persistence
                 return workbook;
             }
             double row = IncrementRowCounter(persistable);
-            ws.Cells[row, 1].Value = IncrementSequence();
+            double sequence = IncrementSequence();
+            ws.Cells[row, 1].Value = sequence;
+            persistable.SetIndex(sequence);
             for (int i = 0; i < data.Count; i++)
             {
                 ws.Cells[row, i + 2].Value = data[i];
@@ -236,7 +241,21 @@ namespace Watchdog.Persistence
             return searchResult;
         }
 
-        public List<string[]> ConvertRanges(List<Range> ranges)
+        public Range ReadTableRow(string tableName, double index)
+        {
+            Worksheet worksheet = FindWorksheet(tableName);
+            foreach (Range row in worksheet.Rows)
+            {
+                double.TryParse(row.Cells[1, 1].Value.ToString(), out double rowIndex);
+                if (rowIndex == index)
+                {
+                    return row;
+                }
+            }
+            return null;
+        }
+
+        public List<string[]> ConvertRangesToStrings(List<Range> ranges)
         {
             List<string[]> list = new List<string[]>();
             foreach (Range row in ranges)
@@ -250,6 +269,78 @@ namespace Watchdog.Persistence
                     data[index] = cellValue;
                 }
                 list.Add(data);
+            }
+            return list;
+        }
+
+        public List<Fund> ConvertRangeToFund(List<Range> ranges)
+        {
+            List<Fund> list = new List<Fund>();
+            if (ranges == null)
+            {
+                return list;
+            }
+            foreach (Range row in ranges)
+            {
+                if (row.Cells.Count - 1 != Fund.GetDefaultValue().GetTableHeader().Count)
+                {
+                    throw new ArgumentException();
+                }
+                Fund fund = new Fund
+                {
+                    Index = row.Cells[1, 1].Value,
+                    Name = row.Cells[1, 2].Value.ToString(),
+                    CustodyAccountNumber = row.Cells[1, 3].Value.ToString(),
+                    Isin = row.Cells[1, 4].Value.ToString(),
+                    Currency = new Currency(row.Cells[1, 5].Value.ToString())
+                };
+                list.Add(fund);
+            }
+            return list;
+        }
+
+        public List<AssetClass> ConvertRangeToAssetClass(List<Range> ranges)
+        {
+            List<AssetClass> list = new List<AssetClass>();
+            if (ranges == null)
+            {
+                return list;
+            }
+            foreach (Range row in ranges)
+            {
+                if (row.Cells.Count - 1 != AssetClass.GetDefaultValue().GetTableHeader().Count)
+                {
+                    throw new ArgumentException();
+                }
+                AssetClass assetClass = new AssetClass
+                {
+                    Index = row.Cells[1, 1].Value,
+                    Name = row.Cells[1, 2].Value.ToString()
+                };
+                list.Add(assetClass);
+            }
+            return list;
+        }
+
+        public List<Currency> ConvertRangeToCurrency(List<Range> ranges)
+        {
+            List<Currency> list = new List<Currency>();
+            if (ranges == null)
+            {
+                return list;
+            }
+            foreach (Range row in ranges)
+            {
+                if (row.Cells.Count - 1 != AssetClass.GetDefaultValue().GetTableHeader().Count)
+                {
+                    throw new ArgumentException();
+                }
+                Currency currency = new Currency
+                {
+                    Index = row.Cells[1, 1].Value,
+                    IsoCode = row.Cells[1, 2].Value.ToString()
+                };
+                list.Add(currency);
             }
             return list;
         }
@@ -269,7 +360,18 @@ namespace Watchdog.Persistence
             return true;
         }
 
-        public  bool UpdateTableRow(Persistable persistable, TableUpdateWrapper update)
+        public bool DeleteTableRow(string tableName, double index)
+        {
+            Range result = ReadTableRow(tableName, index);
+            if (result == null)
+            {
+                return false;
+            }
+            result.EntireRow.Delete();
+            return true;
+        }
+
+        public bool UpdateTableRow(Persistable persistable, TableUpdateWrapper update)
         {
             Dictionary<string, string> searchParameters = new Dictionary<string, string>()
             {

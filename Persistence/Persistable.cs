@@ -11,5 +11,9 @@ namespace Watchdog.Persistence
         string GetTableName();
         
         List<string> GetTableHeader();
+
+        double GetIndex();
+
+        void SetIndex(double index);
     }
 }

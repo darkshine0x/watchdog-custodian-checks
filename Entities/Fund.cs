@@ -14,10 +14,11 @@ namespace Watchdog.Entities
             "currency"
         };
         private static readonly Fund defaultFund = new Fund();
+        public double Index { get; set; }
         public string Name { get; set; }
-        public string Isin { get; }
-        public string CustodyAccountNumber { get; }
-        public Currency Currency { get; }
+        public string Isin { get; set; }
+        public string CustodyAccountNumber { get; set; }
+        public Currency Currency { get; set; }
         public List<Position> Positions { get; }
         public List<Rule> Rules { get; }
         public AssetAllocation AssetAllocation { get; }
@@ -33,7 +34,9 @@ namespace Watchdog.Entities
             AssetAllocation = new AssetAllocation();
         }
 
-        private Fund() { }
+        public Fund() 
+        {
+        }
 
         public string GetTableName()
         {
@@ -48,6 +51,16 @@ namespace Watchdog.Entities
         public static Persistable GetDefaultValue()
         {
             return defaultFund;
+        }
+
+        public double GetIndex()
+        {
+            return Index;
+        }
+
+        public void SetIndex(double index)
+        {
+            Index = index;
         }
     }
 }

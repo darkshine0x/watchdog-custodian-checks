@@ -38,7 +38,7 @@
             this.tabCustodianCheck = this.Factory.CreateRibbonTab();
             this.groupFundAdmin = this.Factory.CreateRibbonGroup();
             this.buttonAddFund = this.Factory.CreateRibbonButton();
-            this.buttonEditFund = this.Factory.CreateRibbonButton();
+            this.buttonSettings = this.Factory.CreateRibbonButton();
             this.button1 = this.Factory.CreateRibbonButton();
             this.tabCustodianCheck.SuspendLayout();
             this.groupFundAdmin.SuspendLayout();
@@ -53,7 +53,7 @@
             // groupFundAdmin
             // 
             this.groupFundAdmin.Items.Add(this.buttonAddFund);
-            this.groupFundAdmin.Items.Add(this.buttonEditFund);
+            this.groupFundAdmin.Items.Add(this.buttonSettings);
             this.groupFundAdmin.Items.Add(this.button1);
             this.groupFundAdmin.Label = "Fondsadministration";
             this.groupFundAdmin.Name = "groupFundAdmin";
@@ -62,19 +62,19 @@
             // 
             this.buttonAddFund.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
             this.buttonAddFund.Image = ((System.Drawing.Image)(resources.GetObject("buttonAddFund.Image")));
-            this.buttonAddFund.Label = "Fonds hinzufügen";
+            this.buttonAddFund.Label = "Fonds administrieren";
             this.buttonAddFund.Name = "buttonAddFund";
             this.buttonAddFund.ShowImage = true;
             this.buttonAddFund.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ButtonAddFundClick);
             // 
-            // buttonEditFund
+            // buttonSettings
             // 
-            this.buttonEditFund.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.buttonEditFund.Image = ((System.Drawing.Image)(resources.GetObject("buttonEditFund.Image")));
-            this.buttonEditFund.Label = "Fonds bearbeiten";
-            this.buttonEditFund.Name = "buttonEditFund";
-            this.buttonEditFund.ShowImage = true;
-            this.buttonEditFund.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ButtonEditFundClick);
+            this.buttonSettings.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.buttonSettings.Image = ((System.Drawing.Image)(resources.GetObject("buttonSettings.Image")));
+            this.buttonSettings.Label = "Einstellungen";
+            this.buttonSettings.Name = "buttonSettings";
+            this.buttonSettings.ShowImage = true;
+            this.buttonSettings.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ButtonSettings_Click);
             // 
             // button1
             // 
@@ -104,6 +104,6 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup groupFundAdmin;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton button1;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonAddFund;
-        internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonEditFund;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonSettings;
     }
 }

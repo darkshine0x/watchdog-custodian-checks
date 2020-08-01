@@ -6,6 +6,7 @@ namespace Watchdog.Entities
     class AssetAllocation : Persistable
     {
         private static readonly string tableName = "wdt_asset_allocations";
+        public double Index { get; set; }
         public Dictionary<AssetClass, double> AssetClasses { get; }
         public Dictionary<Currency, double> Currencies { get; }
 
@@ -36,6 +37,16 @@ namespace Watchdog.Entities
         public List<string> GetTableHeader()
         {
             throw new System.NotImplementedException();
+        }
+
+        public double GetIndex()
+        {
+            return Index;
+        }
+
+        public void SetIndex(double index)
+        {
+            Index = index;
         }
     }
 }

@@ -176,6 +176,31 @@
     <Compile Include="Forms\AddFund.Designer.cs">
       <DependentUpon>AddFund.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\OneAttributeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\OneAttributeForm.Designer.cs">
+      <DependentUpon>OneAttributeForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\PassedForm.cs" />
+    <Compile Include="Forms\Settings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Settings.Designer.cs">
+      <DependentUpon>Settings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\EditAssetAllocation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\EditAssetAllocation.Designer.cs">
+      <DependentUpon>EditAssetAllocation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\AllowedAC.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\AllowedAC.Designer.cs">
+      <DependentUpon>AllowedAC.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\WatchdogRibbon.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -194,6 +219,18 @@
     <EmbeddedResource Include="Forms\AddFund.resx">
       <DependentUpon>AddFund.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\OneAttributeForm.resx">
+      <DependentUpon>OneAttributeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Settings.resx">
+      <DependentUpon>Settings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\EditAssetAllocation.resx">
+      <DependentUpon>EditAssetAllocation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AllowedAC.resx">
+      <DependentUpon>AllowedAC.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\WatchdogRibbon.resx">
       <DependentUpon>WatchdogRibbon.cs</DependentUpon>
     </EmbeddedResource>
@@ -206,6 +243,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="Properties\DataSources\Watchdog.Entities.AssetAllocation.datasource" />
+    <None Include="Properties\DataSources\Watchdog.Entities.AssetClass.datasource" />
+    <None Include="Properties\DataSources\Watchdog.Entities.Currency.datasource" />
+    <None Include="Properties\DataSources\Watchdog.Entities.Fund.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
