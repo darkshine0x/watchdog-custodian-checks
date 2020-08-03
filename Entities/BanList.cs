@@ -2,7 +2,7 @@
 
 namespace Watchdog.Entities
 {
-    class BanList<T> : Rule
+    public class BanList<T> : Rule
     {
         public string Test { get; }
         public List<T> Banned { get; }

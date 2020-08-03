@@ -2,7 +2,7 @@
 
 namespace Watchdog.Entities
 {
-    class Rating
+    public class Rating
     {
         public string RatingCode { get; }
         public int RatingNumericValue { get; }

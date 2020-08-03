@@ -3,7 +3,7 @@ using Watchdog.Persistence;
 
 namespace Watchdog.Entities
 {
-    class Issuer
+    public class Issuer
     {
         public int Id { get; }
         public string Name { get; }

@@ -157,8 +157,8 @@
   -->
   <ItemGroup>
     <Compile Include="Entities\Asset.cs" />
-    <Compile Include="Entities\AssetAllocation.cs" />
     <Compile Include="Entities\AllowList.cs" />
+    <Compile Include="Entities\AssetAllocationEntry.cs" />
     <Compile Include="Entities\AssetClass.cs" />
     <Compile Include="Entities\BanList.cs" />
     <Compile Include="Entities\NumericRule.cs" />

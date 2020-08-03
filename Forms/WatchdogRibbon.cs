@@ -24,5 +24,13 @@ namespace Watchdog.Forms
                 Visible = true
             };
         }
+
+        private void button1_Click(object sender, RibbonControlEventArgs e)
+        {
+            _ = new EditAssetAllocation
+            {
+                Visible = true
+            };
+        }
     }
 }

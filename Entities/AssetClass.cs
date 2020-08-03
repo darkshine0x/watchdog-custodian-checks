@@ -3,7 +3,7 @@ using Watchdog.Persistence;
 
 namespace Watchdog.Entities
 {
-    class AssetClass : Persistable
+    public class AssetClass : Persistable
     {
         private static readonly string tableName = "wdt_asset_classes";
         private static readonly List<string> tableHeader = new List<string>()

@@ -2,7 +2,7 @@
 
 namespace Watchdog.Entities
 {
-    class Position
+    public class Position
     {
         public int Id { get; }
         public double Amount { get; }

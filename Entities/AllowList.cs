@@ -2,7 +2,7 @@
 
 namespace Watchdog.Entities
 {
-    class AllowList<T> : Rule
+    public class AllowList<T> : Rule
     {
         public List<T> Allowed { get; }
 

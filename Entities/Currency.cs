@@ -3,7 +3,7 @@ using Watchdog.Persistence;
 
 namespace Watchdog.Entities
 {
-    class Currency : Persistable
+    public class Currency : Persistable
     {
         public static readonly string tableName = "wdt_currencies";
         public static readonly List<string> tableHeader = new List<string>()

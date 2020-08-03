@@ -2,7 +2,7 @@
 
 namespace Watchdog.Entities
 {
-    class RatingAgency
+    public class RatingAgency
     {
         public string Name { get; }
 

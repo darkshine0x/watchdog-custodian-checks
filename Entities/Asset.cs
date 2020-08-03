@@ -3,7 +3,7 @@ using Watchdog.Persistence;
 
 namespace Watchdog.Entities
 {
-    class Asset
+    public class Asset
     {
         public int Id { get; }
         public int SecurityNumber { get; }

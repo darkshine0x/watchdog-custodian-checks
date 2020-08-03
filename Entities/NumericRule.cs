@@ -1,6 +1,6 @@
 ﻿namespace Watchdog.Entities
 {
-    class NumericRule : Rule
+    public class NumericRule : Rule
     {
         public double NumericValue { get; }
 

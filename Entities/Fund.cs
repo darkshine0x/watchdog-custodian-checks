@@ -3,7 +3,7 @@ using Watchdog.Persistence;
 
 namespace Watchdog.Entities
 {
-    class Fund : Persistable
+    public class Fund : Persistable
     {
         private static readonly string tableName = "wdt_funds";
         private static readonly List<string> tableHeader = new List<string>()
@@ -21,7 +21,6 @@ namespace Watchdog.Entities
         public Currency Currency { get; set; }
         public List<Position> Positions { get; }
         public List<Rule> Rules { get; }
-        public AssetAllocation AssetAllocation { get; }
 
         public Fund(string name, string isin, string custodyAccountNumber, Currency currency)
         {
@@ -31,7 +30,6 @@ namespace Watchdog.Entities
             Currency = currency;
             Positions = new List<Position>();
             Rules = new List<Rule>();
-            AssetAllocation = new AssetAllocation();
         }
 
         public Fund() 
