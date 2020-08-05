@@ -158,5 +158,10 @@ namespace Watchdog.Forms
                 tableLayoutPanel1.Controls.Add(GenerateLabel(""), col, numberOfRows);
             }
         }
+
+        private void CancelButtonClick(object sender, EventArgs e)
+        {
+            Close();
+        }
     }
 }
