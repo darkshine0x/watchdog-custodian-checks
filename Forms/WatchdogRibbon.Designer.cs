@@ -39,7 +39,6 @@
             this.groupFundAdmin = this.Factory.CreateRibbonGroup();
             this.buttonAddFund = this.Factory.CreateRibbonButton();
             this.buttonSettings = this.Factory.CreateRibbonButton();
-            this.button1 = this.Factory.CreateRibbonButton();
             this.tabCustodianCheck.SuspendLayout();
             this.groupFundAdmin.SuspendLayout();
             this.SuspendLayout();
@@ -54,7 +53,6 @@
             // 
             this.groupFundAdmin.Items.Add(this.buttonAddFund);
             this.groupFundAdmin.Items.Add(this.buttonSettings);
-            this.groupFundAdmin.Items.Add(this.button1);
             this.groupFundAdmin.Label = "Fondsadministration";
             this.groupFundAdmin.Name = "groupFundAdmin";
             // 
@@ -76,15 +74,6 @@
             this.buttonSettings.ShowImage = true;
             this.buttonSettings.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ButtonSettings_Click);
             // 
-            // button1
-            // 
-            this.button1.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.button1.Image = ((System.Drawing.Image)(resources.GetObject("button1.Image")));
-            this.button1.Label = "Asset Allocation bearbeiten";
-            this.button1.Name = "button1";
-            this.button1.ShowImage = true;
-            this.button1.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.button1_Click);
-            // 
             // WatchdogRibbon
             // 
             this.Name = "WatchdogRibbon";
@@ -103,7 +92,6 @@
 
         internal Microsoft.Office.Tools.Ribbon.RibbonTab tabCustodianCheck;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup groupFundAdmin;
-        internal Microsoft.Office.Tools.Ribbon.RibbonButton button1;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonAddFund;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonSettings;
     }
