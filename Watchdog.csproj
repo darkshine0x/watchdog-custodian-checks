@@ -176,6 +176,7 @@
     <Compile Include="Forms\AddFund.Designer.cs">
       <DependentUpon>AddFund.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormUtility.cs" />
     <Compile Include="Forms\OneAttributeForm.cs">
       <SubType>Form</SubType>
     </Compile>

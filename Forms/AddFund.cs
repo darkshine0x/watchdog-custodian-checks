@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Watchdog.Entities;
 using Watchdog.Persistence;
+using static System.Windows.Forms.DataGridView;
 
 namespace Watchdog.Forms
 {
     public partial class AddFundForm : Form
     {
+        private int currentRowIndex;
         public AddFundForm()
         {
             InitializeComponent();
@@ -45,21 +47,21 @@ namespace Watchdog.Forms
             Close();
         }
 
-        private void FundBindingSource_CurrentChanged(object sender, EventArgs e)
+        private void ClickEditAA(object sender, EventArgs e)
         {
-
+            Fund fund = dataGridFunds.Rows[currentRowIndex].DataBoundItem as Fund;
+            _ = new EditAssetAllocation(fund)
+            {
+                Visible = true
+            };
         }
 
-        private void DataGridFunds_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        private void DataGridFundsMouseDown(object sender, MouseEventArgs e)
         {
+            DataGridView dataGridView = sender as DataGridView;
             if (e.Button == MouseButtons.Right)
             {
-                ContextMenu contextMenu = new ContextMenu();
-                dataGridFunds.ContextMenu = contextMenu;
-                contextMenu.MenuItems.Add("Fonds bearbeiten");
-                contextMenu.MenuItems.Add("Asset Allocation bearbeiten");
-                contextMenu.MenuItems.Add("Fonds löschen");
-                contextMenu.Show(dataGridFunds, dataGridFunds.PointToClient(Cursor.Position));
+                currentRowIndex = FormUtility.DataGridViewMouseDownContextMenu(dataGridView, e);
             }
         }
     }

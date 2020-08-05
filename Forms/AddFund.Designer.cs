@@ -45,6 +45,8 @@
             this.buttonSubmit = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.dataGridFunds = new System.Windows.Forms.DataGridView();
+            this.contextMenuStripFund = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItemEditAA = new System.Windows.Forms.ToolStripMenuItem();
             this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.isinDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.custodyAccountNumberDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -52,6 +54,7 @@
             this.fundBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.groupBoxFundAttributes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridFunds)).BeginInit();
+            this.contextMenuStripFund.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fundBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -66,9 +69,11 @@
             this.groupBoxFundAttributes.Controls.Add(this.textBoxFundName);
             this.groupBoxFundAttributes.Controls.Add(this.labelFundName);
             this.groupBoxFundAttributes.Font = new System.Drawing.Font("Arial", 9.900001F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBoxFundAttributes.Location = new System.Drawing.Point(81, 87);
+            this.groupBoxFundAttributes.Location = new System.Drawing.Point(81, 112);
+            this.groupBoxFundAttributes.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBoxFundAttributes.Name = "groupBoxFundAttributes";
-            this.groupBoxFundAttributes.Size = new System.Drawing.Size(1152, 379);
+            this.groupBoxFundAttributes.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.groupBoxFundAttributes.Size = new System.Drawing.Size(1152, 489);
             this.groupBoxFundAttributes.TabIndex = 0;
             this.groupBoxFundAttributes.TabStop = false;
             this.groupBoxFundAttributes.Text = "Fondsattribute";
@@ -76,7 +81,8 @@
             // textBoxIsin
             // 
             this.textBoxIsin.Font = new System.Drawing.Font("Arial", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxIsin.Location = new System.Drawing.Point(267, 240);
+            this.textBoxIsin.Location = new System.Drawing.Point(267, 310);
+            this.textBoxIsin.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBoxIsin.Name = "textBoxIsin";
             this.textBoxIsin.Size = new System.Drawing.Size(321, 45);
             this.textBoxIsin.TabIndex = 5;
@@ -85,7 +91,7 @@
             // 
             this.labelIsin.AutoSize = true;
             this.labelIsin.Font = new System.Drawing.Font("Arial", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelIsin.Location = new System.Drawing.Point(20, 243);
+            this.labelIsin.Location = new System.Drawing.Point(20, 314);
             this.labelIsin.Name = "labelIsin";
             this.labelIsin.Size = new System.Drawing.Size(83, 39);
             this.labelIsin.TabIndex = 4;
@@ -94,7 +100,8 @@
             // textBoxCurrency
             // 
             this.textBoxCurrency.Font = new System.Drawing.Font("Arial", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCurrency.Location = new System.Drawing.Point(267, 320);
+            this.textBoxCurrency.Location = new System.Drawing.Point(267, 413);
+            this.textBoxCurrency.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBoxCurrency.Name = "textBoxCurrency";
             this.textBoxCurrency.Size = new System.Drawing.Size(156, 45);
             this.textBoxCurrency.TabIndex = 7;
@@ -102,7 +109,8 @@
             // textBoxCustodyNr
             // 
             this.textBoxCustodyNr.Font = new System.Drawing.Font("Arial", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCustodyNr.Location = new System.Drawing.Point(267, 161);
+            this.textBoxCustodyNr.Location = new System.Drawing.Point(267, 208);
+            this.textBoxCustodyNr.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBoxCustodyNr.Name = "textBoxCustodyNr";
             this.textBoxCustodyNr.Size = new System.Drawing.Size(374, 45);
             this.textBoxCustodyNr.TabIndex = 3;
@@ -111,7 +119,7 @@
             // 
             this.labelCurrency.AutoSize = true;
             this.labelCurrency.Font = new System.Drawing.Font("Arial", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelCurrency.Location = new System.Drawing.Point(20, 320);
+            this.labelCurrency.Location = new System.Drawing.Point(20, 413);
             this.labelCurrency.Name = "labelCurrency";
             this.labelCurrency.Size = new System.Drawing.Size(156, 39);
             this.labelCurrency.TabIndex = 6;
@@ -121,7 +129,7 @@
             // 
             this.labelCustodyNr.AutoSize = true;
             this.labelCustodyNr.Font = new System.Drawing.Font("Arial", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelCustodyNr.Location = new System.Drawing.Point(20, 164);
+            this.labelCustodyNr.Location = new System.Drawing.Point(20, 212);
             this.labelCustodyNr.Name = "labelCustodyNr";
             this.labelCustodyNr.Size = new System.Drawing.Size(226, 39);
             this.labelCustodyNr.TabIndex = 2;
@@ -130,8 +138,8 @@
             // textBoxFundName
             // 
             this.textBoxFundName.Font = new System.Drawing.Font("Arial", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxFundName.Location = new System.Drawing.Point(267, 69);
-            this.textBoxFundName.Margin = new System.Windows.Forms.Padding(10);
+            this.textBoxFundName.Location = new System.Drawing.Point(267, 89);
+            this.textBoxFundName.Margin = new System.Windows.Forms.Padding(10, 13, 10, 13);
             this.textBoxFundName.Name = "textBoxFundName";
             this.textBoxFundName.Size = new System.Drawing.Size(849, 45);
             this.textBoxFundName.TabIndex = 1;
@@ -140,7 +148,7 @@
             // 
             this.labelFundName.AutoSize = true;
             this.labelFundName.Font = new System.Drawing.Font("Arial", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelFundName.Location = new System.Drawing.Point(20, 72);
+            this.labelFundName.Location = new System.Drawing.Point(20, 93);
             this.labelFundName.Name = "labelFundName";
             this.labelFundName.Size = new System.Drawing.Size(192, 39);
             this.labelFundName.TabIndex = 0;
@@ -149,9 +157,10 @@
             // buttonSubmit
             // 
             this.buttonSubmit.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonSubmit.Location = new System.Drawing.Point(1420, 124);
+            this.buttonSubmit.Location = new System.Drawing.Point(1420, 160);
+            this.buttonSubmit.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonSubmit.Name = "buttonSubmit";
-            this.buttonSubmit.Size = new System.Drawing.Size(456, 104);
+            this.buttonSubmit.Size = new System.Drawing.Size(456, 134);
             this.buttonSubmit.TabIndex = 1;
             this.buttonSubmit.Text = "Bestätigen";
             this.buttonSubmit.UseVisualStyleBackColor = true;
@@ -160,9 +169,10 @@
             // buttonCancel
             // 
             this.buttonCancel.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonCancel.Location = new System.Drawing.Point(1420, 251);
+            this.buttonCancel.Location = new System.Drawing.Point(1420, 324);
+            this.buttonCancel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(456, 104);
+            this.buttonCancel.Size = new System.Drawing.Size(456, 134);
             this.buttonCancel.TabIndex = 2;
             this.buttonCancel.Text = "Abbrechen";
             this.buttonCancel.UseVisualStyleBackColor = true;
@@ -170,6 +180,8 @@
             // 
             // dataGridFunds
             // 
+            this.dataGridFunds.AllowUserToAddRows = false;
+            this.dataGridFunds.AllowUserToDeleteRows = false;
             this.dataGridFunds.AutoGenerateColumns = false;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.LightSteelBlue;
@@ -186,6 +198,7 @@
             this.isinDataGridViewTextBoxColumn,
             this.custodyAccountNumberDataGridViewTextBoxColumn,
             this.currencyDataGridViewTextBoxColumn});
+            this.dataGridFunds.ContextMenuStrip = this.contextMenuStripFund;
             this.dataGridFunds.DataSource = this.fundBindingSource;
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
@@ -197,19 +210,35 @@
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridFunds.DefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridFunds.EnableHeadersVisualStyles = false;
-            this.dataGridFunds.Location = new System.Drawing.Point(81, 499);
+            this.dataGridFunds.Location = new System.Drawing.Point(81, 644);
+            this.dataGridFunds.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.dataGridFunds.Name = "dataGridFunds";
-            this.dataGridFunds.ReadOnly = true;
             this.dataGridFunds.RowHeadersVisible = false;
             this.dataGridFunds.RowHeadersWidth = 102;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Arial Narrow", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             dataGridViewCellStyle4.Padding = new System.Windows.Forms.Padding(10);
             this.dataGridFunds.RowsDefaultCellStyle = dataGridViewCellStyle4;
-            this.dataGridFunds.RowTemplate.Height = 40;
-            this.dataGridFunds.RowTemplate.ReadOnly = true;
+            this.dataGridFunds.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Arial Narrow", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dataGridFunds.RowTemplate.Height = 65;
             this.dataGridFunds.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridFunds.Size = new System.Drawing.Size(1784, 710);
+            this.dataGridFunds.Size = new System.Drawing.Size(1784, 916);
             this.dataGridFunds.TabIndex = 3;
-            this.dataGridFunds.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridFunds_CellMouseClick);
+            this.dataGridFunds.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DataGridFundsMouseDown);
+            // 
+            // contextMenuStripFund
+            // 
+            this.contextMenuStripFund.ImageScalingSize = new System.Drawing.Size(40, 40);
+            this.contextMenuStripFund.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemEditAA});
+            this.contextMenuStripFund.Name = "contextMenuStripFund";
+            this.contextMenuStripFund.Size = new System.Drawing.Size(459, 52);
+            // 
+            // toolStripMenuItemEditAA
+            // 
+            this.toolStripMenuItemEditAA.Name = "toolStripMenuItemEditAA";
+            this.toolStripMenuItemEditAA.Size = new System.Drawing.Size(458, 48);
+            this.toolStripMenuItemEditAA.Text = "Asset Allocation bearbeiten";
+            this.toolStripMenuItemEditAA.Click += new System.EventHandler(this.ClickEditAA);
             // 
             // nameDataGridViewTextBoxColumn
             // 
@@ -220,7 +249,6 @@
             this.nameDataGridViewTextBoxColumn.HeaderText = "Fondsname";
             this.nameDataGridViewTextBoxColumn.MinimumWidth = 12;
             this.nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
-            this.nameDataGridViewTextBoxColumn.ReadOnly = true;
             this.nameDataGridViewTextBoxColumn.Width = 900;
             // 
             // isinDataGridViewTextBoxColumn
@@ -229,7 +257,6 @@
             this.isinDataGridViewTextBoxColumn.HeaderText = "ISIN";
             this.isinDataGridViewTextBoxColumn.MinimumWidth = 12;
             this.isinDataGridViewTextBoxColumn.Name = "isinDataGridViewTextBoxColumn";
-            this.isinDataGridViewTextBoxColumn.ReadOnly = true;
             this.isinDataGridViewTextBoxColumn.Width = 280;
             // 
             // custodyAccountNumberDataGridViewTextBoxColumn
@@ -238,7 +265,6 @@
             this.custodyAccountNumberDataGridViewTextBoxColumn.HeaderText = "Depotnummer";
             this.custodyAccountNumberDataGridViewTextBoxColumn.MinimumWidth = 12;
             this.custodyAccountNumberDataGridViewTextBoxColumn.Name = "custodyAccountNumberDataGridViewTextBoxColumn";
-            this.custodyAccountNumberDataGridViewTextBoxColumn.ReadOnly = true;
             this.custodyAccountNumberDataGridViewTextBoxColumn.Width = 250;
             // 
             // currencyDataGridViewTextBoxColumn
@@ -247,28 +273,29 @@
             this.currencyDataGridViewTextBoxColumn.HeaderText = "Währung";
             this.currencyDataGridViewTextBoxColumn.MinimumWidth = 12;
             this.currencyDataGridViewTextBoxColumn.Name = "currencyDataGridViewTextBoxColumn";
-            this.currencyDataGridViewTextBoxColumn.ReadOnly = true;
             this.currencyDataGridViewTextBoxColumn.Width = 250;
             // 
             // fundBindingSource
             // 
             this.fundBindingSource.DataSource = typeof(Watchdog.Entities.Fund);
-            this.fundBindingSource.CurrentChanged += new System.EventHandler(this.FundBindingSource_CurrentChanged);
             // 
             // AddFundForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 40F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1936, 1266);
+            this.ClientSize = new System.Drawing.Size(1936, 1634);
             this.Controls.Add(this.dataGridFunds);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonSubmit);
             this.Controls.Add(this.groupBoxFundAttributes);
+            this.Font = new System.Drawing.Font("Arial Narrow", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "AddFundForm";
             this.Text = "Fonds hinzufügen";
             this.groupBoxFundAttributes.ResumeLayout(false);
             this.groupBoxFundAttributes.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridFunds)).EndInit();
+            this.contextMenuStripFund.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.fundBindingSource)).EndInit();
             this.ResumeLayout(false);
 
@@ -293,5 +320,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn isinDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn custodyAccountNumberDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn currencyDataGridViewTextBoxColumn;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripFund;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemEditAA;
     }
 }

@@ -109,28 +109,20 @@ namespace Watchdog.Forms
 
         private void AssetClassMouseDown(object sender, MouseEventArgs e)
         {
-            DataGridViewMouseDown(sender as DataGridView, e);
+            DataGridView dataGridView = sender as DataGridView;
+            if (e.Button == MouseButtons.Right)
+            {
+                currentRowIndex = FormUtility.DataGridViewMouseDownContextMenu(dataGridView, e);
+                currentDataGridView = dataGridView;
+            }
         }
 
         private void CurrencyMouseDown(object sender, MouseEventArgs e)
         {
-            DataGridViewMouseDown(sender as DataGridView, e);
-        }
-
-        private void DataGridViewMouseDown(DataGridView sender, MouseEventArgs e)
-        {
             DataGridView dataGridView = sender as DataGridView;
             if (e.Button == MouseButtons.Right)
             {
-                HitTestInfo hitTest = dataGridView.HitTest(e.X, e.Y);
-                dataGridView.ClearSelection();
-                if (hitTest.RowIndex < 0)
-                {
-                    MessageBox.Show("Falsche Zeile ausgewählt.");
-                    return;
-                }
-                dataGridView.Rows[hitTest.RowIndex].Selected = true;
-                currentRowIndex = hitTest.RowIndex;
+                currentRowIndex = FormUtility.DataGridViewMouseDownContextMenu(dataGridView, e);
                 currentDataGridView = dataGridView;
             }
         }
