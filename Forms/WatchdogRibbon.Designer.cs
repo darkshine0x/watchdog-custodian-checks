@@ -34,11 +34,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WatchdogRibbon));
             this.tabCustodianCheck = this.Factory.CreateRibbonTab();
             this.groupFundAdmin = this.Factory.CreateRibbonGroup();
             this.buttonAddFund = this.Factory.CreateRibbonButton();
             this.buttonSettings = this.Factory.CreateRibbonButton();
+            this.buttonRuleSet = this.Factory.CreateRibbonButton();
             this.tabCustodianCheck.SuspendLayout();
             this.groupFundAdmin.SuspendLayout();
             this.SuspendLayout();
@@ -53,13 +53,14 @@
             // 
             this.groupFundAdmin.Items.Add(this.buttonAddFund);
             this.groupFundAdmin.Items.Add(this.buttonSettings);
+            this.groupFundAdmin.Items.Add(this.buttonRuleSet);
             this.groupFundAdmin.Label = "Fondsadministration";
             this.groupFundAdmin.Name = "groupFundAdmin";
             // 
             // buttonAddFund
             // 
             this.buttonAddFund.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.buttonAddFund.Image = ((System.Drawing.Image)(resources.GetObject("buttonAddFund.Image")));
+            this.buttonAddFund.Image = global::Watchdog.Properties.Resources.fund_admin;
             this.buttonAddFund.Label = "Fonds administrieren";
             this.buttonAddFund.Name = "buttonAddFund";
             this.buttonAddFund.ShowImage = true;
@@ -68,11 +69,19 @@
             // buttonSettings
             // 
             this.buttonSettings.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.buttonSettings.Image = ((System.Drawing.Image)(resources.GetObject("buttonSettings.Image")));
+            this.buttonSettings.Image = global::Watchdog.Properties.Resources.settings;
             this.buttonSettings.Label = "Einstellungen";
             this.buttonSettings.Name = "buttonSettings";
             this.buttonSettings.ShowImage = true;
             this.buttonSettings.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ButtonSettings_Click);
+            // 
+            // buttonRuleSet
+            // 
+            this.buttonRuleSet.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.buttonRuleSet.Image = global::Watchdog.Properties.Resources.ruleset;
+            this.buttonRuleSet.Label = "Regeln bearbeiten";
+            this.buttonRuleSet.Name = "buttonRuleSet";
+            this.buttonRuleSet.ShowImage = true;
             // 
             // WatchdogRibbon
             // 
@@ -94,5 +103,6 @@
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup groupFundAdmin;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonAddFund;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonSettings;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton buttonRuleSet;
     }
 }
