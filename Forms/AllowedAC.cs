@@ -3,7 +3,6 @@ using System.Windows.Forms;
 using Watchdog.Persistence;
 using Watchdog.Entities;
 using System;
-using static System.Windows.Forms.DataGridView;
 
 namespace Watchdog.Forms
 {
@@ -107,24 +106,11 @@ namespace Watchdog.Forms
             tableUtility.DeleteTableRow(objectToDelete.GetTableName(), objectToDelete.GetIndex());
         }
 
-        private void AssetClassMouseDown(object sender, MouseEventArgs e)
+        private void SetRowIndex(object sender, MouseEventArgs e)
         {
             DataGridView dataGridView = sender as DataGridView;
-            if (e.Button == MouseButtons.Right)
-            {
-                currentRowIndex = FormUtility.DataGridViewMouseDownContextMenu(dataGridView, e);
-                currentDataGridView = dataGridView;
-            }
-        }
-
-        private void CurrencyMouseDown(object sender, MouseEventArgs e)
-        {
-            DataGridView dataGridView = sender as DataGridView;
-            if (e.Button == MouseButtons.Right)
-            {
-                currentRowIndex = FormUtility.DataGridViewMouseDownContextMenu(dataGridView, e);
-                currentDataGridView = dataGridView;
-            }
+            currentRowIndex = FormUtility.DataGridViewMouseDownContextMenu(dataGridView, e);
+            currentDataGridView = dataGridView;
         }
     }
 }

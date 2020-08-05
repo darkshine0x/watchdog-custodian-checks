@@ -33,19 +33,19 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataGridViewCurrencies = new System.Windows.Forms.DataGridView();
             this.isoCodeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItemDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.currencyBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.labelTitle = new System.Windows.Forms.Label();
             this.dataGridViewAssetClasses = new System.Windows.Forms.DataGridView();
             this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripMenuItemDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.assetClassBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.buttonNewAssetClass = new System.Windows.Forms.Button();
             this.buttonNewCurrency = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCurrencies)).BeginInit();
+            this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.currencyBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewAssetClasses)).BeginInit();
-            this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.assetClassBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -76,7 +76,7 @@
             this.dataGridViewCurrencies.RowTemplate.Height = 40;
             this.dataGridViewCurrencies.Size = new System.Drawing.Size(356, 554);
             this.dataGridViewCurrencies.TabIndex = 2;
-            this.dataGridViewCurrencies.MouseDown += new System.Windows.Forms.MouseEventHandler(this.CurrencyMouseDown);
+            this.dataGridViewCurrencies.MouseDown += new System.Windows.Forms.MouseEventHandler(this.SetRowIndex);
             // 
             // isoCodeDataGridViewTextBoxColumn
             // 
@@ -86,6 +86,21 @@
             this.isoCodeDataGridViewTextBoxColumn.Name = "isoCodeDataGridViewTextBoxColumn";
             this.isoCodeDataGridViewTextBoxColumn.ReadOnly = true;
             this.isoCodeDataGridViewTextBoxColumn.Width = 250;
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(40, 40);
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemDelete});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(206, 52);
+            // 
+            // toolStripMenuItemDelete
+            // 
+            this.toolStripMenuItemDelete.Name = "toolStripMenuItemDelete";
+            this.toolStripMenuItemDelete.Size = new System.Drawing.Size(205, 48);
+            this.toolStripMenuItemDelete.Text = "Löschen";
+            this.toolStripMenuItemDelete.Click += new System.EventHandler(this.DeleteClick);
             // 
             // currencyBindingSource
             // 
@@ -128,7 +143,7 @@
             this.dataGridViewAssetClasses.RowTemplate.Height = 40;
             this.dataGridViewAssetClasses.Size = new System.Drawing.Size(704, 554);
             this.dataGridViewAssetClasses.TabIndex = 4;
-            this.dataGridViewAssetClasses.MouseDown += new System.Windows.Forms.MouseEventHandler(this.AssetClassMouseDown);
+            this.dataGridViewAssetClasses.MouseDown += new System.Windows.Forms.MouseEventHandler(this.SetRowIndex);
             // 
             // nameDataGridViewTextBoxColumn
             // 
@@ -138,21 +153,6 @@
             this.nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
             this.nameDataGridViewTextBoxColumn.ReadOnly = true;
             this.nameDataGridViewTextBoxColumn.Width = 600;
-            // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(40, 40);
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemDelete});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(206, 52);
-            // 
-            // toolStripMenuItemDelete
-            // 
-            this.toolStripMenuItemDelete.Name = "toolStripMenuItemDelete";
-            this.toolStripMenuItemDelete.Size = new System.Drawing.Size(205, 48);
-            this.toolStripMenuItemDelete.Text = "Löschen";
-            this.toolStripMenuItemDelete.Click += new System.EventHandler(this.DeleteClick);
             // 
             // assetClassBindingSource
             // 
@@ -193,9 +193,9 @@
             this.Name = "UserControlAllowedACAndCurrencies";
             this.Size = new System.Drawing.Size(1358, 838);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCurrencies)).EndInit();
+            this.contextMenuStrip1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.currencyBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewAssetClasses)).EndInit();
-            this.contextMenuStrip1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.assetClassBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

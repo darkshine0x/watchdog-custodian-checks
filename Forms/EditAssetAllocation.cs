@@ -76,34 +76,8 @@ namespace Watchdog.Forms
         private void LoadTable()
         {
             TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
-            // List<AssetClass> assetClasses = tableUtility.ConvertRangeToAssetClass(tableUtility.ReadAllRows(AssetClass.GetDefaultValue().GetTableName()));
-            List<AssetClass> assetClasses = new List<AssetClass>
-            {
-                new AssetClass
-                {
-                    Name = "Aktie"
-                },
-                new AssetClass
-                {
-                    Name = "Obligation"
-                }
-            };
-            // List<Currency> currencies = tableUtility.ConvertRangeToCurrency(tableUtility.ReadAllRows(Currency.GetDefaultValue().GetTableName()));
-            List<Currency> currencies = new List<Currency>
-            {
-                new Currency
-                {
-                    IsoCode = "CHF"
-                },
-                new Currency
-                {
-                    IsoCode = "EUR"
-                },
-                new Currency
-                {
-                    IsoCode = "USD"
-                }
-            };
+            List<AssetClass> assetClasses = tableUtility.ConvertRangeToAssetClass(tableUtility.ReadAllRows(AssetClass.GetDefaultValue().GetTableName()));
+            List<Currency> currencies = tableUtility.ConvertRangeToCurrency(tableUtility.ReadAllRows(Currency.GetDefaultValue().GetTableName()));
             int numberOfColumns = assetClasses.Count + 1;
             int numberOfRows = currencies.Count + 1;
             tableLayoutPanel1.ColumnCount = numberOfColumns + 1;
