@@ -64,5 +64,13 @@ namespace Watchdog.Forms
                 currentRowIndex = FormUtility.DataGridViewMouseDownContextMenu(dataGridView, e);
             }
         }
+
+        private void DeleteFundClick(object sender, EventArgs e)
+        {
+            TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
+            Persistable objectToDelete = dataGridFunds.Rows[currentRowIndex].DataBoundItem as Persistable;
+            dataGridFunds.Rows.RemoveAt(currentRowIndex);
+            tableUtility.DeleteTableRow(objectToDelete.GetTableName(), objectToDelete.GetIndex());
+        }
     }
 }

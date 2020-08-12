@@ -45,13 +45,14 @@
             this.buttonSubmit = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.dataGridFunds = new System.Windows.Forms.DataGridView();
-            this.contextMenuStripFund = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripMenuItemEditAA = new System.Windows.Forms.ToolStripMenuItem();
             this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.isinDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.custodyAccountNumberDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.currencyDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.contextMenuStripFund = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItemEditAA = new System.Windows.Forms.ToolStripMenuItem();
             this.fundBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.toolStripMenuItemDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBoxFundAttributes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridFunds)).BeginInit();
             this.contextMenuStripFund.SuspendLayout();
@@ -225,21 +226,6 @@
             this.dataGridFunds.TabIndex = 3;
             this.dataGridFunds.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DataGridFundsMouseDown);
             // 
-            // contextMenuStripFund
-            // 
-            this.contextMenuStripFund.ImageScalingSize = new System.Drawing.Size(40, 40);
-            this.contextMenuStripFund.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemEditAA});
-            this.contextMenuStripFund.Name = "contextMenuStripFund";
-            this.contextMenuStripFund.Size = new System.Drawing.Size(459, 52);
-            // 
-            // toolStripMenuItemEditAA
-            // 
-            this.toolStripMenuItemEditAA.Name = "toolStripMenuItemEditAA";
-            this.toolStripMenuItemEditAA.Size = new System.Drawing.Size(458, 48);
-            this.toolStripMenuItemEditAA.Text = "Asset Allocation bearbeiten";
-            this.toolStripMenuItemEditAA.Click += new System.EventHandler(this.ClickEditAA);
-            // 
             // nameDataGridViewTextBoxColumn
             // 
             this.nameDataGridViewTextBoxColumn.DataPropertyName = "Name";
@@ -275,9 +261,32 @@
             this.currencyDataGridViewTextBoxColumn.Name = "currencyDataGridViewTextBoxColumn";
             this.currencyDataGridViewTextBoxColumn.Width = 250;
             // 
+            // contextMenuStripFund
+            // 
+            this.contextMenuStripFund.ImageScalingSize = new System.Drawing.Size(40, 40);
+            this.contextMenuStripFund.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemEditAA,
+            this.toolStripMenuItemDelete});
+            this.contextMenuStripFund.Name = "contextMenuStripFund";
+            this.contextMenuStripFund.Size = new System.Drawing.Size(459, 100);
+            // 
+            // toolStripMenuItemEditAA
+            // 
+            this.toolStripMenuItemEditAA.Name = "toolStripMenuItemEditAA";
+            this.toolStripMenuItemEditAA.Size = new System.Drawing.Size(458, 48);
+            this.toolStripMenuItemEditAA.Text = "Asset Allocation bearbeiten";
+            this.toolStripMenuItemEditAA.Click += new System.EventHandler(this.ClickEditAA);
+            // 
             // fundBindingSource
             // 
             this.fundBindingSource.DataSource = typeof(Watchdog.Entities.Fund);
+            // 
+            // toolStripMenuItemDelete
+            // 
+            this.toolStripMenuItemDelete.Name = "toolStripMenuItemDelete";
+            this.toolStripMenuItemDelete.Size = new System.Drawing.Size(458, 48);
+            this.toolStripMenuItemDelete.Text = "Löschen";
+            this.toolStripMenuItemDelete.Click += new System.EventHandler(this.DeleteFundClick);
             // 
             // AddFundForm
             // 
@@ -322,5 +331,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn currencyDataGridViewTextBoxColumn;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripFund;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemEditAA;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemDelete;
     }
 }
