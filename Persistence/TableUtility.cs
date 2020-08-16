@@ -356,6 +356,7 @@ namespace Watchdog.Persistence
             createdSheet.Rows[1].Font.Bold = true;
             createdSheet.Application.ActiveWindow.SplitRow = 1;
             createdSheet.Application.ActiveWindow.FreezePanes = true;
+            createdSheet.Visible = XlSheetVisibility.xlSheetHidden;
             return createdSheet;
         }
     }
