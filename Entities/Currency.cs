@@ -6,9 +6,9 @@ namespace Watchdog.Entities
     public class Currency : Persistable
     {
         public static readonly string tableName = "wdt_currencies";
-        public static readonly List<string> tableHeader = new List<string>()
+        public static readonly Dictionary<string, string> tableMapping = new Dictionary<string, string>
         {
-            "iso_code"
+            {"iso_code", "IsoCode" }
         };
         public static readonly Currency defaultCurrency = new Currency();
         public string IsoCode { get; set; }
@@ -36,7 +36,7 @@ namespace Watchdog.Entities
 
         public List<string> GetTableHeader()
         {
-            return tableHeader;
+            return new List<string>(tableMapping.Keys);
         }
 
         public static Persistable GetDefaultValue()
@@ -52,6 +52,11 @@ namespace Watchdog.Entities
         public void SetIndex(double index)
         {
             Index = index;
+        }
+
+        public Dictionary<string, string> GetTableMapping()
+        {
+            return tableMapping;
         }
     }
 }

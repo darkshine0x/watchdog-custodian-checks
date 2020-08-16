@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Watchdog.Forms
@@ -24,7 +25,7 @@ namespace Watchdog.Forms
                 MessageBox.Show("Feld darf nicht leer sein.");
                 return;
             }
-            originalForm.OnSubmit(textBox1.Text, reference);
+            originalForm.OnSubmit(new List<string>{ textBox1.Text}, reference);
             Close();
         }
 

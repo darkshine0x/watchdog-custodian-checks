@@ -19,23 +19,32 @@ namespace Watchdog.Forms
         private void ButtonSubmit_Click(object sender, EventArgs e)
         {
             TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
-            Fund newFund = new Fund(textBoxFundName.Text, textBoxIsin.Text, textBoxCustodyNr.Text, new Currency(textBoxCurrency.Text));
+            Currency currency = new Currency(textBoxCurrency.Text);
+            Fund newFund = new Fund(textBoxFundName.Text, textBoxIsin.Text, textBoxCustodyNr.Text, currency);
+            tableUtility.CreateMissingTable(currency);
             tableUtility.CreateMissingTable(newFund);
-            List<string> data = new List<string>()
+
+            List<string> currencyData = new List<string>()
             {
-                textBoxFundName.Text,
-                textBoxCustodyNr.Text,
-                textBoxIsin.Text,
-                textBoxCurrency.Text
+                currency.IsoCode
             };
-            tableUtility.InsertTableRow(newFund, data);
+            tableUtility.InsertTableRow(currency, currencyData);
+            List<string> fundData = new List<string>()
+            {
+                newFund.Name,
+                newFund.CustodyAccountNumber,
+                newFund.Isin,
+                currency.GetIndex().ToString()
+            };
+            tableUtility.InsertTableRow(newFund, fundData);
             fundBindingSource.Add(newFund);
         }
 
         private void LoadFundTable()
         {
             TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
-            List<Fund> fundList = tableUtility.ConvertRangeToFund(tableUtility.ReadAllRows(Fund.GetDefaultValue().GetTableName()));
+            // List<Fund> fundList = tableUtility.ConvertRangeToFund(tableUtility.ReadAllRows(Fund.GetDefaultValue().GetTableName()));
+            List<Fund> fundList = tableUtility.ConvertRangesToObjects<Fund>(tableUtility.ReadAllRows(Fund.GetDefaultValue().GetTableName()));
             foreach (Fund fund in fundList)
             {
                 fundBindingSource.Add(fund);
@@ -70,7 +79,7 @@ namespace Watchdog.Forms
             TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
             Persistable objectToDelete = dataGridFunds.Rows[currentRowIndex].DataBoundItem as Persistable;
             dataGridFunds.Rows.RemoveAt(currentRowIndex);
-            tableUtility.DeleteTableRow(objectToDelete.GetTableName(), objectToDelete.GetIndex());
+            tableUtility.DeleteTableRow(objectToDelete, objectToDelete.GetIndex());
         }
     }
 }

@@ -6,12 +6,12 @@ namespace Watchdog.Entities
     public class Fund : Persistable
     {
         private static readonly string tableName = "wdt_funds";
-        private static readonly List<string> tableHeader = new List<string>()
+        private static readonly Dictionary<string, string> tableMapping = new Dictionary<string, string>
         {
-            "name",
-            "custody_nr",
-            "isin",
-            "currency"
+            {"name", "Name" },
+            {"custody_nr", "CustodyAccountNumber" },
+            {"isin", "Isin" },
+            {"currency", "Currency" }
         };
         private static readonly Fund defaultFund = new Fund();
         public double Index { get; set; }
@@ -43,7 +43,7 @@ namespace Watchdog.Entities
 
         public List<string> GetTableHeader()
         {
-            return tableHeader;
+            return new List<string>(tableMapping.Keys);
         }
 
         public static Persistable GetDefaultValue()
@@ -59,6 +59,11 @@ namespace Watchdog.Entities
         public void SetIndex(double index)
         {
             Index = index;
+        }
+
+        public Dictionary<string, string> GetTableMapping()
+        {
+            return tableMapping;
         }
     }
 }

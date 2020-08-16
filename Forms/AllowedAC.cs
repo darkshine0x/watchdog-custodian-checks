@@ -21,7 +21,8 @@ namespace Watchdog.Forms
         private void LoadCurrencies()
         {
             TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
-            List<Currency> currencyList = tableUtility.ConvertRangeToCurrency(tableUtility.ReadAllRows(Currency.GetDefaultValue().GetTableName()));
+            // List<Currency> currencyList = tableUtility.ConvertRangeToCurrency(tableUtility.ReadAllRows(Currency.GetDefaultValue().GetTableName()));
+            List<Currency> currencyList = tableUtility.ConvertRangesToObjects<Currency>(tableUtility.ReadAllRows(Currency.GetDefaultValue().GetTableName()));
             foreach (Currency currency in currencyList)
             {
                 currencyBindingSource.Add(currency);
@@ -31,7 +32,8 @@ namespace Watchdog.Forms
         private void LoadAssetClasses()
         {
             TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
-            List<AssetClass> assetClassList = tableUtility.ConvertRangeToAssetClass(tableUtility.ReadAllRows(AssetClass.GetDefaultValue().GetTableName()));
+            // List<AssetClass> assetClassList = tableUtility.ConvertRangeToAssetClass(tableUtility.ReadAllRows(AssetClass.GetDefaultValue().GetTableName()));
+            List<AssetClass> assetClassList = tableUtility.ConvertRangesToObjects<AssetClass>(tableUtility.ReadAllRows(AssetClass.GetDefaultValue().GetTableName()));
             foreach (AssetClass assetClass in assetClassList)
             {
                 assetClassBindingSource.Add(assetClass);
@@ -76,16 +78,16 @@ namespace Watchdog.Forms
             };
         }
 
-        public void OnSubmit(string passedValue, string reference)
+        public void OnSubmit(List<string> passedValue, string reference)
         {
             switch (reference)
             {
                 case "asset_class":
-                    AddAssetClass(passedValue);
+                    AddAssetClass(passedValue[0]);
                     break;
 
                 case "currency":
-                    AddCurrency(passedValue);
+                    AddCurrency(passedValue[0]);
                     break;
             }
         }
@@ -103,7 +105,7 @@ namespace Watchdog.Forms
             TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
             Persistable objectToDelete = currentDataGridView.Rows[currentRowIndex].DataBoundItem as Persistable;
             currentDataGridView.Rows.RemoveAt(currentRowIndex);
-            tableUtility.DeleteTableRow(objectToDelete.GetTableName(), objectToDelete.GetIndex());
+            tableUtility.DeleteTableRow(objectToDelete, objectToDelete.GetIndex());
         }
 
         private void SetRowIndex(object sender, MouseEventArgs e)

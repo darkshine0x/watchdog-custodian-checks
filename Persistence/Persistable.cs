@@ -11,5 +11,7 @@ namespace Watchdog.Persistence
         double GetIndex();
 
         void SetIndex(double index);
+
+        Dictionary<string, string> GetTableMapping();
     }
 }

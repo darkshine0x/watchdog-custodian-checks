@@ -25,16 +25,25 @@ namespace Watchdog.Forms
                 return;
             }
             string selectedView = treeViewSettings.SelectedNode.Name;
-
+            ClearPanel();
             switch (selectedView)
             {
                 case "AC":
                     panel1.Controls.Add(new UserControlAllowedACAndCurrencies());
                     break;
+
+                case "Ratings":
+                    panel1.Controls.Add(new Ratings());
+                    break;
             }
         }
 
-        private void TreeViewSettings_MouseClick(object sender, MouseEventArgs e)
+        private void ClearPanel()
+        {
+            panel1.Controls.Clear();
+        }
+
+        private void NodeTreeAfterSelect(object sender, TreeViewEventArgs e)
         {
             LoadTreeView();
         }

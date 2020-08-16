@@ -1,7 +1,6 @@
 ﻿using Microsoft.Office.Interop.Excel;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
@@ -9,7 +8,7 @@ using Watchdog.Entities;
 
 namespace Watchdog.Persistence
 {
-    class TableUtility
+    public class TableUtility
     {
         private readonly string sequenceTableName = "wdt_sequence";
         private readonly Workbook workbook;
@@ -122,11 +121,18 @@ namespace Watchdog.Persistence
             return sequence;
         }
 
-        private  double IncrementRowCounter(Persistable persistable)
+        private  double ChangeRowCounter(Persistable persistable, bool decrement)
         {
             int column = FindOrCreateRowCounterColumn(persistable);
             Worksheet ws = FindWorksheet(sequenceTableName);
-            double counter = ws.Cells[2, column].Value + 1;
+            double counter = ws.Cells[2, column].Value;
+            if (decrement)
+            {
+                counter--;
+            } else
+            {
+                counter++;
+            }
             ws.Cells[2, column].Value = counter;
             return counter;
         }
@@ -139,7 +145,6 @@ namespace Watchdog.Persistence
             } 
             catch (Exception)
             {
-                // MessageBox.Show(i.ToString());
                 return null;
             }
         }
@@ -156,7 +161,7 @@ namespace Watchdog.Persistence
                 MessageBox.Show("Tabelle existiert nicht.");
                 return workbook;
             }
-            double row = IncrementRowCounter(persistable);
+            double row = ChangeRowCounter(persistable, false);
             double sequence = IncrementSequence();
             ws.Cells[row, 1].Value = sequence;
             persistable.SetIndex(sequence);
@@ -188,7 +193,6 @@ namespace Watchdog.Persistence
             List<Range> searchResult = new List<Range>();
             Worksheet worksheet = FindWorksheet(tableName);
             List<string> searchKeys = searchParameters.Keys.ToList();
-            // HashSet<double> foundRows = new HashSet<double>();
             Dictionary<string, double> columnIndizes = new Dictionary<string, double>();
             foreach (string key in searchKeys)
             {
@@ -244,7 +248,7 @@ namespace Watchdog.Persistence
         public Range ReadTableRow(string tableName, double index)
         {
             Worksheet worksheet = FindWorksheet(tableName);
-            foreach (Range row in worksheet.Rows)
+            foreach (Range row in worksheet.UsedRange.Rows)
             {
                 double.TryParse(row.Cells[1, 1].Value.ToString(), out double rowIndex);
                 if (rowIndex == index)
@@ -255,119 +259,67 @@ namespace Watchdog.Persistence
             return null;
         }
 
-        public List<string[]> ConvertRangesToStrings(List<Range> ranges)
+        public List<T> ConvertRangesToObjects<T>(List<Range> ranges) where T : Persistable, new()
         {
-            List<string[]> list = new List<string[]>();
-            foreach (Range row in ranges)
-            {
-                Range cells = row.Cells;
-                int size = cells.Count - 1;
-                string[] data = new string[size];
-                for (int index = 0; index < size; index++)
-                {
-                    string cellValue = row.Cells[1, index + 2].Value.ToString();
-                    data[index] = cellValue;
-                }
-                list.Add(data);
-            }
-            return list;
-        }
-
-        public List<Fund> ConvertRangeToFund(List<Range> ranges)
-        {
-            List<Fund> list = new List<Fund>();
+            List<T> list = new List<T>();
             if (ranges == null)
             {
                 return list;
             }
             foreach (Range row in ranges)
             {
-                if (row.Cells.Count - 1 != Fund.GetDefaultValue().GetTableHeader().Count)
-                {
-                    throw new ArgumentException();
-                }
-                Fund fund = new Fund
-                {
-                    Index = row.Cells[1, 1].Value,
-                    Name = row.Cells[1, 2].Value.ToString(),
-                    CustodyAccountNumber = row.Cells[1, 3].Value.ToString(),
-                    Isin = row.Cells[1, 4].Value.ToString(),
-                    Currency = new Currency(row.Cells[1, 5].Value.ToString())
-                };
-                list.Add(fund);
+                list.Add(ConvertRowToObject<T>(row));
             }
             return list;
         }
 
-        public List<AssetClass> ConvertRangeToAssetClass(List<Range> ranges)
+        public T ConvertRowToObject<T>(Range row) where T : Persistable, new()
         {
-            List<AssetClass> list = new List<AssetClass>();
-            if (ranges == null)
+            if (row == null)
             {
-                return list;
+                return default;
             }
-            foreach (Range row in ranges)
+            Type type = typeof(T);
+            T obj = new T();
+            if (row.Cells.Count - 1 != obj.GetTableHeader().Count)
             {
-                if (row.Cells.Count - 1 != AssetClass.GetDefaultValue().GetTableHeader().Count)
+                throw new ArgumentException("Number of attributes does match the number of columns");
+            }
+            obj.SetIndex(row.Cells[1, 1].Value);
+            int col = 2;
+            foreach (string fieldName in obj.GetTableMapping().Values)
+            {
+                PropertyInfo propertyInfo = type.GetProperty(fieldName);
+                Type propertyType = propertyInfo.PropertyType;
+                if (!propertyType.IsPrimitive && propertyType != typeof(string))
                 {
-                    throw new ArgumentException();
+                    Persistable foreignObject = Activator.CreateInstance(propertyType) as Persistable;
+                    double foreignKey = row.Cells[1, col].Value;
+                    Range foreignRow = ReadTableRow(foreignObject.GetTableName(), foreignKey);
+                    MethodInfo method = typeof(TableUtility).GetMethod("ConvertRowToObject");
+                    MethodInfo genericMethod = method.MakeGenericMethod(propertyType);
+                    Range[] parameters = new Range[1];
+                    parameters[0] = foreignRow;
+                    Persistable generatedObject = genericMethod.Invoke(this, parameters) as Persistable;
+                    propertyInfo.SetValue(obj, generatedObject);
+                } else
+                {
+                    type.GetProperty(fieldName).SetValue(obj, row.Cells[1, col].Value);
                 }
-                AssetClass assetClass = new AssetClass
-                {
-                    Index = row.Cells[1, 1].Value,
-                    Name = row.Cells[1, 2].Value.ToString()
-                };
-                list.Add(assetClass);
+                col++;
             }
-            return list;
+            return obj;
         }
 
-        public List<Currency> ConvertRangeToCurrency(List<Range> ranges)
+        public bool DeleteTableRow(Persistable persistable, double index)
         {
-            List<Currency> list = new List<Currency>();
-            if (ranges == null)
-            {
-                return list;
-            }
-            foreach (Range row in ranges)
-            {
-                if (row.Cells.Count - 1 != AssetClass.GetDefaultValue().GetTableHeader().Count)
-                {
-                    throw new ArgumentException();
-                }
-                Currency currency = new Currency
-                {
-                    Index = row.Cells[1, 1].Value,
-                    IsoCode = row.Cells[1, 2].Value.ToString()
-                };
-                list.Add(currency);
-            }
-            return list;
-        }
-
-        public  bool DeleteTableRow(string tableName, Dictionary<string, string> searchParameters, QueryOperator queryOperator)
-        {
-            List<Range> searchResult = ReadTableRow(tableName, searchParameters, queryOperator);
-            if (!searchResult.Any())
-            {
-                return true;
-            }
-
-            foreach (Range row in searchResult)
-            {
-                row.EntireRow.Delete();
-            }
-            return true;
-        }
-
-        public bool DeleteTableRow(string tableName, double index)
-        {
-            Range result = ReadTableRow(tableName, index);
+            Range result = ReadTableRow(persistable.GetTableName(), index);
             if (result == null)
             {
                 return false;
             }
             result.EntireRow.Delete();
+            ChangeRowCounter(persistable, true);
             return true;
         }
 

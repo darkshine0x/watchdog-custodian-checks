@@ -139,7 +139,7 @@
     </Reference>
     <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
       <Private>False</Private>
-      <EmbedInteropTypes>true</EmbedInteropTypes>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <Private>False</Private>
@@ -184,6 +184,12 @@
       <DependentUpon>OneAttributeForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\PassedForm.cs" />
+    <Compile Include="Forms\Ratings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Ratings.Designer.cs">
+      <DependentUpon>Ratings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Settings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -223,6 +229,9 @@
     <EmbeddedResource Include="Forms\OneAttributeForm.resx">
       <DependentUpon>OneAttributeForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Ratings.resx">
+      <DependentUpon>Ratings.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Settings.resx">
       <DependentUpon>Settings.cs</DependentUpon>
     </EmbeddedResource>
@@ -249,6 +258,8 @@
     <None Include="Properties\DataSources\Watchdog.Entities.AssetClass.datasource" />
     <None Include="Properties\DataSources\Watchdog.Entities.Currency.datasource" />
     <None Include="Properties\DataSources\Watchdog.Entities.Fund.datasource" />
+    <None Include="Properties\DataSources\Watchdog.Entities.Rating.datasource" />
+    <None Include="Properties\DataSources\Watchdog.Entities.RatingAgency.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

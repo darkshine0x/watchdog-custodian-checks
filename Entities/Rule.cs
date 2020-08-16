@@ -33,5 +33,10 @@ namespace Watchdog.Entities
         {
             Index = index;
         }
+
+        public Dictionary<string, string> GetTableMapping()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

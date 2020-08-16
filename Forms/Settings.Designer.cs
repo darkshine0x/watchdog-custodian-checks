@@ -28,7 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Asset-Klassen und Währungen");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Asset-Klassen und Währungen");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Ratings");
             this.labelSettings = new System.Windows.Forms.Label();
             this.treeViewSettings = new System.Windows.Forms.TreeView();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -48,14 +49,17 @@
             // 
             this.treeViewSettings.Location = new System.Drawing.Point(105, 249);
             this.treeViewSettings.Name = "treeViewSettings";
-            treeNode2.Checked = true;
-            treeNode2.Name = "AC";
-            treeNode2.Text = "Asset-Klassen und Währungen";
+            treeNode1.Checked = true;
+            treeNode1.Name = "AC";
+            treeNode1.Text = "Asset-Klassen und Währungen";
+            treeNode2.Name = "Ratings";
+            treeNode2.Text = "Ratings";
             this.treeViewSettings.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+            treeNode1,
             treeNode2});
             this.treeViewSettings.Size = new System.Drawing.Size(448, 741);
             this.treeViewSettings.TabIndex = 3;
-            this.treeViewSettings.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TreeViewSettings_MouseClick);
+            this.treeViewSettings.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.NodeTreeAfterSelect);
             // 
             // panel1
             // 
