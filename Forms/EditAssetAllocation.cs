@@ -19,11 +19,11 @@ namespace Watchdog.Forms
             }
         }
 
-        private Label GenerateLabel(string text)
+        private Label GenerateLabel<T>(string text, T bindingObject) where T : Persistable
         {
             Padding padding = Padding.Empty;
             Padding margin = new Padding(1, 0, 0, 1);
-            return new Label
+            Label label =  new Label
             {
                 Text = text,
                 Width = 200,
@@ -34,6 +34,14 @@ namespace Watchdog.Forms
                 TextAlign = ContentAlignment.MiddleRight,
                 Font = new Font(Font, Font.Style | FontStyle.Bold)
             };
+            if (bindingObject != null)
+            {
+                Binding binding = new Binding("", bindingObject, "");
+                label.DataBindings.Add(binding);
+                T obj = (T) label.DataBindings[0].DataSource;
+                MessageBox.Show(obj.ToString());
+            }
+            return label;
         }
 
         private double GetColumnSum(int col)
@@ -84,37 +92,31 @@ namespace Watchdog.Forms
             tableLayoutPanel1.RowCount = numberOfRows + 1;
 
             // First cell, should be empty
-            tableLayoutPanel1.Controls.Add(GenerateLabel(string.Empty), 0, 0);
+            tableLayoutPanel1.Controls.Add(GenerateLabel<Persistable>(string.Empty, null), 0, 0);
 
             Padding padding = Padding.Empty;
 
             // Add column labels for asset classes
             for (int col = 1; col < numberOfColumns; col++)
             {
-                Label columnLabel = GenerateLabel(assetClasses[col - 1].Name);
-                BindingSource bindingSource = new BindingSource
-                {
-                    DataSource = assetClasses[col - 1]
-                };
+                AssetClass assetClass = assetClasses[col - 1];
+                Label columnLabel = GenerateLabel(assetClass.Name, assetClass);
                 tableLayoutPanel1.Controls.Add(columnLabel, col, 0);
             }
 
             // Add total column
-            tableLayoutPanel1.Controls.Add(GenerateLabel("Total"), numberOfColumns, 0);
+            tableLayoutPanel1.Controls.Add(GenerateLabel<Persistable>("Total", null), numberOfColumns, 0);
 
             // Add row labels for currencies
             for (int row = 1; row < numberOfRows; row++)
             {
-                Label rowLabel = GenerateLabel(currencies[row - 1].IsoCode);
-                BindingSource bindingSource = new BindingSource
-                {
-                    DataSource = currencies[row - 1]
-                };
+                Currency currency = currencies[row - 1];
+                Label rowLabel = GenerateLabel(currency.IsoCode, currency);
                 tableLayoutPanel1.Controls.Add(rowLabel, 0, row);
             }
 
             // Add total row
-            tableLayoutPanel1.Controls.Add(GenerateLabel("Total"), 0, numberOfRows);
+            tableLayoutPanel1.Controls.Add(GenerateLabel<Persistable>("Total", null), 0, numberOfRows);
 
             // Add text boxes
             for (int row = 1; row < numberOfRows; row++)
@@ -159,19 +161,27 @@ namespace Watchdog.Forms
             // Add total labels in last column
             for (int row = 1; row < numberOfRows + 1; row++)
             {
-                tableLayoutPanel1.Controls.Add(GenerateLabel(""), numberOfColumns, row);
+                tableLayoutPanel1.Controls.Add(GenerateLabel<Persistable>("", null), numberOfColumns, row);
             }
 
             // Add total labels in last row
             for (int col = 1; col < numberOfColumns; col++)
             {
-                tableLayoutPanel1.Controls.Add(GenerateLabel(""), col, numberOfRows);
+                tableLayoutPanel1.Controls.Add(GenerateLabel<Persistable>("", null), col, numberOfRows);
             }
         }
 
         private void CancelButtonClick(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void ButtonSubmit_Click(object sender, EventArgs e)
+        {
+            for (int col = 1; col < tableLayoutPanel1.ColumnCount; col++)
+            {
+                // AssetClass colAssetClass = tableLayoutPanel1.GetControlFromPosition(col, 0);
+            }
         }
     }
 }

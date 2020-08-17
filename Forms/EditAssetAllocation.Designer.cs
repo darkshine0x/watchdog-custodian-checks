@@ -28,21 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.button1 = new System.Windows.Forms.Button();
+            this.buttonSubmit = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.LabelAA = new System.Windows.Forms.Label();
             this.LabelFund = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.SuspendLayout();
             // 
-            // button1
+            // buttonSubmit
             // 
-            this.button1.Location = new System.Drawing.Point(2012, 1159);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(251, 66);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "Bestätigen";
-            this.button1.UseVisualStyleBackColor = true;
+            this.buttonSubmit.Location = new System.Drawing.Point(2012, 1159);
+            this.buttonSubmit.Name = "buttonSubmit";
+            this.buttonSubmit.Size = new System.Drawing.Size(251, 66);
+            this.buttonSubmit.TabIndex = 1;
+            this.buttonSubmit.Text = "Bestätigen";
+            this.buttonSubmit.UseVisualStyleBackColor = true;
+            this.buttonSubmit.Click += new System.EventHandler(this.ButtonSubmit_Click);
             // 
             // button2
             // 
@@ -97,7 +98,7 @@
             this.Controls.Add(this.LabelFund);
             this.Controls.Add(this.LabelAA);
             this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.buttonSubmit);
             this.Name = "EditAssetAllocation";
             this.Text = "Asset Allocation bearbeiten";
             this.ResumeLayout(false);
@@ -106,7 +107,7 @@
         }
 
         #endregion
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button buttonSubmit;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label LabelAA;
         private System.Windows.Forms.Label LabelFund;
