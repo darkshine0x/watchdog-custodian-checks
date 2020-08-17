@@ -91,7 +91,12 @@ namespace Watchdog.Forms
             // Add column labels for asset classes
             for (int col = 1; col < numberOfColumns; col++)
             {
-                tableLayoutPanel1.Controls.Add(GenerateLabel(assetClasses[col - 1].Name), col, 0);
+                Label columnLabel = GenerateLabel(assetClasses[col - 1].Name);
+                BindingSource bindingSource = new BindingSource
+                {
+                    DataSource = assetClasses[col - 1]
+                };
+                tableLayoutPanel1.Controls.Add(columnLabel, col, 0);
             }
 
             // Add total column
@@ -100,7 +105,12 @@ namespace Watchdog.Forms
             // Add row labels for currencies
             for (int row = 1; row < numberOfRows; row++)
             {
-                tableLayoutPanel1.Controls.Add(GenerateLabel(currencies[row - 1].IsoCode), 0, row);
+                Label rowLabel = GenerateLabel(currencies[row - 1].IsoCode);
+                BindingSource bindingSource = new BindingSource
+                {
+                    DataSource = currencies[row - 1]
+                };
+                tableLayoutPanel1.Controls.Add(rowLabel, 0, row);
             }
 
             // Add total row
