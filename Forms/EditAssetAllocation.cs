@@ -245,6 +245,11 @@ namespace Watchdog.Forms
             TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
             tableUtility.CreateMissingTable(AssetAllocationEntry.GetDefaultValue());
             CalcTotals();
+            if (totalRow != 100 || totalCol != 100)
+            {
+                MessageBox.Show("Gesamttotal muss 100% sein.");
+                return;
+            }
             for (int col = 1; col < tableLayoutPanel1.ColumnCount - 1; col++)
             {
                 for (int row = 1; row < tableLayoutPanel1.RowCount - 1; row++)
