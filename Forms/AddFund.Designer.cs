@@ -1,4 +1,6 @@
-﻿namespace Watchdog.Forms
+﻿using Watchdog.Entities;
+
+namespace Watchdog.Forms
 {
     partial class AddFundForm
     {
@@ -30,9 +32,8 @@
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.groupBoxFundAttributes = new System.Windows.Forms.GroupBox();
             this.textBoxIsin = new System.Windows.Forms.TextBox();
             this.labelIsin = new System.Windows.Forms.Label();
@@ -45,18 +46,18 @@
             this.buttonSubmit = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.dataGridFunds = new System.Windows.Forms.DataGridView();
-            this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.isinDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.custodyAccountNumberDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.currencyDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuStripFund = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemEditAA = new System.Windows.Forms.ToolStripMenuItem();
-            this.fundBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.toolStripMenuItemDelete = new System.Windows.Forms.ToolStripMenuItem();
+            this.fundBinding = new System.Windows.Forms.BindingSource(this.components);
             this.groupBoxFundAttributes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridFunds)).BeginInit();
             this.contextMenuStripFund.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.fundBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fundBinding)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBoxFundAttributes
@@ -100,6 +101,8 @@
             // 
             // textBoxCurrency
             // 
+            this.textBoxCurrency.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.textBoxCurrency.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBoxCurrency.Font = new System.Drawing.Font("Arial", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCurrency.Location = new System.Drawing.Point(267, 413);
             this.textBoxCurrency.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -195,30 +198,30 @@
             this.dataGridFunds.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridFunds.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridFunds.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.nameDataGridViewTextBoxColumn,
-            this.isinDataGridViewTextBoxColumn,
-            this.custodyAccountNumberDataGridViewTextBoxColumn,
-            this.currencyDataGridViewTextBoxColumn});
+            this.dataGridViewTextBoxColumn1,
+            this.dataGridViewTextBoxColumn2,
+            this.dataGridViewTextBoxColumn3,
+            this.dataGridViewTextBoxColumn4});
             this.dataGridFunds.ContextMenuStrip = this.contextMenuStripFund;
-            this.dataGridFunds.DataSource = this.fundBindingSource;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Arial Narrow", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.Padding = new System.Windows.Forms.Padding(10);
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridFunds.DefaultCellStyle = dataGridViewCellStyle3;
+            this.dataGridFunds.DataSource = this.fundBinding;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Arial Narrow", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.Padding = new System.Windows.Forms.Padding(10);
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridFunds.DefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridFunds.EnableHeadersVisualStyles = false;
             this.dataGridFunds.Location = new System.Drawing.Point(81, 644);
             this.dataGridFunds.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.dataGridFunds.Name = "dataGridFunds";
             this.dataGridFunds.RowHeadersVisible = false;
             this.dataGridFunds.RowHeadersWidth = 102;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Arial Narrow", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.Padding = new System.Windows.Forms.Padding(10);
-            this.dataGridFunds.RowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Arial Narrow", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.Padding = new System.Windows.Forms.Padding(10);
+            this.dataGridFunds.RowsDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridFunds.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Arial Narrow", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dataGridFunds.RowTemplate.Height = 65;
             this.dataGridFunds.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
@@ -226,40 +229,37 @@
             this.dataGridFunds.TabIndex = 3;
             this.dataGridFunds.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DataGridFundsMouseDown);
             // 
-            // nameDataGridViewTextBoxColumn
+            // dataGridViewTextBoxColumn1
             // 
-            this.nameDataGridViewTextBoxColumn.DataPropertyName = "Name";
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Arial Narrow", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.Padding = new System.Windows.Forms.Padding(10);
-            this.nameDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle2;
-            this.nameDataGridViewTextBoxColumn.HeaderText = "Fondsname";
-            this.nameDataGridViewTextBoxColumn.MinimumWidth = 12;
-            this.nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
-            this.nameDataGridViewTextBoxColumn.Width = 900;
+            this.dataGridViewTextBoxColumn1.DataPropertyName = "Name";
+            this.dataGridViewTextBoxColumn1.HeaderText = "Name";
+            this.dataGridViewTextBoxColumn1.MinimumWidth = 12;
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.Width = 500;
             // 
-            // isinDataGridViewTextBoxColumn
+            // dataGridViewTextBoxColumn2
             // 
-            this.isinDataGridViewTextBoxColumn.DataPropertyName = "Isin";
-            this.isinDataGridViewTextBoxColumn.HeaderText = "ISIN";
-            this.isinDataGridViewTextBoxColumn.MinimumWidth = 12;
-            this.isinDataGridViewTextBoxColumn.Name = "isinDataGridViewTextBoxColumn";
-            this.isinDataGridViewTextBoxColumn.Width = 280;
+            this.dataGridViewTextBoxColumn2.DataPropertyName = "Isin";
+            this.dataGridViewTextBoxColumn2.HeaderText = "ISIN";
+            this.dataGridViewTextBoxColumn2.MinimumWidth = 12;
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            this.dataGridViewTextBoxColumn2.Width = 200;
             // 
-            // custodyAccountNumberDataGridViewTextBoxColumn
+            // dataGridViewTextBoxColumn3
             // 
-            this.custodyAccountNumberDataGridViewTextBoxColumn.DataPropertyName = "CustodyAccountNumber";
-            this.custodyAccountNumberDataGridViewTextBoxColumn.HeaderText = "Depotnummer";
-            this.custodyAccountNumberDataGridViewTextBoxColumn.MinimumWidth = 12;
-            this.custodyAccountNumberDataGridViewTextBoxColumn.Name = "custodyAccountNumberDataGridViewTextBoxColumn";
-            this.custodyAccountNumberDataGridViewTextBoxColumn.Width = 250;
+            this.dataGridViewTextBoxColumn3.DataPropertyName = "CustodyAccountNumber";
+            this.dataGridViewTextBoxColumn3.HeaderText = "Depot-Nr.";
+            this.dataGridViewTextBoxColumn3.MinimumWidth = 12;
+            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            this.dataGridViewTextBoxColumn3.Width = 200;
             // 
-            // currencyDataGridViewTextBoxColumn
+            // dataGridViewTextBoxColumn4
             // 
-            this.currencyDataGridViewTextBoxColumn.DataPropertyName = "Currency";
-            this.currencyDataGridViewTextBoxColumn.HeaderText = "Währung";
-            this.currencyDataGridViewTextBoxColumn.MinimumWidth = 12;
-            this.currencyDataGridViewTextBoxColumn.Name = "currencyDataGridViewTextBoxColumn";
-            this.currencyDataGridViewTextBoxColumn.Width = 250;
+            this.dataGridViewTextBoxColumn4.DataPropertyName = "Currency";
+            this.dataGridViewTextBoxColumn4.HeaderText = "Währung";
+            this.dataGridViewTextBoxColumn4.MinimumWidth = 12;
+            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            this.dataGridViewTextBoxColumn4.Width = 250;
             // 
             // contextMenuStripFund
             // 
@@ -277,16 +277,16 @@
             this.toolStripMenuItemEditAA.Text = "Asset Allocation bearbeiten";
             this.toolStripMenuItemEditAA.Click += new System.EventHandler(this.ClickEditAA);
             // 
-            // fundBindingSource
-            // 
-            this.fundBindingSource.DataSource = typeof(Watchdog.Entities.Fund);
-            // 
             // toolStripMenuItemDelete
             // 
             this.toolStripMenuItemDelete.Name = "toolStripMenuItemDelete";
             this.toolStripMenuItemDelete.Size = new System.Drawing.Size(458, 48);
             this.toolStripMenuItemDelete.Text = "Löschen";
             this.toolStripMenuItemDelete.Click += new System.EventHandler(this.DeleteFundClick);
+            // 
+            // fundBinding
+            // 
+            this.fundBinding.DataSource = typeof(Watchdog.Entities.Fund);
             // 
             // AddFundForm
             // 
@@ -305,7 +305,7 @@
             this.groupBoxFundAttributes.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridFunds)).EndInit();
             this.contextMenuStripFund.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.fundBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fundBinding)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -324,13 +324,13 @@
         private System.Windows.Forms.DataGridView dataGridFunds;
         private System.Windows.Forms.TextBox textBoxIsin;
         private System.Windows.Forms.Label labelIsin;
-        private System.Windows.Forms.BindingSource fundBindingSource;
-        private System.Windows.Forms.DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn isinDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn custodyAccountNumberDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn currencyDataGridViewTextBoxColumn;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripFund;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemEditAA;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemDelete;
+        private System.Windows.Forms.BindingSource fundBinding;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
     }
 }

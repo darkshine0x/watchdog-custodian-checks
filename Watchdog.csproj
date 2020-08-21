@@ -214,7 +214,6 @@
     <Compile Include="Forms\WatchdogRibbon.Designer.cs">
       <DependentUpon>WatchdogRibbon.cs</DependentUpon>
     </Compile>
-    <Compile Include="Persistence\FundPersister.cs" />
     <Compile Include="Persistence\Persistable.cs" />
     <Compile Include="Persistence\QueryOperator.cs" />
     <Compile Include="Persistence\RulePersister.cs" />
@@ -301,6 +300,24 @@
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>DC33A30DA2E8A6B348CB21FD73713EE80EE82CDD</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>VSTO40;DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>VSTO40;TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

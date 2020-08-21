@@ -1,29 +1,45 @@
-﻿using System;
+﻿using Microsoft.Office.Interop.Excel;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using Watchdog.Entities;
 using Watchdog.Persistence;
-using static System.Windows.Forms.DataGridView;
 
 namespace Watchdog.Forms
 {
     public partial class AddFundForm : Form
     {
         private int currentRowIndex;
+        private List<Currency> currencyCache;
         public AddFundForm()
         {
             InitializeComponent();
             LoadFundTable();
+            TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
+            currencyCache = tableUtility.ConvertRangesToObjects<Currency>(tableUtility.ReadAllRows(Currency.GetDefaultValue().GetTableName()));
         }
 
         private void ButtonSubmit_Click(object sender, EventArgs e)
         {
             TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
-            Currency currency = new Currency(textBoxCurrency.Text);
-            Fund newFund = new Fund(textBoxFundName.Text, textBoxIsin.Text, textBoxCustodyNr.Text, currency);
-            tableUtility.CreateMissingTable(currency);
-            tableUtility.CreateMissingTable(newFund);
+            tableUtility.CreateMissingTable(Currency.GetDefaultValue());
+            tableUtility.CreateMissingTable(Fund.GetDefaultValue());
+            textBoxCurrency.BackColor = Color.Empty;
+            List<Range> currencyRange = tableUtility.ReadTableRow(Currency.GetDefaultValue().GetTableName(), new Dictionary<string, string>
+            {
+                {"iso_code", textBoxCurrency.Text }
+            }, QueryOperator.OR);
+            
+            if (currencyRange.Count == 0 || currencyRange.Count > 1)
+            {
+                textBoxCurrency.BackColor = Color.Red;
+                return;
+            }
 
+            Currency currency = tableUtility.ConvertRangesToObjects<Currency>(currencyRange)[0];
+            Fund newFund = new Fund(textBoxFundName.Text, textBoxIsin.Text, textBoxCustodyNr.Text, currency);
             List<string> currencyData = new List<string>()
             {
                 currency.IsoCode
@@ -37,17 +53,16 @@ namespace Watchdog.Forms
                 currency.GetIndex().ToString()
             };
             tableUtility.InsertTableRow(newFund, fundData);
-            fundBindingSource.Add(newFund);
+            fundBinding.Add(newFund);
         }
 
         private void LoadFundTable()
         {
             TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
-            // List<Fund> fundList = tableUtility.ConvertRangeToFund(tableUtility.ReadAllRows(Fund.GetDefaultValue().GetTableName()));
             List<Fund> fundList = tableUtility.ConvertRangesToObjects<Fund>(tableUtility.ReadAllRows(Fund.GetDefaultValue().GetTableName()));
             foreach (Fund fund in fundList)
             {
-                fundBindingSource.Add(fund);
+                fundBinding.Add(fund);
             }
         }
 

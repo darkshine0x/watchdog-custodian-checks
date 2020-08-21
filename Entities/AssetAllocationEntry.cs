@@ -5,15 +5,15 @@ namespace Watchdog.Entities
 {
     public class AssetAllocationEntry : Persistable
     {
-        private string tableName = "wdt_asset_allocation_entries";
-        private Dictionary<string, string> tableMapping = new Dictionary<string, string>
+        private readonly string tableName = "wdt_asset_allocation_entries";
+        private readonly Dictionary<string, string> tableMapping = new Dictionary<string, string>
         {
             {"asset_class_index", "AssetClass" },
             {"currency_index", "Currency" },
             {"value", "Value" },
             {"fund_index", "Fund" }
         };
-        private static AssetAllocationEntry defaultValue = new AssetAllocationEntry();
+        private readonly static AssetAllocationEntry defaultValue = new AssetAllocationEntry();
         public AssetClass AssetClass { get; set; }
         public Currency Currency { get; set; }
         public Fund Fund { get; set; }
