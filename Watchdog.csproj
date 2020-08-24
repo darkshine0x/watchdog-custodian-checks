@@ -190,6 +190,12 @@
     <Compile Include="Forms\Ratings.Designer.cs">
       <DependentUpon>Ratings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\RuleAdministration.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RuleAdministration.Designer.cs">
+      <DependentUpon>RuleAdministration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Settings.cs">
       <SubType>Form</SubType>
     </Compile>

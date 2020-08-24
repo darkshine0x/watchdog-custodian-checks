@@ -18,7 +18,7 @@ namespace Watchdog.Entities
 
         private static readonly Rating defaultValue = new Rating();
         public string RatingCode { get; set; }
-        public int RatingNumericValue { get; set; }
+        public double RatingNumericValue { get; set; }
         public double Index { get; set; }
         public double Agency { get; set; }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Office.Interop.Excel;
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Watchdog.Entities;
@@ -9,12 +10,17 @@ namespace Watchdog.Forms
     public partial class Ratings : UserControl, PassedForm
     {
         private int ratingsCurrentRowIndex;
+        private int ratingAgenciesRowIndex;
         private Rating currentRow;
         private RatingAgency currentRatingAgency;
 
         public Ratings()
         {
             InitializeComponent();
+            TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
+            tableUtility.CreateMissingTable(Rating.GetDefaultValue());
+            tableUtility.CreateMissingTable(RatingAgency.GetDefaultValue());
+            ratingAgenciesRowIndex = 0;
             LoadRatingAgencies();
         }
 
@@ -30,15 +36,18 @@ namespace Watchdog.Forms
 
         public void OnSubmit(List<string> passedValue, string reference)
         {
+            dataGridViewRatingAgencies.ClearSelection();
             TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
             RatingAgency ratingAgency = new RatingAgency(passedValue[0]);
-            tableUtility.CreateMissingTable(RatingAgency.GetDefaultValue());
             tableUtility.InsertTableRow(ratingAgency, new List<string>
             {
                 passedValue[0]
             });
-            ratingAgencyBindingSource.Add(ratingAgency);
-
+            int index = ratingAgencyBindingSource.Add(ratingAgency);
+            dataGridViewRatingAgencies.Rows[index].Selected = true;
+            currentRatingAgency = ratingAgency;
+            ratingAgenciesRowIndex = index;
+            LoadRatings(ratingAgenciesRowIndex);
         }
 
         private void ButtonAddRatingAgency_Click(object sender, EventArgs e)
@@ -47,11 +56,6 @@ namespace Watchdog.Forms
             {
                 Visible = true
             };
-        }
-
-        private void SelectionChangedLoadRatings(object sender, EventArgs e)
-        {
-
         }
 
         private Rating CopyRating(Rating oldRating)
@@ -71,13 +75,11 @@ namespace Watchdog.Forms
 
         private void RowValidatedRatings(object sender, DataGridViewCellEventArgs e)
         {
-
             if (currentRatingAgency == null)
             {
                 return;
             }
             TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
-            tableUtility.CreateMissingTable(Rating.GetDefaultValue());
             Rating newRating = dataGridViewRatingCodes.Rows[e.RowIndex].DataBoundItem as Rating;
             if (newRating == null)
             {
@@ -91,6 +93,10 @@ namespace Watchdog.Forms
                     newRating.RatingNumericValue.ToString(),
                     currentRatingAgency.Index.ToString()
                 });
+                return;
+            }
+            if (currentRow == null)
+            {
                 return;
             }
 
@@ -143,9 +149,75 @@ namespace Watchdog.Forms
             }
         }
 
-        private void AgencySelected(object sender, DataGridViewCellStateChangedEventArgs e)
+        private void DeleteRatingAgencyClick(object sender, EventArgs e)
         {
-            currentRatingAgency = dataGridViewRatingAgencies.Rows[e.Cell.RowIndex].DataBoundItem as RatingAgency;
+            TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
+            RatingAgency ratingAgencyToDelete = dataGridViewRatingAgencies.Rows[ratingAgenciesRowIndex].DataBoundItem as RatingAgency;
+            List<Rating> ratingsToDelete = tableUtility.ConvertRangesToObjects<Rating>(tableUtility.ReadTableRow(Rating.GetDefaultValue().GetTableName(), new Dictionary<string, string>
+            {
+                {"rating_agency_index", ratingAgencyToDelete.GetIndex().ToString() }
+            }, QueryOperator.OR));
+            foreach (Rating rating in ratingsToDelete)
+            {
+                tableUtility.DeleteTableRow(rating, rating.GetIndex());
+            }
+            tableUtility.DeleteTableRow(ratingAgencyToDelete, ratingAgencyToDelete.GetIndex());
+            ratingAgencyBindingSource.RemoveAt(ratingAgenciesRowIndex);
+            LoadRatings(ratingAgenciesRowIndex);
+            if (ratingAgencyBindingSource.Count == 0)
+            {
+                currentRatingAgency = null;
+            }
+        }
+
+        private void DataGridRatingAgenciesMouseDown(object sender, MouseEventArgs e)
+        {
+            DataGridView dataGridView = sender as DataGridView;
+            ratingAgenciesRowIndex = FormUtility.DataGridViewMouseDownContextMenu(dataGridView, e);
+            if (ratingAgenciesRowIndex < 0)
+            {
+                return;
+            }
+            currentRatingAgency = ratingAgencyBindingSource[ratingAgenciesRowIndex] as RatingAgency;
+        }
+
+        private void ClickRatingAgencies(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                LoadRatings(ratingAgenciesRowIndex);
+            }
+        }
+
+        private void LoadRatings(int index)
+        {
+            if (index < 0)
+            {
+                ratingBindingSource.Clear();
+                return;
+            }
+            ratingBindingSource.Clear();
+            if (currentRatingAgency == null)
+            {
+                return;
+            }
+            TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
+
+            List<Range> agencyRanges = tableUtility.ReadTableRow(Rating.GetDefaultValue().GetTableName(), new Dictionary<string, string>
+            {
+                {"rating_agency_index", currentRatingAgency.GetIndex().ToString() }
+            }, QueryOperator.OR);
+
+            if (agencyRanges.Count == 0)
+            {
+                return;
+            }
+
+            List<Rating> ratings = tableUtility.ConvertRangesToObjects<Rating>(agencyRanges);
+            foreach (Rating rating in ratings)
+            {
+                ratingBindingSource.Add(rating);
+            }
         }
     }
 }

@@ -8,19 +8,15 @@ namespace Watchdog.Forms
     {
         public static int DataGridViewMouseDownContextMenu(DataGridView sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            HitTestInfo hitTest = sender.HitTest(e.X, e.Y);
+            sender.ClearSelection();
+            if (hitTest.RowIndex < 0)
             {
-                HitTestInfo hitTest = sender.HitTest(e.X, e.Y);
-                sender.ClearSelection();
-                if (hitTest.RowIndex < 0)
-                {
-                    PreventContextMenu(sender, e);
-                    return -1;
-                }
-                sender.Rows[hitTest.RowIndex].Selected = true;
-                return hitTest.RowIndex;
+                PreventContextMenu(sender, e);
+                return -1;
             }
-            return -1;
+            sender.Rows[hitTest.RowIndex].Selected = true;
+            return hitTest.RowIndex;
         }
 
         private static void PreventContextMenu(DataGridView dataGridView, MouseEventArgs e)

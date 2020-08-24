@@ -32,16 +32,19 @@
             this.labelTitle = new System.Windows.Forms.Label();
             this.buttonAddRatingAgency = new System.Windows.Forms.Button();
             this.dataGridViewRatingCodes = new System.Windows.Forms.DataGridView();
+            this.dataGridViewRatingAgencies = new System.Windows.Forms.DataGridView();
+            this.contextMenuStripRatingAgency = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItemDelete = new System.Windows.Forms.ToolStripMenuItem();
+            this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ratingAgencyBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.ratingCodeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ratingNumericValueDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ratingBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.dataGridViewRatingAgencies = new System.Windows.Forms.DataGridView();
-            this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ratingAgencyBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRatingCodes)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ratingBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRatingAgencies)).BeginInit();
+            this.contextMenuStripRatingAgency.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ratingAgencyBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ratingBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // labelTitle
@@ -83,6 +86,54 @@
             this.dataGridViewRatingCodes.RowValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.RowValidatedRatings);
             this.dataGridViewRatingCodes.KeyUp += new System.Windows.Forms.KeyEventHandler(this.DeleteRow);
             // 
+            // dataGridViewRatingAgencies
+            // 
+            this.dataGridViewRatingAgencies.AllowUserToAddRows = false;
+            this.dataGridViewRatingAgencies.AutoGenerateColumns = false;
+            this.dataGridViewRatingAgencies.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewRatingAgencies.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.nameDataGridViewTextBoxColumn});
+            this.dataGridViewRatingAgencies.ContextMenuStrip = this.contextMenuStripRatingAgency;
+            this.dataGridViewRatingAgencies.DataSource = this.ratingAgencyBindingSource;
+            this.dataGridViewRatingAgencies.Location = new System.Drawing.Point(55, 308);
+            this.dataGridViewRatingAgencies.Name = "dataGridViewRatingAgencies";
+            this.dataGridViewRatingAgencies.ReadOnly = true;
+            this.dataGridViewRatingAgencies.RowHeadersWidth = 102;
+            this.dataGridViewRatingAgencies.RowTemplate.Height = 40;
+            this.dataGridViewRatingAgencies.Size = new System.Drawing.Size(701, 394);
+            this.dataGridViewRatingAgencies.TabIndex = 5;
+            this.dataGridViewRatingAgencies.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ClickRatingAgencies);
+            this.dataGridViewRatingAgencies.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DataGridRatingAgenciesMouseDown);
+            // 
+            // contextMenuStripRatingAgency
+            // 
+            this.contextMenuStripRatingAgency.ImageScalingSize = new System.Drawing.Size(40, 40);
+            this.contextMenuStripRatingAgency.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemDelete});
+            this.contextMenuStripRatingAgency.Name = "contextMenuStripRatingAgency";
+            this.contextMenuStripRatingAgency.Size = new System.Drawing.Size(361, 105);
+            // 
+            // toolStripMenuItemDelete
+            // 
+            this.toolStripMenuItemDelete.Font = new System.Drawing.Font("Arial Narrow", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolStripMenuItemDelete.Name = "toolStripMenuItemDelete";
+            this.toolStripMenuItemDelete.Size = new System.Drawing.Size(360, 46);
+            this.toolStripMenuItemDelete.Text = "Löschen";
+            this.toolStripMenuItemDelete.Click += new System.EventHandler(this.DeleteRatingAgencyClick);
+            // 
+            // nameDataGridViewTextBoxColumn
+            // 
+            this.nameDataGridViewTextBoxColumn.DataPropertyName = "Name";
+            this.nameDataGridViewTextBoxColumn.HeaderText = "Name";
+            this.nameDataGridViewTextBoxColumn.MinimumWidth = 12;
+            this.nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
+            this.nameDataGridViewTextBoxColumn.ReadOnly = true;
+            this.nameDataGridViewTextBoxColumn.Width = 250;
+            // 
+            // ratingAgencyBindingSource
+            // 
+            this.ratingAgencyBindingSource.DataSource = typeof(Watchdog.Entities.RatingAgency);
+            // 
             // ratingCodeDataGridViewTextBoxColumn
             // 
             this.ratingCodeDataGridViewTextBoxColumn.DataPropertyName = "RatingCode";
@@ -103,37 +154,6 @@
             // 
             this.ratingBindingSource.DataSource = typeof(Watchdog.Entities.Rating);
             // 
-            // dataGridViewRatingAgencies
-            // 
-            this.dataGridViewRatingAgencies.AllowUserToAddRows = false;
-            this.dataGridViewRatingAgencies.AutoGenerateColumns = false;
-            this.dataGridViewRatingAgencies.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewRatingAgencies.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.nameDataGridViewTextBoxColumn});
-            this.dataGridViewRatingAgencies.DataSource = this.ratingAgencyBindingSource;
-            this.dataGridViewRatingAgencies.Location = new System.Drawing.Point(55, 308);
-            this.dataGridViewRatingAgencies.Name = "dataGridViewRatingAgencies";
-            this.dataGridViewRatingAgencies.ReadOnly = true;
-            this.dataGridViewRatingAgencies.RowHeadersWidth = 102;
-            this.dataGridViewRatingAgencies.RowTemplate.Height = 40;
-            this.dataGridViewRatingAgencies.Size = new System.Drawing.Size(701, 394);
-            this.dataGridViewRatingAgencies.TabIndex = 5;
-            this.dataGridViewRatingAgencies.CellStateChanged += new System.Windows.Forms.DataGridViewCellStateChangedEventHandler(this.AgencySelected);
-            this.dataGridViewRatingAgencies.SelectionChanged += new System.EventHandler(this.SelectionChangedLoadRatings);
-            // 
-            // nameDataGridViewTextBoxColumn
-            // 
-            this.nameDataGridViewTextBoxColumn.DataPropertyName = "Name";
-            this.nameDataGridViewTextBoxColumn.HeaderText = "Name";
-            this.nameDataGridViewTextBoxColumn.MinimumWidth = 12;
-            this.nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
-            this.nameDataGridViewTextBoxColumn.ReadOnly = true;
-            this.nameDataGridViewTextBoxColumn.Width = 250;
-            // 
-            // ratingAgencyBindingSource
-            // 
-            this.ratingAgencyBindingSource.DataSource = typeof(Watchdog.Entities.RatingAgency);
-            // 
             // Ratings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
@@ -145,9 +165,10 @@
             this.Name = "Ratings";
             this.Size = new System.Drawing.Size(1313, 730);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRatingCodes)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ratingBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRatingAgencies)).EndInit();
+            this.contextMenuStripRatingAgency.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ratingAgencyBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ratingBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -164,5 +185,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ratingNumericValueDataGridViewTextBoxColumn;
         private System.Windows.Forms.BindingSource ratingBindingSource;
         private System.Windows.Forms.DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripRatingAgency;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemDelete;
     }
 }
