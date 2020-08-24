@@ -12,13 +12,11 @@ namespace Watchdog.Forms
     public partial class AddFundForm : Form
     {
         private int currentRowIndex;
-        private List<Currency> currencyCache;
         public AddFundForm()
         {
             InitializeComponent();
             LoadFundTable();
             TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
-            currencyCache = tableUtility.ConvertRangesToObjects<Currency>(tableUtility.ReadAllRows(Currency.GetDefaultValue().GetTableName()));
         }
 
         private void ButtonSubmit_Click(object sender, EventArgs e)
