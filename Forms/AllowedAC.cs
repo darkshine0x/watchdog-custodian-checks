@@ -21,7 +21,6 @@ namespace Watchdog.Forms
         private void LoadCurrencies()
         {
             TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
-            // List<Currency> currencyList = tableUtility.ConvertRangeToCurrency(tableUtility.ReadAllRows(Currency.GetDefaultValue().GetTableName()));
             List<Currency> currencyList = tableUtility.ConvertRangesToObjects<Currency>(tableUtility.ReadAllRows(Currency.GetDefaultValue().GetTableName()));
             foreach (Currency currency in currencyList)
             {
@@ -32,7 +31,6 @@ namespace Watchdog.Forms
         private void LoadAssetClasses()
         {
             TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
-            // List<AssetClass> assetClassList = tableUtility.ConvertRangeToAssetClass(tableUtility.ReadAllRows(AssetClass.GetDefaultValue().GetTableName()));
             List<AssetClass> assetClassList = tableUtility.ConvertRangesToObjects<AssetClass>(tableUtility.ReadAllRows(AssetClass.GetDefaultValue().GetTableName()));
             foreach (AssetClass assetClass in assetClassList)
             {
@@ -87,7 +85,7 @@ namespace Watchdog.Forms
                     break;
 
                 case "currency":
-                    AddCurrency(passedValue[0]);
+                    AddCurrency(passedValue[0].ToUpper());
                     break;
             }
         }
