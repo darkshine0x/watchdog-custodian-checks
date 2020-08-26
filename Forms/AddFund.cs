@@ -41,7 +41,6 @@ namespace Watchdog.Forms
             {
                 currency.IsoCode
             };
-            tableUtility.InsertTableRow(currency, currencyData);
             List<string> fundData = new List<string>()
             {
                 newFund.Name,
