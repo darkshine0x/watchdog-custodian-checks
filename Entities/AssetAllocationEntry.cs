@@ -10,14 +10,18 @@ namespace Watchdog.Entities
         {
             {"asset_class_index", "AssetClass" },
             {"currency_index", "Currency" },
-            {"value", "Value" },
+            {"min_value", "StrategicMinValue" },
+            {"opt_value", "StrategicOptValue" },
+            {"max_value", "StrategicMaxValue" },
             {"fund_index", "Fund" }
         };
         private readonly static AssetAllocationEntry defaultValue = new AssetAllocationEntry();
         public AssetClass AssetClass { get; set; }
         public Currency Currency { get; set; }
         public Fund Fund { get; set; }
-        public double Value { get; set; }
+        public double StrategicMinValue { get; set; }
+        public double StrategicOptValue { get; set; }
+        public double StrategicMaxValue { get; set; }
         public double Index { get; set; }
 
         public AssetAllocationEntry() { }

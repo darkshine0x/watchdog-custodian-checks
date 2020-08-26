@@ -8,7 +8,6 @@ using Watchdog.Persistence;
 
 namespace Watchdog.Forms
 {
-    // Plan zum Updaten der Tabelle. Wenn die Tabelle geladen wird, soll in die jeweilige Textbox gleich der zugehörige Wert geladen werden.
     public partial class EditAssetAllocation : Form
     {
         private readonly Fund fund;
@@ -36,7 +35,7 @@ namespace Watchdog.Forms
             Label label =  new Label
             {
                 Text = text,
-                Width = 200,
+                Width = 150,
                 Height = 50,
                 Margin = margin,
                 Padding = padding,
@@ -57,8 +56,8 @@ namespace Watchdog.Forms
             double sum = 0;
             for (int row = 1; row < tableLayoutPanel1.RowCount - 1; row++)
             {
-                TextBox textBox = tableLayoutPanel1.GetControlFromPosition(col, row) as TextBox;
-                double.TryParse(textBox.Text, out double number);
+                FlowLayoutPanel panel = tableLayoutPanel1.GetControlFromPosition(col, row) as FlowLayoutPanel;
+                double.TryParse(panel.Controls[1].Text, out double number);
                 sum += number;
             }
             return sum;
@@ -69,8 +68,8 @@ namespace Watchdog.Forms
             double sum = 0;
             for (int col = 1; col < tableLayoutPanel1.ColumnCount - 1; col++)
             {
-                TextBox textBox = tableLayoutPanel1.GetControlFromPosition(col, row) as TextBox;
-                double.TryParse(textBox.Text, out double number);
+                FlowLayoutPanel panel = tableLayoutPanel1.GetControlFromPosition(col, row) as FlowLayoutPanel;
+                double.TryParse(panel.Controls[1].Text, out double number);
                 sum += number;
             }
             return sum;
@@ -151,39 +150,57 @@ namespace Watchdog.Forms
                 {
                     AssetClass assetClass = tableLayoutPanel1.GetControlFromPosition(col, 0).DataBindings[0].DataSource as AssetClass;
                     Currency currency = tableLayoutPanel1.GetControlFromPosition(0, row).DataBindings[0].DataSource as Currency;
-                    TextBox textBox = new TextBox
+                    Padding paddingOneLeft = new Padding(1, 0, 0, 0);
+                    FlowLayoutPanel panel = new FlowLayoutPanel
                     {
-                        AutoSize = false,
-                        Width = 200,
+                        Margin = paddingOneLeft,
                         Height = 50,
-                        Margin = new Padding(1, 0, 0, 0),
-                        BorderStyle = BorderStyle.None,
-                        TextAlign = HorizontalAlignment.Right
+                        Width = 150
+                    };
+
+
+                    for (int i = 0; i < 3; i++)
+                    {
+                        TextBox textBox = new TextBox
+                        {
+                            AutoSize = false,
+                            Width = 50,
+                            Height = 50,
+                            Margin = padding,
+                            BorderStyle = BorderStyle.None,
+                            TextAlign = HorizontalAlignment.Right
+                        };
+                        textBox.KeyUp += (tb, keyUp) =>
+                        {
+                            TextBox t = tb as TextBox;
+                            bool cellContentIsNumber = double.TryParse(t.Text, out _);
+                            if (!cellContentIsNumber)
+                            {
+                                t.Clear();
+                            }
+                        };
+                        panel.Controls.Add(textBox);
+                    }
+                    panel.Controls[1].KeyUp += (tb, keyUp) =>
+                    {
+                        TextBox textBox = tb as TextBox;
+                        FlowLayoutPanel flowPanel = ((TextBox)tb).Parent as FlowLayoutPanel;
+                        CalcTotals(flowPanel);
                     };
 
                     AssetAllocationEntry entry = GetAssetAllocationEntry(assetClass, currency);
                     if (entry != null)
                     {
                         updateable = true;
-                        textBox.Text = entry.Value.ToString();
+                        panel.Controls[0].Text = entry.StrategicMinValue.ToString();
+                        panel.Controls[1].Text = entry.StrategicOptValue.ToString();
+                        panel.Controls[2].Text = entry.StrategicMaxValue.ToString();
                         Binding binding = new Binding(string.Empty, entry, string.Empty);
-                        textBox.DataBindings.Add(binding);
+                        panel.DataBindings.Add(binding);
                     }
 
-                    textBox.KeyUp += (tb, keyUp) =>
-                    {
-                        CalcTotals(tb);
-                    };
-                    textBox.KeyUp += (tb, keyUp) =>
-                    {
-                        TextBox t = tb as TextBox;
-                        bool cellContentIsNumber = double.TryParse(t.Text, out _);
-                        if (!cellContentIsNumber)
-                        {
-                            t.Clear();
-                        }
-                    };
-                    tableLayoutPanel1.Controls.Add(textBox);
+                    
+                    tableLayoutPanel1.Controls.Add(panel);
                 }
             }
 
@@ -204,7 +221,7 @@ namespace Watchdog.Forms
         {
             int numberOfRows = tableLayoutPanel1.RowCount - 1;
             int numberOfColumns = tableLayoutPanel1.ColumnCount - 1;
-            TableLayoutPanelCellPosition position = tableLayoutPanel1.GetPositionFromControl(tb as TextBox);
+            TableLayoutPanelCellPosition position = tableLayoutPanel1.GetPositionFromControl(tb as FlowLayoutPanel);
             Label totalAssetClass = tableLayoutPanel1.GetControlFromPosition(position.Column, numberOfRows) as Label;
             Label totalCurrency = tableLayoutPanel1.GetControlFromPosition(numberOfColumns, position.Row) as Label;
             Label total = tableLayoutPanel1.GetControlFromPosition(numberOfColumns, numberOfRows) as Label;
@@ -218,6 +235,8 @@ namespace Watchdog.Forms
 
         private void CalcTotals()
         {
+            totalCol = 0;
+            totalRow = 0;
             for (int col = 1; col < tableLayoutPanel1.ColumnCount - 1; col++)
             {
                 double colSum = GetColumnSum(col);
@@ -254,32 +273,50 @@ namespace Watchdog.Forms
             {
                 for (int row = 1; row < tableLayoutPanel1.RowCount - 1; row++)
                 {
-                    bool parsingSuccessful = double.TryParse(tableLayoutPanel1.GetControlFromPosition(col, row).Text, out double value);
-                    if (!parsingSuccessful)
+                    FlowLayoutPanel panel = tableLayoutPanel1.GetControlFromPosition(col, row) as FlowLayoutPanel;
+                    double[] assetAllocationRange = new double[3];
+
+                    for (int i = 0; i < 3; i++)
                     {
-                        value = 0;
+                        bool parsingSuccessful = double.TryParse(panel.Controls[i].Text, out double value);
+                        if (!parsingSuccessful)
+                        {
+                            value = 0;
+                        }
+                        assetAllocationRange[i] = value;
                     }
+                    
+                    
                     if (updateable)
                     {
                         AssetAllocationEntry entry = tableLayoutPanel1.GetControlFromPosition(col, row).DataBindings[0].DataSource as AssetAllocationEntry;
-                        TableUpdateWrapper update = new TableUpdateWrapper(entry.Index, "value", tableLayoutPanel1.GetControlFromPosition(col, row).Text);
+                        TableUpdateWrapper update = new TableUpdateWrapper(entry.Index, "min_value", panel.Controls[0].Text);
                         tableUtility.UpdateTableRow(entry, update);
+                        update = new TableUpdateWrapper(entry.Index, "opt_value", panel.Controls[1].Text);
+                        tableUtility.UpdateTableRow(entry, update);
+                        update = new TableUpdateWrapper(entry.Index, "max_value", panel.Controls[2].Text);
+                        tableUtility.UpdateTableRow(entry, update);
+
                     } else
                     {
                         AssetAllocationEntry assetAllocationEntry = new AssetAllocationEntry
                         {
                             AssetClass = tableLayoutPanel1.GetControlFromPosition(col, 0).DataBindings[0].DataSource as AssetClass,
                             Currency = tableLayoutPanel1.GetControlFromPosition(0, row).DataBindings[0].DataSource as Currency,
-                            Value = value,
+                            StrategicMinValue = assetAllocationRange[0],
+                            StrategicOptValue = assetAllocationRange[1],
+                            StrategicMaxValue = assetAllocationRange[2],
                             Fund = fund
                         };
                         tableUtility.InsertTableRow(assetAllocationEntry, new List<string>
-                    {
-                        assetAllocationEntry.AssetClass.Index.ToString(),
-                        assetAllocationEntry.Currency.Index.ToString(),
-                        value.ToString(),
-                        fund.Index.ToString()
-                    });
+                        {
+                            assetAllocationEntry.AssetClass.Index.ToString(),
+                            assetAllocationEntry.Currency.Index.ToString(),
+                            assetAllocationRange[0].ToString(),
+                            assetAllocationRange[1].ToString(),
+                            assetAllocationRange[2].ToString(),
+                            fund.Index.ToString()
+                        });
                     }
                 }
             }
