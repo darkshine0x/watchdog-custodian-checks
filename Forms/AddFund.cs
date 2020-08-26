@@ -37,10 +37,6 @@ namespace Watchdog.Forms
 
             Currency currency = tableUtility.ConvertRangesToObjects<Currency>(currencyRange)[0];
             Fund newFund = new Fund(textBoxFundName.Text, textBoxIsin.Text, textBoxCustodyNr.Text, currency);
-            List<string> currencyData = new List<string>()
-            {
-                currency.IsoCode
-            };
             List<string> fundData = new List<string>()
             {
                 newFund.Name,
