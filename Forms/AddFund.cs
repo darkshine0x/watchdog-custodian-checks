@@ -16,7 +16,6 @@ namespace Watchdog.Forms
         {
             InitializeComponent();
             LoadFundTable();
-            TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
         }
 
         private void ButtonSubmit_Click(object sender, EventArgs e)
