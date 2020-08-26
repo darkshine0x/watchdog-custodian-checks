@@ -26,7 +26,7 @@ namespace Watchdog.Forms
             textBoxCurrency.BackColor = Color.Empty;
             List<Range> currencyRange = tableUtility.ReadTableRow(Currency.GetDefaultValue().GetTableName(), new Dictionary<string, string>
             {
-                {"iso_code", textBoxCurrency.Text }
+                {"iso_code", textBoxCurrency.Text.ToUpper() }
             }, QueryOperator.OR);
             
             if (currencyRange.Count == 0 || currencyRange.Count > 1)
