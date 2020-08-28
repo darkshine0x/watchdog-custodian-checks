@@ -1,4 +1,6 @@
 ﻿using Microsoft.Office.Tools.Ribbon;
+using Watchdog.Forms.FundAdministration;
+using Watchdog.Forms.Settings;
 
 namespace Watchdog.Forms
 {
@@ -19,7 +21,15 @@ namespace Watchdog.Forms
 
         private void ButtonSettings_Click(object sender, RibbonControlEventArgs e)
         {
-            _ = new Settings()
+            _ = new SettingsForm()
+            {
+                Visible = true
+            };
+        }
+
+        private void ButtonRuleSet_Click(object sender, RibbonControlEventArgs e)
+        {
+            _ = new RuleAdministration()
             {
                 Visible = true
             };

@@ -20,7 +20,7 @@ namespace Watchdog.Forms.FundAdministration
 
         private void ButtonSubmit_Click(object sender, EventArgs e)
         {
-            TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
+            TableUtility tableUtility = new TableUtility();
             tableUtility.CreateTable(Currency.GetDefaultValue());
             tableUtility.CreateTable(Fund.GetDefaultValue());
             textBoxCurrency.BackColor = Color.Empty;
@@ -42,7 +42,7 @@ namespace Watchdog.Forms.FundAdministration
 
         private void LoadFundTable()
         {
-            TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
+            TableUtility tableUtility = new TableUtility();
             List<Fund> fundList = tableUtility.ConvertRangesToObjects<Fund>(tableUtility.ReadAllRows(Fund.GetDefaultValue()));
             foreach (Fund fund in fundList)
             {
@@ -75,7 +75,7 @@ namespace Watchdog.Forms.FundAdministration
 
         private void DeleteFundClick(object sender, EventArgs e)
         {
-            TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
+            TableUtility tableUtility = new TableUtility();
             Persistable objectToDelete = dataGridFunds.Rows[currentRowIndex].DataBoundItem as Persistable;
             dataGridFunds.Rows.RemoveAt(currentRowIndex);
             tableUtility.DeleteTableRow(objectToDelete);

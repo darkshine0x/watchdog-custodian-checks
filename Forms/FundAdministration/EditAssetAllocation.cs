@@ -90,7 +90,7 @@ namespace Watchdog.Forms.FundAdministration
 
         private AssetAllocationEntry GetAssetAllocationEntry(AssetClass assetClass, Currency currency)
         {
-            TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
+            TableUtility tableUtility = new TableUtility();
             List<AssetAllocationEntry> entries = tableUtility.ConvertRangesToObjects<AssetAllocationEntry>(tableUtility.ReadAllRows(AssetAllocationEntry.GetDefaultValue()));
             var entryQuery = from entry in entries
                              where entry.AssetClass.Name.Equals(assetClass.Name)
@@ -108,7 +108,7 @@ namespace Watchdog.Forms.FundAdministration
 
         private void LoadTable()
         {
-            TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
+            TableUtility tableUtility = new TableUtility();
             List<AssetClass> assetClasses = tableUtility.ConvertRangesToObjects<AssetClass>(tableUtility.ReadAllRows(AssetClass.GetDefaultValue()));
             List<Currency> currencies = tableUtility.ConvertRangesToObjects<Currency>(tableUtility.ReadAllRows(Currency.GetDefaultValue()));
             int numberOfColumns = assetClasses.Count + 1;
@@ -261,7 +261,7 @@ namespace Watchdog.Forms.FundAdministration
 
         private void ButtonSubmit_Click(object sender, EventArgs e)
         {
-            TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
+            TableUtility tableUtility = new TableUtility();
             tableUtility.CreateTable(AssetAllocationEntry.GetDefaultValue());
             CalcTotals();
             if (totalRow != 100 || totalCol != 100)

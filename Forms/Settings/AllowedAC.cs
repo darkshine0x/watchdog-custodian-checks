@@ -21,7 +21,7 @@ namespace Watchdog.Forms.Settings
 
         private void LoadCurrencies()
         {
-            TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
+            TableUtility tableUtility = new TableUtility();
             List<Currency> currencyList = tableUtility.ConvertRangesToObjects<Currency>(tableUtility.ReadAllRows(Currency.GetDefaultValue()));
             foreach (Currency currency in currencyList)
             {
@@ -31,7 +31,7 @@ namespace Watchdog.Forms.Settings
 
         private void LoadAssetClasses()
         {
-            TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
+            TableUtility tableUtility = new TableUtility();
             List<AssetClass> assetClassList = tableUtility.ConvertRangesToObjects<AssetClass>(tableUtility.ReadAllRows(AssetClass.GetDefaultValue()));
             foreach (AssetClass assetClass in assetClassList)
             {
@@ -41,7 +41,7 @@ namespace Watchdog.Forms.Settings
 
         private void AddAssetClass(string assetClassName)
         {
-            TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
+            TableUtility tableUtility = new TableUtility();
             tableUtility.CreateTable(AssetClass.GetDefaultValue());
             AssetClass assetClass = new AssetClass
             {
@@ -53,7 +53,7 @@ namespace Watchdog.Forms.Settings
 
         private void AddCurrency(string currencyIsoCode)
         {
-            TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
+            TableUtility tableUtility = new TableUtility();
             tableUtility.CreateTable(Currency.GetDefaultValue());
             Currency currency = new Currency
             {
@@ -95,7 +95,7 @@ namespace Watchdog.Forms.Settings
 
         private void DeleteClick(object sender, EventArgs e)
         {
-            TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
+            TableUtility tableUtility = new TableUtility();
             Persistable objectToDelete = currentDataGridView.Rows[currentRowIndex].DataBoundItem as Persistable;
             currentDataGridView.Rows.RemoveAt(currentRowIndex);
             tableUtility.DeleteTableRow(objectToDelete);

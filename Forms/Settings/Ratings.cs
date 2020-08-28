@@ -18,7 +18,7 @@ namespace Watchdog.Forms.Settings
         public Ratings()
         {
             InitializeComponent();
-            TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
+            TableUtility tableUtility = new TableUtility();
             tableUtility.CreateTable(Rating.GetDefaultValue());
             tableUtility.CreateTable(RatingAgency.GetDefaultValue());
             ratingAgenciesRowIndex = 0;
@@ -27,7 +27,7 @@ namespace Watchdog.Forms.Settings
 
         private void LoadRatingAgencies()
         {
-            TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
+            TableUtility tableUtility = new TableUtility();
             List<RatingAgency> agencyList = tableUtility.ConvertRangesToObjects<RatingAgency>(tableUtility.ReadAllRows(RatingAgency.GetDefaultValue()));
             foreach (RatingAgency agency in agencyList)
             {
@@ -38,7 +38,7 @@ namespace Watchdog.Forms.Settings
         public void OnSubmit(List<string> passedValue, string reference)
         {
             dataGridViewRatingAgencies.ClearSelection();
-            TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
+            TableUtility tableUtility = new TableUtility();
             RatingAgency ratingAgency = new RatingAgency(passedValue[0]);
             tableUtility.InsertTableRow(ratingAgency);
             int index = ratingAgencyBindingSource.Add(ratingAgency);
@@ -77,7 +77,7 @@ namespace Watchdog.Forms.Settings
             {
                 return;
             }
-            TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
+            TableUtility tableUtility = new TableUtility();
             Rating newRating = dataGridViewRatingCodes.Rows[e.RowIndex].DataBoundItem as Rating;
             if (newRating == null)
             {
@@ -137,7 +137,7 @@ namespace Watchdog.Forms.Settings
 
             if (e.KeyCode == Keys.Delete)
             {
-                TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
+                TableUtility tableUtility = new TableUtility();
                 tableUtility.DeleteTableRow(currentRow);
                 dataGridViewRatingCodes.Rows.RemoveAt(ratingsCurrentRowIndex);
             }
@@ -145,7 +145,7 @@ namespace Watchdog.Forms.Settings
 
         private void DeleteRatingAgencyClick(object sender, EventArgs e)
         {
-            TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
+            TableUtility tableUtility = new TableUtility();
             RatingAgency ratingAgencyToDelete = dataGridViewRatingAgencies.Rows[ratingAgenciesRowIndex].DataBoundItem as RatingAgency;
             List<Rating> ratingsToDelete = tableUtility.ConvertRangesToObjects<Rating>(tableUtility.ReadTableRow(Rating.GetDefaultValue().GetTableName(), new Dictionary<string, string>
             {
@@ -195,7 +195,7 @@ namespace Watchdog.Forms.Settings
             {
                 return;
             }
-            TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
+            TableUtility tableUtility = new TableUtility();
 
             List<Range> agencyRanges = tableUtility.ReadTableRow(Rating.GetDefaultValue().GetTableName(), new Dictionary<string, string>
             {

@@ -82,6 +82,7 @@
             this.buttonRuleSet.Label = "Regeln bearbeiten";
             this.buttonRuleSet.Name = "buttonRuleSet";
             this.buttonRuleSet.ShowImage = true;
+            this.buttonRuleSet.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.ButtonRuleSet_Click);
             // 
             // WatchdogRibbon
             // 

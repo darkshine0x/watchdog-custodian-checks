@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.labelValue = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBoxValue = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // labelValue
@@ -41,18 +41,19 @@
             this.labelValue.TabIndex = 0;
             this.labelValue.Text = "Maximaler Wert";
             // 
-            // textBox1
+            // textBoxValue
             // 
-            this.textBox1.Location = new System.Drawing.Point(329, 102);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(257, 38);
-            this.textBox1.TabIndex = 1;
+            this.textBoxValue.Font = new System.Drawing.Font("Arial Narrow", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxValue.Location = new System.Drawing.Point(293, 100);
+            this.textBoxValue.Name = "textBoxValue";
+            this.textBoxValue.Size = new System.Drawing.Size(323, 45);
+            this.textBoxValue.TabIndex = 1;
             // 
             // UserControlNumericOneValue
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.textBoxValue);
             this.Controls.Add(this.labelValue);
             this.Name = "UserControlNumericOneValue";
             this.Size = new System.Drawing.Size(669, 261);
@@ -64,6 +65,6 @@
         #endregion
 
         private System.Windows.Forms.Label labelValue;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBoxValue;
     }
 }

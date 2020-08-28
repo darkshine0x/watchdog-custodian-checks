@@ -12,6 +12,11 @@ namespace Watchdog.Persistence
         private readonly string sequenceTableName = "wdt_sequence";
         private readonly Workbook workbook;
 
+        public TableUtility() : this(Globals.WatchdogAddIn.Application.ActiveWorkbook)
+        {
+
+        }
+
         public TableUtility(Workbook workbook)
         {
             this.workbook = workbook;
@@ -164,10 +169,11 @@ namespace Watchdog.Persistence
             foreach (PropertyInfo property in GetPersistableProperties(persistable))
             {
                 Type propertyType = property.PropertyType;
-                if (!propertyType.IsPrimitive && propertyType != typeof(string)) {
+                if (!propertyType.IsPrimitive && propertyType != typeof(string) && !propertyType.IsEnum) {
                     Persistable nestedObject = property.GetValue(persistable) as Persistable;
                     ws.Cells[row, colCounter].Value = nestedObject.GetIndex();
-                } else
+                }
+                else
                 {
                     ws.Cells[row, colCounter].Value = property.GetValue(persistable);
                 }
@@ -306,6 +312,12 @@ namespace Watchdog.Persistence
                 Type propertyType = property.PropertyType;
                 if (!propertyType.IsPrimitive && propertyType != typeof(string))
                 {
+                    if (propertyType.IsEnum)
+                    {
+                        double enumKey = row.Cells[1, col].Value;
+                        property.SetValue(obj, Enum.Parse(propertyType, enumKey.ToString()));
+                        continue;
+                    }
                     Persistable foreignObject = Activator.CreateInstance(propertyType) as Persistable;
                     double foreignKey = row.Cells[1, col].Value;
                     foreignObject.SetIndex(row.Cells[1, col].Value);

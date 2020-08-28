@@ -60,5 +60,13 @@ namespace Watchdog.Forms.FundAdministration
             }
 
         }
+
+        private void ButtonSubmit_Click(object sender, EventArgs e)
+        {
+            IRuleUserControl userControl = panelUserControl.Controls[0] as IRuleUserControl;
+            DropDownItem<RuleKind> ruleKindItem = comboBoxRuleKind.SelectedItem as DropDownItem<RuleKind>;
+            userControl.InvokeSubmission(ruleKindItem.Value);
+            Close();
+        }
     }
 }

@@ -82,6 +82,7 @@
             this.buttonSubmit.TabIndex = 3;
             this.buttonSubmit.Text = "Bestätigen";
             this.buttonSubmit.UseVisualStyleBackColor = true;
+            this.buttonSubmit.Click += new System.EventHandler(this.ButtonSubmit_Click);
             // 
             // buttonCancel
             // 
