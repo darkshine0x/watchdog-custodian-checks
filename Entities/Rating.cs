@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Collections.Generic;
 using Watchdog.Persistence;
 
 namespace Watchdog.Entities
@@ -17,10 +15,13 @@ namespace Watchdog.Entities
         };
 
         private static readonly Rating defaultValue = new Rating();
+        [PersistableField]
         public string RatingCode { get; set; }
+        [PersistableField]
         public double RatingNumericValue { get; set; }
         public double Index { get; set; }
-        public double Agency { get; set; }
+        [PersistableField]
+        public RatingAgency Agency { get; set; }
 
         public Rating()
         {
@@ -66,19 +67,19 @@ namespace Watchdog.Entities
                    Agency == rating.Agency;
         }
 
+        public Dictionary<string, string> GetTableMapping()
+        {
+            return tableMapping;
+        }
+
         public override int GetHashCode()
         {
             int hashCode = 1239053354;
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(RatingCode);
             hashCode = hashCode * -1521134295 + RatingNumericValue.GetHashCode();
             hashCode = hashCode * -1521134295 + Index.GetHashCode();
-            hashCode = hashCode * -1521134295 + Agency.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<RatingAgency>.Default.GetHashCode(Agency);
             return hashCode;
-        }
-
-        public Dictionary<string, string> GetTableMapping()
-        {
-            return tableMapping;
         }
     }
 }

@@ -17,14 +17,14 @@ namespace Watchdog.Persistence
             this.workbook = workbook;
         }
 
-        public  Workbook CreateMissingTable(Persistable persistable)
+        public void CreateTable(Persistable persistable)
         {
-            if (FindWorksheet(persistable.GetTableName()) != null) {
-                return workbook;
+            if (FindWorksheet(persistable.GetTableName()) != null)
+            {
+                return;
             }
-            CreateWorksheet(persistable);
+            CreateTableWorksheet(persistable);
             InsertRowCounter(persistable);
-            return workbook;
         }
 
         private  Worksheet CreateSequenceTable()
@@ -148,12 +148,8 @@ namespace Watchdog.Persistence
             }
         }
 
-        public  Workbook InsertTableRow(Persistable persistable, List<string> data)
+        public Workbook InsertTableRow(Persistable persistable)
         {
-            if (data.Count != persistable.GetTableHeader().Count)
-            {
-                throw new ArgumentException("The data row's length does not match the the number of table columns.");
-            }
             Worksheet ws = FindWorksheet(persistable.GetTableName());
             if (ws == null)
             {
@@ -164,17 +160,40 @@ namespace Watchdog.Persistence
             double sequence = IncrementSequence();
             ws.Cells[row, 1].Value = sequence;
             persistable.SetIndex(sequence);
-            for (int i = 0; i < data.Count; i++)
+            int colCounter = 2;
+            foreach (PropertyInfo property in GetPersistableProperties(persistable))
             {
-                ws.Cells[row, i + 2].Value = data[i];
+                Type propertyType = property.PropertyType;
+                if (!propertyType.IsPrimitive && propertyType != typeof(string)) {
+                    Persistable nestedObject = property.GetValue(persistable) as Persistable;
+                    ws.Cells[row, colCounter].Value = nestedObject.GetIndex();
+                } else
+                {
+                    ws.Cells[row, colCounter].Value = property.GetValue(persistable);
+                }
+                colCounter++;
             }
             return workbook;
         }
 
-        public List<Range> ReadAllRows(string tableName)
+        private List<PropertyInfo> GetPersistableProperties(Persistable persistable)
+        {
+            PropertyInfo[] properties = persistable.GetType().GetProperties();
+            List<PropertyInfo> persistableProperties = new List<PropertyInfo>();
+            foreach (PropertyInfo property in properties)
+            {
+                if (property.GetCustomAttributes(typeof(PersistableField), false).Length != 0)
+                {
+                    persistableProperties.Add(property);
+                }
+            }
+            return persistableProperties;
+        }
+
+        public List<Range> ReadAllRows(Persistable persistable)
         {
             List<Range> searchResult = new List<Range>();
-            Worksheet worksheet = FindWorksheet(tableName);
+            Worksheet worksheet = FindWorksheet(persistable.GetTableName());
             if (worksheet == null)
             {
                 return null;
@@ -244,13 +263,13 @@ namespace Watchdog.Persistence
             return searchResult;
         }
 
-        public Range ReadTableRow(string tableName, double index)
+        public Range ReadTableRow(Persistable persistable)
         {
-            Worksheet worksheet = FindWorksheet(tableName);
+            Worksheet worksheet = FindWorksheet(persistable.GetTableName());
             foreach (Range row in worksheet.UsedRange.Rows)
             {
                 double.TryParse(row.Cells[1, 1].Value.ToString(), out double rowIndex);
-                if (rowIndex == index)
+                if (rowIndex == persistable.GetIndex())
                 {
                     return row;
                 }
@@ -267,52 +286,48 @@ namespace Watchdog.Persistence
             }
             foreach (Range row in ranges)
             {
-                list.Add(ConvertRowToObject<T>(row));
+                list.Add(RowToObject<T>(row));
             }
             return list;
         }
 
-        public T ConvertRowToObject<T>(Range row) where T : Persistable, new()
+        public T RowToObject<T>(Range row) where T : Persistable, new()
         {
             if (row == null)
             {
                 return default;
             }
-            Type type = typeof(T);
             T obj = new T();
-            if (row.Cells.Count - 1 != obj.GetTableHeader().Count)
-            {
-                throw new ArgumentException("Number of attributes does match the number of columns");
-            }
             obj.SetIndex(row.Cells[1, 1].Value);
+            List<PropertyInfo> persistableProperties = GetPersistableProperties(obj);
             int col = 2;
-            foreach (string fieldName in obj.GetTableMapping().Values)
+            foreach (PropertyInfo property in persistableProperties)
             {
-                PropertyInfo propertyInfo = type.GetProperty(fieldName);
-                Type propertyType = propertyInfo.PropertyType;
+                Type propertyType = property.PropertyType;
                 if (!propertyType.IsPrimitive && propertyType != typeof(string))
                 {
                     Persistable foreignObject = Activator.CreateInstance(propertyType) as Persistable;
                     double foreignKey = row.Cells[1, col].Value;
-                    Range foreignRow = ReadTableRow(foreignObject.GetTableName(), foreignKey);
-                    MethodInfo method = typeof(TableUtility).GetMethod("ConvertRowToObject");
+                    foreignObject.SetIndex(row.Cells[1, col].Value);
+                    Range foreignRow = ReadTableRow(foreignObject);
+                    MethodInfo method = typeof(TableUtility).GetMethod("RowToObject");
                     MethodInfo genericMethod = method.MakeGenericMethod(propertyType);
                     Range[] parameters = new Range[1];
                     parameters[0] = foreignRow;
                     Persistable generatedObject = genericMethod.Invoke(this, parameters) as Persistable;
-                    propertyInfo.SetValue(obj, generatedObject);
+                    property.SetValue(obj, generatedObject);
                 } else
                 {
-                    type.GetProperty(fieldName).SetValue(obj, row.Cells[1, col].Value);
+                    property.SetValue(obj, row.Cells[1, col].Value);
                 }
                 col++;
             }
             return obj;
         }
 
-        public bool DeleteTableRow(Persistable persistable, double index)
+        public bool DeleteTableRow(Persistable persistable)
         {
-            Range result = ReadTableRow(persistable.GetTableName(), index);
+            Range result = ReadTableRow(persistable);
             if (result == null)
             {
                 return false;
@@ -338,12 +353,7 @@ namespace Watchdog.Persistence
             return true;
         }
 
-        public  Worksheet CreateWorksheet(Persistable persistable)
-        {
-            return CreateWorksheet(persistable.GetTableName(), persistable.GetTableHeader());
-        }
-
-        public  Worksheet CreateWorksheet(string tableName, List<string> tableHeader)
+        public Worksheet CreateWorksheet(string tableName, List<string> tableHeader)
         {
             Worksheet createdSheet = workbook.Sheets.Add();
             createdSheet.Name = tableName;
@@ -358,6 +368,26 @@ namespace Watchdog.Persistence
             createdSheet.Application.ActiveWindow.FreezePanes = true;
             createdSheet.Visible = XlSheetVisibility.xlSheetHidden;
             return createdSheet;
+        }
+
+        public Worksheet CreateTableWorksheet(Persistable persistable)
+        {
+            Worksheet newWorksheet = workbook.Sheets.Add();
+            newWorksheet.Name = persistable.GetTableName();
+            newWorksheet.Cells[1, 1].Value = "index";
+            int colCounter = 2;
+            List<PropertyInfo> persistableProperties = GetPersistableProperties(persistable);
+            foreach (PropertyInfo property in persistableProperties)
+            {
+                newWorksheet.Cells[1, colCounter].Value = property.Name;
+                colCounter++;
+            }
+            newWorksheet.Rows[1].AutoFilter();
+            newWorksheet.Rows[1].Font.Bold = true;
+            newWorksheet.Application.ActiveWindow.SplitRow = 1;
+            newWorksheet.Application.ActiveWindow.FreezePanes = true;
+            newWorksheet.Visible = XlSheetVisibility.xlSheetHidden;
+            return newWorksheet;
         }
     }
 }

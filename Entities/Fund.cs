@@ -15,9 +15,13 @@ namespace Watchdog.Entities
         };
         private static readonly Fund defaultFund = new Fund();
         public double Index { get; set; }
+        [PersistableField]
         public string Name { get; set; }
+        [PersistableField]
         public string Isin { get; set; }
+        [PersistableField]
         public string CustodyAccountNumber { get; set; }
+        [PersistableField]
         public Currency Currency { get; set; }
         public List<Position> Positions { get; }
         public List<Rule> Rules { get; }

@@ -1,12 +1,17 @@
-﻿namespace Watchdog.Entities
+﻿using Watchdog.Persistence;
+
+namespace Watchdog.Entities
 {
     public class NumericRule : Rule
     {
-        public double NumericValue { get; }
+        [PersistableField]
+        public double NumericValue { get; set; }
 
         public NumericRule(double numericValue, RuleKind ruleKind) : base(ruleKind)
         {
             NumericValue = numericValue;
         }
+
+        
     }
 }

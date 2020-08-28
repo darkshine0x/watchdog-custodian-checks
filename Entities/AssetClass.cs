@@ -12,6 +12,7 @@ namespace Watchdog.Entities
         };
         private static readonly AssetClass defaultAssetClass = new AssetClass();
 
+        [PersistableField]
         public string Name { get; set; }
         public double Index { get; set; }
 

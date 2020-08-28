@@ -170,57 +170,72 @@
     <Compile Include="Entities\Rating.cs" />
     <Compile Include="Entities\RatingAgency.cs" />
     <Compile Include="Entities\Rule.cs" />
-    <Compile Include="Forms\AddFund.cs">
+    <Compile Include="Forms\FundAdministration\AddFund.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\AddFund.Designer.cs">
+    <Compile Include="Forms\FundAdministration\AddFund.Designer.cs">
       <DependentUpon>AddFund.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FormUtility.cs" />
-    <Compile Include="Forms\OneAttributeForm.cs">
+    <Compile Include="Forms\FundAdministration\AddRule.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\OneAttributeForm.Designer.cs">
+    <Compile Include="Forms\FundAdministration\AddRule.Designer.cs">
+      <DependentUpon>AddRule.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FundAdministration\UserControlNumericOneValue.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\FundAdministration\UserControlNumericOneValue.Designer.cs">
+      <DependentUpon>UserControlNumericOneValue.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Util\DropDownItem.cs" />
+    <Compile Include="Forms\Util\FormUtility.cs" />
+    <Compile Include="Forms\Util\IRuleUserControl.cs" />
+    <Compile Include="Forms\Util\OneAttributeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Util\OneAttributeForm.Designer.cs">
       <DependentUpon>OneAttributeForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\PassedForm.cs" />
-    <Compile Include="Forms\Ratings.cs">
+    <Compile Include="Forms\Util\IPassedForm.cs" />
+    <Compile Include="Forms\Settings\Ratings.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Forms\Ratings.Designer.cs">
+    <Compile Include="Forms\Settings\Ratings.Designer.cs">
       <DependentUpon>Ratings.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\RuleAdministration.cs">
+    <Compile Include="Forms\FundAdministration\RuleAdministration.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\RuleAdministration.Designer.cs">
+    <Compile Include="Forms\FundAdministration\RuleAdministration.Designer.cs">
       <DependentUpon>RuleAdministration.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Settings.cs">
+    <Compile Include="Forms\Settings\SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\Settings.Designer.cs">
-      <DependentUpon>Settings.cs</DependentUpon>
+    <Compile Include="Forms\Settings\SettingsForm.Designer.cs">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\EditAssetAllocation.cs">
+    <Compile Include="Forms\FundAdministration\EditAssetAllocation.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\EditAssetAllocation.Designer.cs">
+    <Compile Include="Forms\FundAdministration\EditAssetAllocation.Designer.cs">
       <DependentUpon>EditAssetAllocation.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\AllowedAC.cs">
+    <Compile Include="Forms\Settings\AllowedAC.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Forms\AllowedAC.Designer.cs">
+    <Compile Include="Forms\Settings\AllowedAC.Designer.cs">
       <DependentUpon>AllowedAC.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\WatchdogRibbon.cs">
-      <SubType>Form</SubType>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Forms\WatchdogRibbon.Designer.cs">
       <DependentUpon>WatchdogRibbon.cs</DependentUpon>
     </Compile>
     <Compile Include="Persistence\Persistable.cs" />
+    <Compile Include="Persistence\PersistableField.cs" />
     <Compile Include="Persistence\QueryOperator.cs" />
     <Compile Include="Persistence\RulePersister.cs" />
     <Compile Include="Persistence\TableUpdateWrapper.cs" />
@@ -228,22 +243,31 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <EmbeddedResource Include="Forms\AddFund.resx">
+    <EmbeddedResource Include="Forms\FundAdministration\AddFund.resx">
       <DependentUpon>AddFund.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\OneAttributeForm.resx">
+    <EmbeddedResource Include="Forms\FundAdministration\AddRule.resx">
+      <DependentUpon>AddRule.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FundAdministration\UserControlNumericOneValue.resx">
+      <DependentUpon>UserControlNumericOneValue.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Util\OneAttributeForm.resx">
       <DependentUpon>OneAttributeForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Ratings.resx">
+    <EmbeddedResource Include="Forms\Settings\Ratings.resx">
       <DependentUpon>Ratings.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Settings.resx">
-      <DependentUpon>Settings.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FundAdministration\RuleAdministration.resx">
+      <DependentUpon>RuleAdministration.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\EditAssetAllocation.resx">
+    <EmbeddedResource Include="Forms\Settings\SettingsForm.resx">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FundAdministration\EditAssetAllocation.resx">
       <DependentUpon>EditAssetAllocation.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\AllowedAC.resx">
+    <EmbeddedResource Include="Forms\Settings\AllowedAC.resx">
       <DependentUpon>AllowedAC.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\WatchdogRibbon.resx">
@@ -265,6 +289,7 @@
     <None Include="Properties\DataSources\Watchdog.Entities.Fund.datasource" />
     <None Include="Properties\DataSources\Watchdog.Entities.Rating.datasource" />
     <None Include="Properties\DataSources\Watchdog.Entities.RatingAgency.datasource" />
+    <None Include="Properties\DataSources\Watchdog.Entities.RuleKind.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

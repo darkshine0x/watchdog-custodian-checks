@@ -16,11 +16,17 @@ namespace Watchdog.Entities
             {"fund_index", "Fund" }
         };
         private readonly static AssetAllocationEntry defaultValue = new AssetAllocationEntry();
+        [PersistableField]
         public AssetClass AssetClass { get; set; }
+        [PersistableField]
         public Currency Currency { get; set; }
+        [PersistableField]
         public Fund Fund { get; set; }
+        [PersistableField]
         public double StrategicMinValue { get; set; }
+        [PersistableField]
         public double StrategicOptValue { get; set; }
+        [PersistableField]
         public double StrategicMaxValue { get; set; }
         public double Index { get; set; }
 

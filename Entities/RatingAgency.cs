@@ -11,6 +11,7 @@ namespace Watchdog.Entities
             {"name", "Name" }
         };
         private static readonly RatingAgency defaultValue = new RatingAgency();
+        [PersistableField]
         public string Name { get; set; }
         public double Index { get; set; }
 

@@ -6,8 +6,19 @@ namespace Watchdog.Entities
     public class Rule : Persistable
     {
         private static readonly string tableName = "wdt_rules";
-        public RuleKind RuleKind { get; }
+        private static readonly Dictionary<string, string> tableMapping = new Dictionary<string, string>
+        {
+            {"rule_kind", "RuleKind" },
+        };
+
+        [PersistableField]
+        public RuleKind RuleKind { get; set; }
         public double Index { get; set; }
+
+        public Rule()
+        {
+
+        }
 
         public Rule(RuleKind ruleKind)
         {
@@ -21,7 +32,9 @@ namespace Watchdog.Entities
 
         public List<string> GetTableHeader()
         {
-            throw new System.NotImplementedException();
+            List<string> header = new List<string>();
+            header.AddRange(tableMapping.Keys);
+            return header;
         }
 
         public double GetIndex()
@@ -36,7 +49,12 @@ namespace Watchdog.Entities
 
         public Dictionary<string, string> GetTableMapping()
         {
-            throw new System.NotImplementedException();
+            return tableMapping;
+        }
+
+        public static Persistable GetDefaultValue()
+        {
+            return new Rule();
         }
     }
 }

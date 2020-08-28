@@ -11,6 +11,7 @@ namespace Watchdog.Entities
             {"iso_code", "IsoCode" }
         };
         public static readonly Currency defaultCurrency = new Currency();
+        [PersistableField]
         public string IsoCode { get; set; }
         public double Index { get; set; }
 
