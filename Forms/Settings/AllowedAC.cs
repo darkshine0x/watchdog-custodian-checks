@@ -3,10 +3,11 @@ using System.Windows.Forms;
 using Watchdog.Persistence;
 using Watchdog.Entities;
 using System;
+using Watchdog.Forms.Util;
 
-namespace Watchdog.Forms
+namespace Watchdog.Forms.Settings
 {
-    public partial class UserControlAllowedACAndCurrencies : UserControl, PassedForm
+    public partial class UserControlAllowedACAndCurrencies : UserControl, IPassedForm
     {
         private int currentRowIndex;
         private DataGridView currentDataGridView;
@@ -21,7 +22,7 @@ namespace Watchdog.Forms
         private void LoadCurrencies()
         {
             TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
-            List<Currency> currencyList = tableUtility.ConvertRangesToObjects<Currency>(tableUtility.ReadAllRows(Currency.GetDefaultValue().GetTableName()));
+            List<Currency> currencyList = tableUtility.ConvertRangesToObjects<Currency>(tableUtility.ReadAllRows(Currency.GetDefaultValue()));
             foreach (Currency currency in currencyList)
             {
                 currencyBindingSource.Add(currency);
@@ -31,7 +32,7 @@ namespace Watchdog.Forms
         private void LoadAssetClasses()
         {
             TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
-            List<AssetClass> assetClassList = tableUtility.ConvertRangesToObjects<AssetClass>(tableUtility.ReadAllRows(AssetClass.GetDefaultValue().GetTableName()));
+            List<AssetClass> assetClassList = tableUtility.ConvertRangesToObjects<AssetClass>(tableUtility.ReadAllRows(AssetClass.GetDefaultValue()));
             foreach (AssetClass assetClass in assetClassList)
             {
                 assetClassBindingSource.Add(assetClass);
@@ -41,30 +42,24 @@ namespace Watchdog.Forms
         private void AddAssetClass(string assetClassName)
         {
             TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
-            tableUtility.CreateMissingTable(AssetClass.GetDefaultValue());
+            tableUtility.CreateTable(AssetClass.GetDefaultValue());
             AssetClass assetClass = new AssetClass
             {
                 Name = assetClassName
             };
-            tableUtility.InsertTableRow(assetClass, new List<string>()
-            {
-                assetClass.Name
-            });
+            tableUtility.InsertTableRow(assetClass);
             assetClassBindingSource.Add(assetClass);
         }
 
         private void AddCurrency(string currencyIsoCode)
         {
             TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
-            tableUtility.CreateMissingTable(Currency.GetDefaultValue());
+            tableUtility.CreateTable(Currency.GetDefaultValue());
             Currency currency = new Currency
             {
                 IsoCode = currencyIsoCode
             };
-            tableUtility.InsertTableRow(currency, new List<string>()
-            {
-                currency.IsoCode
-            });
+            tableUtility.InsertTableRow(currency);
             currencyBindingSource.Add(currency);
         }
 
@@ -103,7 +98,7 @@ namespace Watchdog.Forms
             TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
             Persistable objectToDelete = currentDataGridView.Rows[currentRowIndex].DataBoundItem as Persistable;
             currentDataGridView.Rows.RemoveAt(currentRowIndex);
-            tableUtility.DeleteTableRow(objectToDelete, objectToDelete.GetIndex());
+            tableUtility.DeleteTableRow(objectToDelete);
         }
 
         private void SetRowIndex(object sender, MouseEventArgs e)

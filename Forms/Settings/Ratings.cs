@@ -3,11 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Watchdog.Entities;
+using Watchdog.Forms.Util;
 using Watchdog.Persistence;
 
-namespace Watchdog.Forms
+namespace Watchdog.Forms.Settings
 {
-    public partial class Ratings : UserControl, PassedForm
+    public partial class Ratings : UserControl, IPassedForm
     {
         private int ratingsCurrentRowIndex;
         private int ratingAgenciesRowIndex;
@@ -18,8 +19,8 @@ namespace Watchdog.Forms
         {
             InitializeComponent();
             TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
-            tableUtility.CreateMissingTable(Rating.GetDefaultValue());
-            tableUtility.CreateMissingTable(RatingAgency.GetDefaultValue());
+            tableUtility.CreateTable(Rating.GetDefaultValue());
+            tableUtility.CreateTable(RatingAgency.GetDefaultValue());
             ratingAgenciesRowIndex = 0;
             LoadRatingAgencies();
         }
@@ -27,7 +28,7 @@ namespace Watchdog.Forms
         private void LoadRatingAgencies()
         {
             TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
-            List<RatingAgency> agencyList = tableUtility.ConvertRangesToObjects<RatingAgency>(tableUtility.ReadAllRows(RatingAgency.GetDefaultValue().GetTableName()));
+            List<RatingAgency> agencyList = tableUtility.ConvertRangesToObjects<RatingAgency>(tableUtility.ReadAllRows(RatingAgency.GetDefaultValue()));
             foreach (RatingAgency agency in agencyList)
             {
                 ratingAgencyBindingSource.Add(agency);
@@ -39,10 +40,7 @@ namespace Watchdog.Forms
             dataGridViewRatingAgencies.ClearSelection();
             TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
             RatingAgency ratingAgency = new RatingAgency(passedValue[0]);
-            tableUtility.InsertTableRow(ratingAgency, new List<string>
-            {
-                passedValue[0]
-            });
+            tableUtility.InsertTableRow(ratingAgency);
             int index = ratingAgencyBindingSource.Add(ratingAgency);
             dataGridViewRatingAgencies.Rows[index].Selected = true;
             currentRatingAgency = ratingAgency;
@@ -85,14 +83,10 @@ namespace Watchdog.Forms
             {
                 return;
             }
+            newRating.Agency = currentRatingAgency;
             if (newRating.Index == 0)
             {
-                tableUtility.InsertTableRow(newRating, new List<string>
-                {
-                    newRating.RatingCode,
-                    newRating.RatingNumericValue.ToString(),
-                    currentRatingAgency.Index.ToString()
-                });
+                tableUtility.InsertTableRow(newRating);
                 return;
             }
             if (currentRow == null)
@@ -144,7 +138,7 @@ namespace Watchdog.Forms
             if (e.KeyCode == Keys.Delete)
             {
                 TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
-                tableUtility.DeleteTableRow(currentRow, currentRow.GetIndex());
+                tableUtility.DeleteTableRow(currentRow);
                 dataGridViewRatingCodes.Rows.RemoveAt(ratingsCurrentRowIndex);
             }
         }
@@ -155,13 +149,13 @@ namespace Watchdog.Forms
             RatingAgency ratingAgencyToDelete = dataGridViewRatingAgencies.Rows[ratingAgenciesRowIndex].DataBoundItem as RatingAgency;
             List<Rating> ratingsToDelete = tableUtility.ConvertRangesToObjects<Rating>(tableUtility.ReadTableRow(Rating.GetDefaultValue().GetTableName(), new Dictionary<string, string>
             {
-                {"rating_agency_index", ratingAgencyToDelete.GetIndex().ToString() }
+                {"Agency", ratingAgencyToDelete.GetIndex().ToString() }
             }, QueryOperator.OR));
             foreach (Rating rating in ratingsToDelete)
             {
-                tableUtility.DeleteTableRow(rating, rating.GetIndex());
+                tableUtility.DeleteTableRow(rating);
             }
-            tableUtility.DeleteTableRow(ratingAgencyToDelete, ratingAgencyToDelete.GetIndex());
+            tableUtility.DeleteTableRow(ratingAgencyToDelete);
             ratingAgencyBindingSource.RemoveAt(ratingAgenciesRowIndex);
             LoadRatings(ratingAgenciesRowIndex);
             if (ratingAgencyBindingSource.Count == 0)
@@ -205,7 +199,7 @@ namespace Watchdog.Forms
 
             List<Range> agencyRanges = tableUtility.ReadTableRow(Rating.GetDefaultValue().GetTableName(), new Dictionary<string, string>
             {
-                {"rating_agency_index", currentRatingAgency.GetIndex().ToString() }
+                {"Agency", currentRatingAgency.GetIndex().ToString() }
             }, QueryOperator.OR);
 
             if (agencyRanges.Count == 0)

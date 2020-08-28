@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace Watchdog.Forms
+namespace Watchdog.Forms.Util
 {
     public partial class OneAttributeForm : Form
     {
-        public PassedForm originalForm;
+        public IPassedForm originalForm;
         public string reference;
 
-        public OneAttributeForm(PassedForm originalForm, string labelValue, string reference)
+        public OneAttributeForm(IPassedForm originalForm, string labelValue, string reference)
         {
             Text = labelValue;
             InitializeComponent();

@@ -2,12 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 using Watchdog.Entities;
+using Watchdog.Forms.Util;
 using Watchdog.Persistence;
 
-namespace Watchdog.Forms
+namespace Watchdog.Forms.FundAdministration
 {
     public partial class AddFundForm : Form
     {
@@ -21,12 +21,12 @@ namespace Watchdog.Forms
         private void ButtonSubmit_Click(object sender, EventArgs e)
         {
             TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
-            tableUtility.CreateMissingTable(Currency.GetDefaultValue());
-            tableUtility.CreateMissingTable(Fund.GetDefaultValue());
+            tableUtility.CreateTable(Currency.GetDefaultValue());
+            tableUtility.CreateTable(Fund.GetDefaultValue());
             textBoxCurrency.BackColor = Color.Empty;
             List<Range> currencyRange = tableUtility.ReadTableRow(Currency.GetDefaultValue().GetTableName(), new Dictionary<string, string>
             {
-                {"iso_code", textBoxCurrency.Text.ToUpper() }
+                {"IsoCode", textBoxCurrency.Text.ToUpper() }
             }, QueryOperator.OR);
             
             if (currencyRange.Count == 0 || currencyRange.Count > 1)
@@ -34,24 +34,16 @@ namespace Watchdog.Forms
                 textBoxCurrency.BackColor = Color.Red;
                 return;
             }
-
             Currency currency = tableUtility.ConvertRangesToObjects<Currency>(currencyRange)[0];
             Fund newFund = new Fund(textBoxFundName.Text, textBoxIsin.Text, textBoxCustodyNr.Text, currency);
-            List<string> fundData = new List<string>()
-            {
-                newFund.Name,
-                newFund.CustodyAccountNumber,
-                newFund.Isin,
-                currency.GetIndex().ToString()
-            };
-            tableUtility.InsertTableRow(newFund, fundData);
+            tableUtility.InsertTableRow(newFund);
             fundBinding.Add(newFund);
         }
 
         private void LoadFundTable()
         {
             TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
-            List<Fund> fundList = tableUtility.ConvertRangesToObjects<Fund>(tableUtility.ReadAllRows(Fund.GetDefaultValue().GetTableName()));
+            List<Fund> fundList = tableUtility.ConvertRangesToObjects<Fund>(tableUtility.ReadAllRows(Fund.GetDefaultValue()));
             foreach (Fund fund in fundList)
             {
                 fundBinding.Add(fund);
@@ -86,7 +78,7 @@ namespace Watchdog.Forms
             TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
             Persistable objectToDelete = dataGridFunds.Rows[currentRowIndex].DataBoundItem as Persistable;
             dataGridFunds.Rows.RemoveAt(currentRowIndex);
-            tableUtility.DeleteTableRow(objectToDelete, objectToDelete.GetIndex());
+            tableUtility.DeleteTableRow(objectToDelete);
         }
     }
 }

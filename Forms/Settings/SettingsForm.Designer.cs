@@ -1,6 +1,6 @@
-﻿namespace Watchdog.Forms
+﻿namespace Watchdog.Forms.Settings
 {
-    partial class Settings
+    partial class SettingsForm
     {
         /// <summary>
         /// Required designer variable.

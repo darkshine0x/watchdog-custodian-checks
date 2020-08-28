@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using Watchdog.Entities;
 using Watchdog.Persistence;
 
-namespace Watchdog.Forms
+namespace Watchdog.Forms.FundAdministration
 {
     public partial class EditAssetAllocation : Form
     {
@@ -91,7 +91,7 @@ namespace Watchdog.Forms
         private AssetAllocationEntry GetAssetAllocationEntry(AssetClass assetClass, Currency currency)
         {
             TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
-            List<AssetAllocationEntry> entries = tableUtility.ConvertRangesToObjects<AssetAllocationEntry>(tableUtility.ReadAllRows(AssetAllocationEntry.GetDefaultValue().GetTableName()));
+            List<AssetAllocationEntry> entries = tableUtility.ConvertRangesToObjects<AssetAllocationEntry>(tableUtility.ReadAllRows(AssetAllocationEntry.GetDefaultValue()));
             var entryQuery = from entry in entries
                              where entry.AssetClass.Name.Equals(assetClass.Name)
                              where entry.Currency.IsoCode.Equals(currency.IsoCode)
@@ -109,8 +109,8 @@ namespace Watchdog.Forms
         private void LoadTable()
         {
             TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
-            List<AssetClass> assetClasses = tableUtility.ConvertRangesToObjects<AssetClass>(tableUtility.ReadAllRows(AssetClass.GetDefaultValue().GetTableName()));
-            List<Currency> currencies = tableUtility.ConvertRangesToObjects<Currency>(tableUtility.ReadAllRows(Currency.GetDefaultValue().GetTableName()));
+            List<AssetClass> assetClasses = tableUtility.ConvertRangesToObjects<AssetClass>(tableUtility.ReadAllRows(AssetClass.GetDefaultValue()));
+            List<Currency> currencies = tableUtility.ConvertRangesToObjects<Currency>(tableUtility.ReadAllRows(Currency.GetDefaultValue()));
             int numberOfColumns = assetClasses.Count + 1;
             int numberOfRows = currencies.Count + 1;
             tableLayoutPanel1.ColumnCount = numberOfColumns + 1;
@@ -262,7 +262,7 @@ namespace Watchdog.Forms
         private void ButtonSubmit_Click(object sender, EventArgs e)
         {
             TableUtility tableUtility = new TableUtility(Globals.WatchdogAddIn.Application.ActiveWorkbook);
-            tableUtility.CreateMissingTable(AssetAllocationEntry.GetDefaultValue());
+            tableUtility.CreateTable(AssetAllocationEntry.GetDefaultValue());
             CalcTotals();
             if (totalRow != 100 || totalCol != 100)
             {
@@ -308,15 +308,7 @@ namespace Watchdog.Forms
                             StrategicMaxValue = assetAllocationRange[2],
                             Fund = fund
                         };
-                        tableUtility.InsertTableRow(assetAllocationEntry, new List<string>
-                        {
-                            assetAllocationEntry.AssetClass.Index.ToString(),
-                            assetAllocationEntry.Currency.Index.ToString(),
-                            assetAllocationRange[0].ToString(),
-                            assetAllocationRange[1].ToString(),
-                            assetAllocationRange[2].ToString(),
-                            fund.Index.ToString()
-                        });
+                        tableUtility.InsertTableRow(assetAllocationEntry);
                     }
                 }
             }

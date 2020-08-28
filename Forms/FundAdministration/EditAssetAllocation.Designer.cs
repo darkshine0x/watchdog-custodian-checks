@@ -1,4 +1,4 @@
-﻿namespace Watchdog.Forms
+﻿namespace Watchdog.Forms.FundAdministration
 {
     partial class EditAssetAllocation
     {

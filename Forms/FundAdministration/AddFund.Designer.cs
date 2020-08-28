@@ -1,6 +1,4 @@
-﻿using Watchdog.Entities;
-
-namespace Watchdog.Forms
+﻿namespace Watchdog.Forms.FundAdministration
 {
     partial class AddFundForm
     {

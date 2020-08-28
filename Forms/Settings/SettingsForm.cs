@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
+using Watchdog.Forms.Util;
 
-namespace Watchdog.Forms
+namespace Watchdog.Forms.Settings
 {
-    public partial class Settings : Form
+    public partial class SettingsForm : Form
     {
-        public Settings()
+        public SettingsForm()
         {
             InitializeComponent();
             LoadTreeView();
@@ -25,7 +18,7 @@ namespace Watchdog.Forms
                 return;
             }
             string selectedView = treeViewSettings.SelectedNode.Name;
-            ClearPanel();
+            FormUtility.ClearPanel(panel1);
             switch (selectedView)
             {
                 case "AC":
@@ -36,11 +29,6 @@ namespace Watchdog.Forms
                     panel1.Controls.Add(new Ratings());
                     break;
             }
-        }
-
-        private void ClearPanel()
-        {
-            panel1.Controls.Clear();
         }
 
         private void NodeTreeAfterSelect(object sender, TreeViewEventArgs e)

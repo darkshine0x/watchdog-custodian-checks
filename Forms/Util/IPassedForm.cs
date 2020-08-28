@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace Watchdog.Forms
+namespace Watchdog.Forms.Util
 {
-    public interface PassedForm
+    public interface IPassedForm
     {
         void OnSubmit(List<string> passedValue, string reference);
     }

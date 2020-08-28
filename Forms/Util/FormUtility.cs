@@ -1,8 +1,7 @@
-﻿using System.Drawing;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using static System.Windows.Forms.DataGridView;
 
-namespace Watchdog.Forms
+namespace Watchdog.Forms.Util
 {
     class FormUtility
     {
@@ -31,6 +30,11 @@ namespace Watchdog.Forms
                     i.Cancel = false;
                 }
             };
+        }
+
+        public static void ClearPanel(Panel panel)
+        {
+            panel.Controls.Clear();
         }
     }
 }
