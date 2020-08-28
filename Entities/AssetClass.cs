@@ -6,10 +6,6 @@ namespace Watchdog.Entities
     public class AssetClass : Persistable
     {
         private static readonly string tableName = "wdt_asset_classes";
-        private static readonly Dictionary<string, string> tableMapping = new Dictionary<string, string>
-        {
-            { "name", "Name"}
-        };
         private static readonly AssetClass defaultAssetClass = new AssetClass();
 
         [PersistableField]
@@ -31,11 +27,6 @@ namespace Watchdog.Entities
             return tableName;
         }
 
-        public List<string> GetTableHeader()
-        {
-            return new List<string>(tableMapping.Keys);
-        }
-
         public override string ToString()
         {
             return Name;
@@ -54,11 +45,6 @@ namespace Watchdog.Entities
         public void SetIndex(double index)
         {
             Index = index;
-        }
-
-        public Dictionary<string, string> GetTableMapping()
-        {
-            return tableMapping;
         }
     }
 }

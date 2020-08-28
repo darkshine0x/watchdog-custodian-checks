@@ -6,14 +6,6 @@ namespace Watchdog.Entities
     public class Rating : Persistable
     {
         private static readonly string tableName = "wdt_ratings";
-
-        private static readonly Dictionary<string, string> tableMapping = new Dictionary<string, string>
-        {
-            {"rating_code", "RatingCode" },
-            {"numeric_value", "RatingNumericValue" },
-            {"rating_agency_index", "Agency" }
-        };
-
         private static readonly Rating defaultValue = new Rating();
         [PersistableField]
         public string RatingCode { get; set; }
@@ -30,13 +22,6 @@ namespace Watchdog.Entities
         public string GetTableName()
         {
             return tableName;
-        }
-
-        public List<string> GetTableHeader()
-        {
-            List<string> header = new List<string>();
-            header.AddRange(tableMapping.Keys);
-            return header;
         }
 
         public double GetIndex()
@@ -65,11 +50,6 @@ namespace Watchdog.Entities
                    RatingNumericValue == rating.RatingNumericValue &&
                    Index == rating.Index &&
                    Agency == rating.Agency;
-        }
-
-        public Dictionary<string, string> GetTableMapping()
-        {
-            return tableMapping;
         }
 
         public override int GetHashCode()

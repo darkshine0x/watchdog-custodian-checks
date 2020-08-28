@@ -6,10 +6,6 @@ namespace Watchdog.Entities
     public class RatingAgency : Persistable
     {
         private static readonly string tableName = "wdt_rating_agencies";
-        private static readonly Dictionary<string, string> tableMapping = new Dictionary<string, string>
-        {
-            {"name", "Name" }
-        };
         private static readonly RatingAgency defaultValue = new RatingAgency();
         [PersistableField]
         public string Name { get; set; }
@@ -25,11 +21,6 @@ namespace Watchdog.Entities
         public string GetTableName()
         {
             return tableName;
-        }
-
-        public List<string> GetTableHeader()
-        {
-            return new List<string>(tableMapping.Keys);
         }
 
         public double GetIndex()
@@ -63,11 +54,6 @@ namespace Watchdog.Entities
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Name);
             hashCode = hashCode * -1521134295 + Index.GetHashCode();
             return hashCode;
-        }
-
-        public Dictionary<string, string> GetTableMapping()
-        {
-            return tableMapping;
         }
     }
 }

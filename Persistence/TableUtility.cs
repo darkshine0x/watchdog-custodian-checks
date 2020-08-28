@@ -348,7 +348,9 @@ namespace Watchdog.Persistence
             {
                 return false;
             }
-            int columnNumber = persistable.GetTableHeader().IndexOf(update.Attribute);
+            List<PropertyInfo> persistableProperty = GetPersistableProperties(persistable);
+            List<string> columns = persistableProperty.ConvertAll(new Converter<PropertyInfo, string>(x => {return x.Name; }));
+            int columnNumber = columns.IndexOf(update.Attribute);
             searchResult[0].Cells[1, columnNumber + 2] = update.Value;
             return true;
         }

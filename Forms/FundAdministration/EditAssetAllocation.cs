@@ -290,11 +290,11 @@ namespace Watchdog.Forms.FundAdministration
                     if (updateable)
                     {
                         AssetAllocationEntry entry = tableLayoutPanel1.GetControlFromPosition(col, row).DataBindings[0].DataSource as AssetAllocationEntry;
-                        TableUpdateWrapper update = new TableUpdateWrapper(entry.Index, "min_value", panel.Controls[0].Text);
+                        TableUpdateWrapper update = new TableUpdateWrapper(entry.Index, "StrategicMinValue", panel.Controls[0].Text);
                         tableUtility.UpdateTableRow(entry, update);
-                        update = new TableUpdateWrapper(entry.Index, "opt_value", panel.Controls[1].Text);
+                        update = new TableUpdateWrapper(entry.Index, "StrategicOptValue", panel.Controls[1].Text);
                         tableUtility.UpdateTableRow(entry, update);
-                        update = new TableUpdateWrapper(entry.Index, "max_value", panel.Controls[2].Text);
+                        update = new TableUpdateWrapper(entry.Index, "StrategicMaxValue", panel.Controls[2].Text);
                         tableUtility.UpdateTableRow(entry, update);
 
                     } else

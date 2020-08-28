@@ -96,13 +96,13 @@ namespace Watchdog.Forms.Settings
 
             if (!currentRow.RatingCode.Equals(newRating.RatingCode))
             {
-                TableUpdateWrapper update = new TableUpdateWrapper(currentRow.Index, "rating_code", newRating.RatingCode);
+                TableUpdateWrapper update = new TableUpdateWrapper(currentRow.Index, "RatingCode", newRating.RatingCode);
                 tableUtility.UpdateTableRow(currentRow, update);
             }
 
             if (currentRow.RatingNumericValue != newRating.RatingNumericValue)
             {
-                TableUpdateWrapper update = new TableUpdateWrapper(currentRow.Index, "numeric_value", newRating.RatingNumericValue.ToString());
+                TableUpdateWrapper update = new TableUpdateWrapper(currentRow.Index, "RatingNumericValue", newRating.RatingNumericValue.ToString());
                 tableUtility.UpdateTableRow(currentRow, update);
             }
 
