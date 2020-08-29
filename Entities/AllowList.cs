@@ -6,7 +6,11 @@ namespace Watchdog.Entities
     {
         public List<T> Allowed { get; }
 
-        public AllowList(RuleKind ruleKind) : base(ruleKind)
+        public AllowList()
+        {
+
+        }
+        public AllowList(RuleKind ruleKind, string name) : base(ruleKind, name)
         {
             Allowed = new List<T>();
         }

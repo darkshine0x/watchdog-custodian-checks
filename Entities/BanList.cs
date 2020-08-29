@@ -7,7 +7,7 @@ namespace Watchdog.Entities
         public string Test { get; }
         public List<T> Banned { get; }
 
-        public BanList(RuleKind ruleKind) : base(ruleKind)
+        public BanList(RuleKind ruleKind, string name) : base(ruleKind, name)
         {
             Banned = new List<T>();
         }

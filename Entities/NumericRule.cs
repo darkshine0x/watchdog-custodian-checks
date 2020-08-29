@@ -2,12 +2,18 @@
 
 namespace Watchdog.Entities
 {
+    [JoinedTable("wdt_numeric_rules")]
     public class NumericRule : Rule
     {
         [PersistableField]
         public double NumericValue { get; set; }
 
-        public NumericRule(double numericValue, RuleKind ruleKind) : base(ruleKind)
+        public NumericRule()
+        {
+
+        }
+
+        public NumericRule(double numericValue, RuleKind ruleKind, string name) : base(ruleKind, name)
         {
             NumericValue = numericValue;
         }

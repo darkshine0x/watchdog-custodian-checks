@@ -24,7 +24,17 @@ namespace Watchdog.Persistence
 
         public void CreateTable(Persistable persistable)
         {
-            if (FindWorksheet(persistable.GetTableName()) != null)
+            string joinedTable = IsJoinedTable(persistable);
+            Worksheet ws;
+            if (joinedTable != "")
+            {
+                ws = FindWorksheet(joinedTable);
+            }
+            else
+            {
+                ws = FindWorksheet(persistable.GetTableName());
+            }
+            if (ws != null)
             {
                 return;
             }
@@ -155,7 +165,15 @@ namespace Watchdog.Persistence
 
         public Workbook InsertTableRow(Persistable persistable)
         {
-            Worksheet ws = FindWorksheet(persistable.GetTableName());
+            string joinedTable = IsJoinedTable(persistable);
+            Worksheet ws;
+            if (joinedTable != "")
+            {
+                ws = FindWorksheet(joinedTable);
+            } else
+            {
+                ws = FindWorksheet(persistable.GetTableName());
+            }
             if (ws == null)
             {
                 MessageBox.Show("Tabelle existiert nicht.");
@@ -196,13 +214,56 @@ namespace Watchdog.Persistence
             return persistableProperties;
         }
 
+        private string IsJoinedTable(Persistable persistable)
+        {
+            if (Attribute.GetCustomAttribute(persistable.GetType(), typeof(JoinedTable), false) is JoinedTable attribute)
+            {
+                return attribute.Name;
+            }
+            return "";
+        }
+
+        private Type[] IsJoinedTableBaseClass(Type type)
+        {
+            if (Attribute.GetCustomAttribute(type, typeof(JoinedTableBase), false) is JoinedTableBase attribute)
+            {
+                return attribute.DerivedTypes;
+            }
+            return new Type[0];
+        } 
+
+        private Persistable GetDefaultObject(Type type)
+        {
+            Persistable persistable = Activator.CreateInstance(type) as Persistable;
+            return persistable;
+        }
+
         public List<Range> ReadAllRows(Persistable persistable)
         {
             List<Range> searchResult = new List<Range>();
-            Worksheet worksheet = FindWorksheet(persistable.GetTableName());
+            Type[] derivedTypes = IsJoinedTableBaseClass(persistable.GetType());
+            if (derivedTypes.Length != 0)
+            {
+                foreach (Type derivedType in derivedTypes)
+                {
+                    List<Range> subList = ReadAllRows(GetDefaultObject(derivedType));
+                    searchResult.AddRange(subList);
+                }
+            }
+
+            string joinedTable = IsJoinedTable(persistable);
+            Worksheet worksheet;
+            if (joinedTable != "")
+            {
+                worksheet = FindWorksheet(joinedTable);
+            } 
+            else
+            {
+                worksheet = FindWorksheet(persistable.GetTableName());
+            }
             if (worksheet == null)
             {
-                return null;
+                return searchResult;
             }
             Range rows = worksheet.UsedRange.Rows;
             for (int index = 2; index < rows.Count + 1; index++)
@@ -212,10 +273,19 @@ namespace Watchdog.Persistence
             return searchResult;
         }
 
-        public  List<Range> ReadTableRow(string tableName, Dictionary<string, string> searchParameters, QueryOperator queryOperator)
+        public  List<Range> ReadTableRow(Persistable persistable, Dictionary<string, string> searchParameters, QueryOperator queryOperator)
         {
             List<Range> searchResult = new List<Range>();
-            Worksheet worksheet = FindWorksheet(tableName);
+            Worksheet worksheet;
+            string joinedTable = IsJoinedTable(persistable);
+            if (joinedTable != "")
+            {
+                worksheet = FindWorksheet(joinedTable);
+            }
+            else
+            {
+                worksheet = FindWorksheet(persistable.GetTableName());
+            }
             List<string> searchKeys = searchParameters.Keys.ToList();
             Dictionary<string, double> columnIndizes = new Dictionary<string, double>();
             foreach (string key in searchKeys)
@@ -271,7 +341,16 @@ namespace Watchdog.Persistence
 
         public Range ReadTableRow(Persistable persistable)
         {
-            Worksheet worksheet = FindWorksheet(persistable.GetTableName());
+            string joinedTable = IsJoinedTable(persistable);
+            Worksheet worksheet;
+            if (joinedTable != "")
+            {
+                worksheet = FindWorksheet(joinedTable);
+            }
+            else
+            {
+                worksheet = FindWorksheet(persistable.GetTableName());
+            }
             foreach (Range row in worksheet.UsedRange.Rows)
             {
                 double.TryParse(row.Cells[1, 1].Value.ToString(), out double rowIndex);
@@ -297,6 +376,20 @@ namespace Watchdog.Persistence
             return list;
         }
 
+        private Type GetTypeByTableName(Type[] types, string tableName)
+        {
+            foreach (Type type in types)
+            {
+                Persistable persistable = Activator.CreateInstance(type) as Persistable;
+                string objTableName = IsJoinedTable(persistable);
+                if (objTableName.Equals(tableName))
+                {
+                    return type;
+                }
+            }
+            return null;
+        }
+
         public T RowToObject<T>(Range row) where T : Persistable, new()
         {
             if (row == null)
@@ -304,6 +397,18 @@ namespace Watchdog.Persistence
                 return default;
             }
             T obj = new T();
+            Type[] derivedTypes = IsJoinedTableBaseClass(obj.GetType());
+            if (derivedTypes.Length != 0)
+            {
+                string tableName = row.Worksheet.Name;
+                Type type = GetTypeByTableName(derivedTypes, tableName);
+                MethodInfo method = typeof(TableUtility).GetMethod("RowToObject");
+                MethodInfo genericMethod = method.MakeGenericMethod(type);
+                Range[] parameters = new Range[1];
+                parameters[0] = row;
+                T generatedObject = (T) genericMethod.Invoke(this, parameters);
+                return generatedObject;
+            }
             obj.SetIndex(row.Cells[1, 1].Value);
             List<PropertyInfo> persistableProperties = GetPersistableProperties(obj);
             int col = 2;
@@ -316,6 +421,7 @@ namespace Watchdog.Persistence
                     {
                         double enumKey = row.Cells[1, col].Value;
                         property.SetValue(obj, Enum.Parse(propertyType, enumKey.ToString()));
+                        col++;
                         continue;
                     }
                     Persistable foreignObject = Activator.CreateInstance(propertyType) as Persistable;
@@ -330,6 +436,7 @@ namespace Watchdog.Persistence
                     property.SetValue(obj, generatedObject);
                 } else
                 {
+                    var x = row.Cells[1, col].Value;
                     property.SetValue(obj, row.Cells[1, col].Value);
                 }
                 col++;
@@ -355,7 +462,7 @@ namespace Watchdog.Persistence
             {
                 {"index", update.Index.ToString() }
             };
-            List<Range> searchResult = ReadTableRow(persistable.GetTableName(), searchParameters, QueryOperator.OR);
+            List<Range> searchResult = ReadTableRow(persistable, searchParameters, QueryOperator.OR);
             if (!searchResult.Any())
             {
                 return false;
@@ -387,7 +494,15 @@ namespace Watchdog.Persistence
         public Worksheet CreateTableWorksheet(Persistable persistable)
         {
             Worksheet newWorksheet = workbook.Sheets.Add();
-            newWorksheet.Name = persistable.GetTableName();
+            string joinedTable = IsJoinedTable(persistable);
+            if (joinedTable != "")
+            {
+                newWorksheet.Name = joinedTable;
+            }
+            else
+            {
+                newWorksheet.Name = persistable.GetTableName();
+            }
             newWorksheet.Cells[1, 1].Value = "index";
             int colCounter = 2;
             List<PropertyInfo> persistableProperties = GetPersistableProperties(persistable);
