@@ -1,4 +1,5 @@
-﻿using Watchdog.Persistence;
+﻿using System.Collections.Generic;
+using Watchdog.Persistence;
 
 namespace Watchdog.Entities
 {
@@ -10,17 +11,21 @@ namespace Watchdog.Entities
         public RuleKind RuleKind { get; set; }
         [PersistableField]
         public string Name { get; set; }
+        [PersistableField]
+        [MultiValue]
+        public List<Fund> FundList { get; set; }
         public double Index { get; set; }
 
         public Rule()
         {
-
+            FundList = new List<Fund>();
         }
 
         public Rule(RuleKind ruleKind, string name)
         {
             RuleKind = ruleKind;
             Name = name;
+            FundList = new List<Fund>();
         }
 
         public string GetTableName()

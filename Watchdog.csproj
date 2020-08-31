@@ -228,12 +228,18 @@
     <Compile Include="Forms\Settings\AllowedAC.Designer.cs">
       <DependentUpon>AllowedAC.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Util\VerticalLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Forms\WatchdogRibbon.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Forms\WatchdogRibbon.Designer.cs">
       <DependentUpon>WatchdogRibbon.cs</DependentUpon>
     </Compile>
+    <Compile Include="Persistence\JoinedTable.cs" />
+    <Compile Include="Persistence\JoinedTableBase.cs" />
+    <Compile Include="Persistence\MultiValue.cs" />
     <Compile Include="Persistence\Persistable.cs" />
     <Compile Include="Persistence\PersistableField.cs" />
     <Compile Include="Persistence\QueryOperator.cs" />
