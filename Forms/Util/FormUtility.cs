@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using Watchdog.Persistence;
 using static System.Windows.Forms.DataGridView;
 
 namespace Watchdog.Forms.Util
@@ -30,6 +31,16 @@ namespace Watchdog.Forms.Util
                     i.Cancel = false;
                 }
             };
+        }
+
+        public static Control BindObjectToControl(Control control, Persistable bindingObject)
+        {
+            if (bindingObject != null)
+            {
+                Binding binding = new Binding(string.Empty, bindingObject, string.Empty);
+                control.DataBindings.Add(binding);
+            }
+            return control;
         }
 
         public static void ClearPanel(Panel panel)
