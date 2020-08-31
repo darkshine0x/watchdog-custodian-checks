@@ -24,7 +24,7 @@ namespace Watchdog.Forms.FundAdministration
             tableUtility.CreateTable(Currency.GetDefaultValue());
             tableUtility.CreateTable(Fund.GetDefaultValue());
             textBoxCurrency.BackColor = Color.Empty;
-            List<Range> currencyRange = tableUtility.ReadTableRow(Currency.GetDefaultValue().GetTableName(), new Dictionary<string, string>
+            List<Range> currencyRange = tableUtility.ReadTableRow(Currency.GetDefaultValue(), new Dictionary<string, string>
             {
                 {"IsoCode", textBoxCurrency.Text.ToUpper() }
             }, QueryOperator.OR);

@@ -66,7 +66,8 @@ namespace Watchdog.Forms.Settings
             {
                 Index = oldRating.Index,
                 RatingCode = oldRating.RatingCode,
-                RatingNumericValue = oldRating.RatingNumericValue
+                RatingNumericValue = oldRating.RatingNumericValue,
+                Agency = oldRating.Agency
             };
             return newRating;
         }
@@ -94,18 +95,10 @@ namespace Watchdog.Forms.Settings
                 return;
             }
 
-            if (!currentRow.RatingCode.Equals(newRating.RatingCode))
+            if (!currentRow.Equals(newRating))
             {
-                TableUpdateWrapper update = new TableUpdateWrapper(currentRow.Index, "RatingCode", newRating.RatingCode);
-                tableUtility.UpdateTableRow(currentRow, update);
+                tableUtility.MergeTableRow(newRating);
             }
-
-            if (currentRow.RatingNumericValue != newRating.RatingNumericValue)
-            {
-                TableUpdateWrapper update = new TableUpdateWrapper(currentRow.Index, "RatingNumericValue", newRating.RatingNumericValue.ToString());
-                tableUtility.UpdateTableRow(currentRow, update);
-            }
-
         }
 
         private void CatchCurrentRowState(object sender, DataGridViewCellStateChangedEventArgs e)
@@ -147,7 +140,7 @@ namespace Watchdog.Forms.Settings
         {
             TableUtility tableUtility = new TableUtility();
             RatingAgency ratingAgencyToDelete = dataGridViewRatingAgencies.Rows[ratingAgenciesRowIndex].DataBoundItem as RatingAgency;
-            List<Rating> ratingsToDelete = tableUtility.ConvertRangesToObjects<Rating>(tableUtility.ReadTableRow(Rating.GetDefaultValue().GetTableName(), new Dictionary<string, string>
+            List<Rating> ratingsToDelete = tableUtility.ConvertRangesToObjects<Rating>(tableUtility.ReadTableRow(Rating.GetDefaultValue(), new Dictionary<string, string>
             {
                 {"Agency", ratingAgencyToDelete.GetIndex().ToString() }
             }, QueryOperator.OR));
@@ -197,7 +190,7 @@ namespace Watchdog.Forms.Settings
             }
             TableUtility tableUtility = new TableUtility();
 
-            List<Range> agencyRanges = tableUtility.ReadTableRow(Rating.GetDefaultValue().GetTableName(), new Dictionary<string, string>
+            List<Range> agencyRanges = tableUtility.ReadTableRow(Rating.GetDefaultValue(), new Dictionary<string, string>
             {
                 {"Agency", currentRatingAgency.GetIndex().ToString() }
             }, QueryOperator.OR);

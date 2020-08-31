@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Watchdog.Entities;
+using Watchdog.Forms.Util;
 using Watchdog.Persistence;
 
 namespace Watchdog.Forms.FundAdministration
@@ -28,7 +29,7 @@ namespace Watchdog.Forms.FundAdministration
             
         }
 
-        private Label GenerateLabel<T>(string text, T bindingObject) where T : Persistable
+        private Label GenerateLabel(string text, Persistable bindingObject)
         {
             Padding padding = Padding.Empty;
             Padding margin = new Padding(1, 0, 0, 1);
@@ -43,11 +44,7 @@ namespace Watchdog.Forms.FundAdministration
                 TextAlign = ContentAlignment.MiddleRight,
                 Font = new Font(Font, Font.Style | FontStyle.Bold)
             };
-            if (bindingObject != null)
-            {
-                Binding binding = new Binding(string.Empty, bindingObject, string.Empty);
-                label.DataBindings.Add(binding);
-            }
+            FormUtility.BindObjectToControl(label, bindingObject);
             return label;
         }
 
@@ -117,7 +114,7 @@ namespace Watchdog.Forms.FundAdministration
             tableLayoutPanel1.RowCount = numberOfRows + 1;
 
             // First cell, should be empty
-            tableLayoutPanel1.Controls.Add(GenerateLabel<Persistable>(string.Empty, null), 0, 0);
+            tableLayoutPanel1.Controls.Add(GenerateLabel(string.Empty, null), 0, 0);
 
             Padding padding = Padding.Empty;
 
@@ -130,7 +127,7 @@ namespace Watchdog.Forms.FundAdministration
             }
 
             // Add total column
-            tableLayoutPanel1.Controls.Add(GenerateLabel<Persistable>("Total", null), numberOfColumns, 0);
+            tableLayoutPanel1.Controls.Add(GenerateLabel("Total", null), numberOfColumns, 0);
 
             // Add row labels for currencies
             for (int row = 1; row < numberOfRows; row++)
@@ -141,7 +138,7 @@ namespace Watchdog.Forms.FundAdministration
             }
 
             // Add total row
-            tableLayoutPanel1.Controls.Add(GenerateLabel<Persistable>("Total", null), 0, numberOfRows);
+            tableLayoutPanel1.Controls.Add(GenerateLabel("Total", null), 0, numberOfRows);
 
             // Add text boxes
             for (int row = 1; row < numberOfRows; row++)
@@ -195,8 +192,7 @@ namespace Watchdog.Forms.FundAdministration
                         panel.Controls[0].Text = entry.StrategicMinValue.ToString();
                         panel.Controls[1].Text = entry.StrategicOptValue.ToString();
                         panel.Controls[2].Text = entry.StrategicMaxValue.ToString();
-                        Binding binding = new Binding(string.Empty, entry, string.Empty);
-                        panel.DataBindings.Add(binding);
+                        FormUtility.BindObjectToControl(panel, entry);
                     }
 
                     
@@ -207,13 +203,13 @@ namespace Watchdog.Forms.FundAdministration
             // Add total labels in last column
             for (int row = 1; row < numberOfRows + 1; row++)
             {
-                tableLayoutPanel1.Controls.Add(GenerateLabel<Persistable>("", null), numberOfColumns, row);
+                tableLayoutPanel1.Controls.Add(GenerateLabel("", null), numberOfColumns, row);
             }
 
             // Add total labels in last row
             for (int col = 1; col < numberOfColumns; col++)
             {
-                tableLayoutPanel1.Controls.Add(GenerateLabel<Persistable>("", null), col, numberOfRows);
+                tableLayoutPanel1.Controls.Add(GenerateLabel("", null), col, numberOfRows);
             }
         }
 
@@ -290,13 +286,7 @@ namespace Watchdog.Forms.FundAdministration
                     if (updateable)
                     {
                         AssetAllocationEntry entry = tableLayoutPanel1.GetControlFromPosition(col, row).DataBindings[0].DataSource as AssetAllocationEntry;
-                        TableUpdateWrapper update = new TableUpdateWrapper(entry.Index, "StrategicMinValue", panel.Controls[0].Text);
-                        tableUtility.UpdateTableRow(entry, update);
-                        update = new TableUpdateWrapper(entry.Index, "StrategicOptValue", panel.Controls[1].Text);
-                        tableUtility.UpdateTableRow(entry, update);
-                        update = new TableUpdateWrapper(entry.Index, "StrategicMaxValue", panel.Controls[2].Text);
-                        tableUtility.UpdateTableRow(entry, update);
-
+                        tableUtility.MergeTableRow(entry);
                     } else
                     {
                         AssetAllocationEntry assetAllocationEntry = new AssetAllocationEntry

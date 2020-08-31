@@ -169,25 +169,32 @@ namespace Watchdog.Persistence
             {
                 tableName = persistable.GetTableName();
             }
-            double row;
-            double sequence = persistable.GetIndex();
+            double row = ChangeRowCounter(tableName, false);
+            double sequence = IncrementSequence();
+            persistable.SetIndex(sequence);
             Worksheet ws = FindWorksheet(tableName);
-            if (sequence == 0)
-            {
-                row = ChangeRowCounter(tableName, false);
-                sequence = IncrementSequence();
-                persistable.SetIndex(sequence);
-            }
-            else
-            {
-                row = ReadTableRow(persistable).Row;
-            }
             ws.Cells[row, 1].Value = sequence;
+            Range rowToInsert = ws.Rows[row];
+            ReplaceRange(persistable, rowToInsert);
+            return sequence;
+        }
+
+        private bool ReplaceRange(Persistable persistable, Range row)
+        {
+            string tableName = IsJoinedTable(persistable);
+            if (tableName == "")
+            {
+                tableName = persistable.GetTableName();
+            }
+            if (row.Worksheet.Name != tableName)
+            {
+                return false;
+            }
             int colCounter = 2;
             foreach (PropertyInfo property in GetPropertiesByAttribute(persistable, typeof(PersistableField)))
             {
                 Type propertyType = property.PropertyType;
-                if (!propertyType.IsPrimitive && propertyType != typeof(string) && !propertyType.IsEnum) 
+                if (!propertyType.IsPrimitive && propertyType != typeof(string) && !propertyType.IsEnum)
                 {
                     MultiValue multiValueProperty = property.GetCustomAttribute<MultiValue>();
                     if (multiValueProperty != null)
@@ -198,21 +205,21 @@ namespace Watchdog.Persistence
                         {
                             content += item.GetIndex() + ";";
                         }
-                        ws.Cells[row, colCounter].Value = content;
+                        row.Cells[1, colCounter].Value = content;
                     }
                     else
                     {
                         Persistable nestedObject = property.GetValue(persistable) as Persistable;
-                        ws.Cells[row, colCounter].Value = nestedObject.GetIndex();
+                        row.Cells[1, colCounter].Value = nestedObject.GetIndex();
                     }
                 }
                 else
                 {
-                    ws.Cells[row, colCounter].Value = property.GetValue(persistable);
+                    row.Cells[1, colCounter].Value = property.GetValue(persistable);
                 }
                 colCounter++;
             }
-            return sequence;
+            return true;
         }
 
         private string IsJoinedTable(Persistable persistable)
@@ -508,24 +515,6 @@ namespace Watchdog.Persistence
             return true;
         }
 
-        public bool UpdateTableRow(Persistable persistable, TableUpdateWrapper update)
-        {
-            Dictionary<string, string> searchParameters = new Dictionary<string, string>()
-            {
-                {"index", update.Index.ToString() }
-            };
-            List<Range> searchResult = ReadTableRow(persistable, searchParameters, QueryOperator.OR);
-            if (!searchResult.Any())
-            {
-                return false;
-            }
-            List<PropertyInfo> persistableProperty = GetPropertiesByAttribute(persistable, typeof(PersistableField));
-            List<string> columns = persistableProperty.ConvertAll(new Converter<PropertyInfo, string>(x => {return x.Name; }));
-            int columnNumber = columns.IndexOf(update.Attribute);
-            searchResult[0].Cells[1, columnNumber + 2] = update.Value;
-            return true;
-        }
-
         public bool MergeTableRow(Persistable persistable)
         {
             Range searchResult = ReadTableRow(persistable);
@@ -533,8 +522,11 @@ namespace Watchdog.Persistence
             {
                 return false;
             }
-            InsertTableRow(persistable);
-            return true;
+            else
+            {
+                ReplaceRange(persistable, searchResult);
+                return true;
+            }
         }
 
         public Worksheet CreateWorksheet(string tableName, List<string> tableHeader)
