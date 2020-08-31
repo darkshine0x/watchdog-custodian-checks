@@ -271,6 +271,7 @@ namespace Watchdog.Persistence
                     List<Range> subList = ReadAllRows(GetDefaultObject(derivedType));
                     searchResult.AddRange(subList);
                 }
+                return searchResult;
             }
 
             string joinedTable = IsJoinedTable(persistable);
@@ -387,7 +388,7 @@ namespace Watchdog.Persistence
         public List<T> ConvertRangesToObjects<T>(List<Range> ranges) where T : Persistable, new()
         {
             List<T> list = new List<T>();
-            if (ranges == null)
+            if (ranges == null || ranges.Count == 0)
             {
                 return list;
             }
@@ -457,21 +458,24 @@ namespace Watchdog.Persistence
                         Type listType = propertyTypeWithoutGenericType.MakeGenericType(genericType);
                         object propertyList = Activator.CreateInstance(listType);
                         string content = row.Cells[1, col].Value;
-                        string[] splitContent = content.Split(';');
-                        foreach (string stringIndex in splitContent)
+                        if (content != null)
                         {
-                            if (string.IsNullOrEmpty(stringIndex))
+                            string[] splitContent = content.Split(';');
+                            foreach (string stringIndex in splitContent)
                             {
-                                break;
+                                if (string.IsNullOrEmpty(stringIndex))
+                                {
+                                    break;
+                                }
+                                double.TryParse(stringIndex, out double index);
+                                Persistable searchObject = GetDefaultObject(genericType);
+                                searchObject.SetIndex(index);
+                                parameters[0] = ReadTableRow(searchObject);
+                                MethodInfo recMethod = typeof(TableUtility).GetMethod("RowToObject");
+                                MethodInfo recGenericMethod = recMethod.MakeGenericMethod(genericType);
+                                Persistable generatedListItem = recGenericMethod.Invoke(this, parameters) as Persistable;
+                                ((IList)propertyList).Add(generatedListItem);
                             }
-                            double.TryParse(stringIndex, out double index);
-                            Persistable searchObject = GetDefaultObject(genericType);
-                            searchObject.SetIndex(index);
-                            parameters[0] = ReadTableRow(searchObject);
-                            MethodInfo recMethod = typeof(TableUtility).GetMethod("RowToObject");
-                            MethodInfo recGenericMethod = recMethod.MakeGenericMethod(genericType);
-                            Persistable generatedListItem = recGenericMethod.Invoke(this, parameters) as Persistable;
-                            ((IList) propertyList).Add(generatedListItem);
                         }
                         property.SetValue(obj, propertyList);
                         continue;
