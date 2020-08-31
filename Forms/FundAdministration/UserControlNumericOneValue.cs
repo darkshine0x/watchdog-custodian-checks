@@ -23,17 +23,7 @@ namespace Watchdog.Forms.FundAdministration
             }
             TableUtility tableUtility = new TableUtility();
             Rule newRule = new NumericRule(value, ruleKind, textBoxDescription.Text);
-            newRule.FundList.Add(new Fund("fund1", "ch09", "09-99999", new Currency("CHF")));
-            tableUtility.CreateTable(newRule);
-            tableUtility.CreateTable(Currency.GetDefaultValue());
-            tableUtility.CreateTable(Fund.GetDefaultValue());
-            foreach (Fund f in newRule.FundList)
-            {
-                tableUtility.InsertTableRow(f.Currency);
-                tableUtility.InsertTableRow(f);
-            }
             tableUtility.InsertTableRow(newRule);
-            List<Rule> list = tableUtility.ConvertRangesToObjects<Rule>(tableUtility.ReadAllRows(newRule));
         }
     }
 }
