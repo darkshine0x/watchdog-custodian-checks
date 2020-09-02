@@ -23,6 +23,7 @@ namespace Watchdog.Forms.FundAdministration
             }
             TableUtility tableUtility = new TableUtility();
             Rule newRule = new NumericRule(value, ruleKind, textBoxDescription.Text);
+            tableUtility.CreateTable(newRule);
             tableUtility.InsertTableRow(newRule);
         }
     }
