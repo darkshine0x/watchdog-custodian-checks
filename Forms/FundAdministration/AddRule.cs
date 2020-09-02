@@ -10,7 +10,7 @@ namespace Watchdog.Forms.FundAdministration
 {
     public partial class AddRule : Form
     {
-        public AddRule(RuleAdministration r)
+        public AddRule()
         {
             InitializeComponent();
             LoadRuleKinds();

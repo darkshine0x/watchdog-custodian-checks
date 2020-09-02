@@ -87,7 +87,7 @@ namespace Watchdog.Forms.FundAdministration
 
         private void AddNewRuleClick(object sender, EventArgs e)
         {
-            _ = new AddRule(this)
+            _ = new AddRule()
             {
                 Visible = true
             };
