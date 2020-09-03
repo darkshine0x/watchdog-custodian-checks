@@ -13,18 +13,19 @@ namespace Watchdog.Forms.FundAdministration
             InitializeComponent();
         }
 
-        public void InvokeSubmission(RuleKind ruleKind)
+        public Rule InvokeSubmission(RuleKind ruleKind)
         {
             bool parsingSuccessful = double.TryParse(textBoxValue.Text, out double value);
             if (!parsingSuccessful)
             {
                 MessageBox.Show("Bitte eine gültige Zahl eingeben.");
-                return;
+                return null;
             }
             TableUtility tableUtility = new TableUtility();
             Rule newRule = new NumericRule(value, ruleKind, textBoxDescription.Text);
             tableUtility.CreateTable(newRule);
             tableUtility.InsertTableRow(newRule);
+            return newRule;
         }
     }
 }

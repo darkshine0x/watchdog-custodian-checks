@@ -8,7 +8,7 @@ using Watchdog.Persistence;
 
 namespace Watchdog.Forms.FundAdministration
 {
-    public partial class RuleAdministration : Form
+    public partial class RuleAdministration : Form, IPassedObject<Rule>
     {
         public RuleAdministration()
         {
@@ -16,13 +16,44 @@ namespace Watchdog.Forms.FundAdministration
             LoadRules();
         }
 
-        public void LoadRules()
+        private void AddRule(Rule rule)
+        {
+            int rowCount = tableLayoutPanel1.RowCount++;
+            Padding margin = new Padding(1, 0, 0, 1);
+            Label ruleLabel = new Label
+            {
+                AutoSize = false,
+                Width = 500,
+                Height = 50,
+                Text = rule.Name,
+                BackColor = Color.White,
+                TextAlign = ContentAlignment.MiddleLeft,
+                Margin = margin
+            };
+
+            for (int col = 1; col < tableLayoutPanel1.ColumnCount; col++)
+            {
+                tableLayoutPanel1.Controls.Add(new CheckBox
+                {
+                    AutoSize = false,
+                    Height = 50,
+                    Width = 50,
+                    BackColor = Color.White,
+                    CheckAlign = ContentAlignment.MiddleCenter,
+                    Margin = margin
+                }, col, rowCount);
+            }
+
+            FormUtility.BindObjectToControl(ruleLabel, rule);
+            tableLayoutPanel1.Controls.Add(ruleLabel, 0, rowCount);
+        }
+
+        private void LoadRules()
         {
             TableUtility tableUtility = new TableUtility();
             List<Fund> fundList = tableUtility.ConvertRangesToObjects<Fund>(tableUtility.ReadAllRows(Fund.GetDefaultValue()));
             List<Rule> ruleList = tableUtility.ConvertRangesToObjects<Rule>(tableUtility.ReadAllRows(Rule.GetDefaultValue()));
             tableLayoutPanel1.ColumnCount = fundList.Count + 1;
-            tableLayoutPanel1.RowCount = ruleList.Count + 1;
             Padding margin = new Padding(1, 0, 0, 1);
 
             tableLayoutPanel1.Controls.Add(new Label
@@ -51,43 +82,15 @@ namespace Watchdog.Forms.FundAdministration
                 tableLayoutPanel1.Controls.Add(fundLabel, col + 1, 0);
             }
 
-            for (int row = 0; row < ruleList.Count; row++)
+            foreach (Rule rule in ruleList)
             {
-                // Adding rule labels (rows)
-                Label ruleLabel = new Label
-                {
-                    AutoSize = false,
-                    Width = 500,
-                    Height = 50,
-                    Text = ruleList[row].Name,
-                    BackColor = Color.White,
-                    TextAlign = ContentAlignment.MiddleLeft,
-                    Margin = margin
-                };
-                FormUtility.BindObjectToControl(ruleLabel, ruleList[row]);
-                tableLayoutPanel1.Controls.Add(ruleLabel, 0, row + 1);
-            }
-
-            for (int col = 1; col < tableLayoutPanel1.ColumnCount; col++)
-            {
-                for (int row = 1; row < tableLayoutPanel1.RowCount; row++)
-                {
-                    tableLayoutPanel1.Controls.Add(new CheckBox
-                    {
-                        AutoSize = false,
-                        Height = 50,
-                        Width = 50,
-                        BackColor = Color.White,
-                        CheckAlign = ContentAlignment.MiddleCenter,
-                        Margin = margin
-                    }, col, row);
-                }
+                AddRule(rule);
             }
         }
 
         private void AddNewRuleClick(object sender, EventArgs e)
         {
-            _ = new AddRule()
+            _ = new AddRule(this)
             {
                 Visible = true
             };
@@ -101,6 +104,11 @@ namespace Watchdog.Forms.FundAdministration
         private void CancelClick(object sender, EventArgs e)
         {
             Close();
+        }
+
+        public void OnSubmit(Rule obj)
+        {
+            AddRule(obj);
         }
     }
 }

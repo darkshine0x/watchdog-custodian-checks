@@ -10,10 +10,13 @@ namespace Watchdog.Forms.FundAdministration
 {
     public partial class AddRule : Form
     {
-        public AddRule()
+        private IPassedObject<Rule> parentForm;
+
+        public AddRule(IPassedObject<Rule> parentForm)
         {
             InitializeComponent();
             LoadRuleKinds();
+            this.parentForm = parentForm;
         }
 
         private void LoadRuleKinds()
@@ -65,7 +68,8 @@ namespace Watchdog.Forms.FundAdministration
         {
             IRuleUserControl userControl = panelUserControl.Controls[0] as IRuleUserControl;
             DropDownItem<RuleKind> ruleKindItem = comboBoxRuleKind.SelectedItem as DropDownItem<RuleKind>;
-            userControl.InvokeSubmission(ruleKindItem.Value);
+            Rule newRule = userControl.InvokeSubmission(ruleKindItem.Value);
+            parentForm.OnSubmit(newRule);
             Close();
         }
     }

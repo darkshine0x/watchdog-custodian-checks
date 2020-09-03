@@ -190,6 +190,7 @@
     </Compile>
     <Compile Include="Forms\Util\DropDownItem.cs" />
     <Compile Include="Forms\Util\FormUtility.cs" />
+    <Compile Include="Forms\Util\IPassedObject.cs" />
     <Compile Include="Forms\Util\IRuleUserControl.cs" />
     <Compile Include="Forms\Util\OneAttributeForm.cs">
       <SubType>Form</SubType>
