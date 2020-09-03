@@ -16,33 +16,32 @@ namespace Watchdog.Forms.FundAdministration
         {
             InitializeComponent();
             LoadFundTable();
-        }
+            FormUtility.AddValidation(buttonSubmit, textBoxCurrency, () =>
+            {
+                TableUtility tableUtility = new TableUtility();
+                List<Range> currencyRange = tableUtility.ReadTableRow(Currency.GetDefaultValue(), new Dictionary<string, string>
+                {
+                    {"IsoCode", textBoxCurrency.Text.ToUpper() }
+                }, QueryOperator.OR);
 
-        private void ButtonSubmit_Click(object sender, EventArgs e)
-        {
-            TableUtility tableUtility = new TableUtility();
-            tableUtility.CreateTable(Currency.GetDefaultValue());
-            tableUtility.CreateTable(Fund.GetDefaultValue());
-            textBoxCurrency.BackColor = Color.Empty;
-            List<Range> currencyRange = tableUtility.ReadTableRow(Currency.GetDefaultValue(), new Dictionary<string, string>
-            {
-                {"IsoCode", textBoxCurrency.Text.ToUpper() }
-            }, QueryOperator.OR);
-            
-            if (currencyRange.Count == 0 || currencyRange.Count > 1)
-            {
-                textBoxCurrency.BackColor = Color.Red;
-                return;
-            }
-            Currency currency = tableUtility.ConvertRangesToObjects<Currency>(currencyRange)[0];
-            Fund newFund = new Fund(textBoxFundName.Text, textBoxIsin.Text, textBoxCustodyNr.Text, currency);
-            tableUtility.InsertTableRow(newFund);
-            fundBinding.Add(newFund);
+                if (currencyRange.Count == 0 || currencyRange.Count > 1)
+                {
+                    textBoxCurrency.BackColor = Color.Red;
+                    return false;
+                }
+                Currency currency = tableUtility.ConvertRangesToObjects<Currency>(currencyRange)[0];
+                Fund newFund = new Fund(textBoxFundName.Text, textBoxIsin.Text, textBoxCustodyNr.Text, currency);
+                tableUtility.InsertTableRow(newFund);
+                fundBinding.Add(newFund);
+                return true;
+            });
         }
 
         private void LoadFundTable()
         {
             TableUtility tableUtility = new TableUtility();
+            tableUtility.CreateTable(Currency.GetDefaultValue());
+            tableUtility.CreateTable(Fund.GetDefaultValue());
             List<Fund> fundList = tableUtility.ConvertRangesToObjects<Fund>(tableUtility.ReadAllRows(Fund.GetDefaultValue()));
             foreach (Fund fund in fundList)
             {
@@ -55,10 +54,10 @@ namespace Watchdog.Forms.FundAdministration
             Close();
         }
 
-        private void ClickEditAA(object sender, EventArgs e)
+        private void EditFundClick(object sender, EventArgs e)
         {
             Fund fund = dataGridFunds.Rows[currentRowIndex].DataBoundItem as Fund;
-            _ = new EditAssetAllocation(fund)
+            _ = new EditFund(fund)
             {
                 Visible = true
             };

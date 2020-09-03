@@ -49,7 +49,7 @@
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuStripFund = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripMenuItemEditAA = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.fundBinding = new System.Windows.Forms.BindingSource(this.components);
             this.groupBoxFundAttributes.SuspendLayout();
@@ -166,7 +166,6 @@
             this.buttonSubmit.TabIndex = 1;
             this.buttonSubmit.Text = "Bestätigen";
             this.buttonSubmit.UseVisualStyleBackColor = true;
-            this.buttonSubmit.Click += new System.EventHandler(this.ButtonSubmit_Click);
             // 
             // buttonCancel
             // 
@@ -263,17 +262,17 @@
             // 
             this.contextMenuStripFund.ImageScalingSize = new System.Drawing.Size(40, 40);
             this.contextMenuStripFund.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemEditAA,
+            this.toolStripMenuItemEdit,
             this.toolStripMenuItemDelete});
             this.contextMenuStripFund.Name = "contextMenuStripFund";
             this.contextMenuStripFund.Size = new System.Drawing.Size(459, 100);
             // 
-            // toolStripMenuItemEditAA
+            // toolStripMenuItemEdit
             // 
-            this.toolStripMenuItemEditAA.Name = "toolStripMenuItemEditAA";
-            this.toolStripMenuItemEditAA.Size = new System.Drawing.Size(458, 48);
-            this.toolStripMenuItemEditAA.Text = "Asset Allocation bearbeiten";
-            this.toolStripMenuItemEditAA.Click += new System.EventHandler(this.ClickEditAA);
+            this.toolStripMenuItemEdit.Name = "toolStripMenuItemEdit";
+            this.toolStripMenuItemEdit.Size = new System.Drawing.Size(458, 48);
+            this.toolStripMenuItemEdit.Text = "Asset Allocation bearbeiten";
+            this.toolStripMenuItemEdit.Click += new System.EventHandler(this.EditFundClick);
             // 
             // toolStripMenuItemDelete
             // 
@@ -323,12 +322,12 @@
         private System.Windows.Forms.TextBox textBoxIsin;
         private System.Windows.Forms.Label labelIsin;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripFund;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemEditAA;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemDelete;
         private System.Windows.Forms.BindingSource fundBinding;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemEdit;
     }
 }

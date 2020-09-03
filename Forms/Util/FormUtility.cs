@@ -1,4 +1,6 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Drawing;
+using System.Windows.Forms;
 using Watchdog.Persistence;
 using static System.Windows.Forms.DataGridView;
 
@@ -46,6 +48,24 @@ namespace Watchdog.Forms.Util
         public static void ClearPanel(Panel panel)
         {
             panel.Controls.Clear();
+        }
+
+        public static void AddValidation(Button button, TextBox textBox, Func<bool> validation, bool closeAfterValidation = false)
+        {
+            textBox.BackColor = Color.Empty;
+            button.Click += (sender, e) =>
+            {
+                if (!validation.Invoke())
+                {
+                    textBox.BackColor = Color.Red;
+                    return;
+                }
+
+                if (closeAfterValidation)
+                {
+                    button.FindForm().Close();
+                }
+            };
         }
     }
 }
