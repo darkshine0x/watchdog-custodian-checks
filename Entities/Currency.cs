@@ -45,5 +45,20 @@ namespace Watchdog.Entities
         {
             Index = index;
         }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Currency currency &&
+                   IsoCode == currency.IsoCode &&
+                   Index == currency.Index;
+        }
+
+        public override int GetHashCode()
+        {
+            int hashCode = -1928339242;
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(IsoCode);
+            hashCode = hashCode * -1521134295 + Index.GetHashCode();
+            return hashCode;
+        }
     }
 }
