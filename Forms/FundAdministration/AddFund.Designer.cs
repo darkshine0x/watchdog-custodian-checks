@@ -265,19 +265,19 @@
             this.toolStripMenuItemEdit,
             this.toolStripMenuItemDelete});
             this.contextMenuStripFund.Name = "contextMenuStripFund";
-            this.contextMenuStripFund.Size = new System.Drawing.Size(459, 100);
+            this.contextMenuStripFund.Size = new System.Drawing.Size(823, 250);
             // 
             // toolStripMenuItemEdit
             // 
             this.toolStripMenuItemEdit.Name = "toolStripMenuItemEdit";
-            this.toolStripMenuItemEdit.Size = new System.Drawing.Size(458, 48);
-            this.toolStripMenuItemEdit.Text = "Asset Allocation bearbeiten";
+            this.toolStripMenuItemEdit.Size = new System.Drawing.Size(328, 48);
+            this.toolStripMenuItemEdit.Text = "Fonds bearbeiten";
             this.toolStripMenuItemEdit.Click += new System.EventHandler(this.EditFundClick);
             // 
             // toolStripMenuItemDelete
             // 
             this.toolStripMenuItemDelete.Name = "toolStripMenuItemDelete";
-            this.toolStripMenuItemDelete.Size = new System.Drawing.Size(458, 48);
+            this.toolStripMenuItemDelete.Size = new System.Drawing.Size(328, 48);
             this.toolStripMenuItemDelete.Text = "Löschen";
             this.toolStripMenuItemDelete.Click += new System.EventHandler(this.DeleteFundClick);
             // 

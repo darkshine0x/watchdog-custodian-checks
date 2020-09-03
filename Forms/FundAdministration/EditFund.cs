@@ -9,24 +9,31 @@ using Watchdog.Persistence;
 
 namespace Watchdog.Forms.FundAdministration
 {
-    public partial class EditAssetAllocation : Form
+    public partial class EditFund : Form
     {
         private readonly Fund fund;
+        private readonly IPassedForm passedForm;
         private bool updateable;
         private double totalRow;
         private double totalCol;
 
-        public EditAssetAllocation(Fund fund = null)
+        public EditFund(IPassedForm passedForm, Fund fund)
         {
             InitializeComponent();
-            if (fund != null)
-            {
-                this.fund = fund;
-                LabelFund.Text = fund.Name;
-            }
-            LoadTable();
+            this.fund = fund;
+            this.passedForm = passedForm;
+            LoadFundProperties();
+            LoadAssetAllocationTable();
             CalcTotals();
             
+        }
+
+        private void LoadFundProperties()
+        {
+            textBoxFundName.Text = fund.Name;
+            textBoxIsin.Text = fund.Isin;
+            textBoxCustodyNr.Text = fund.CustodyAccountNumber;
+            textBoxCurrency.Text = fund.Currency.IsoCode;
         }
 
         private Label GenerateLabel(string text, Persistable bindingObject)
@@ -103,7 +110,7 @@ namespace Watchdog.Forms.FundAdministration
             return entryQuery.ToList()[0];
         }
 
-        private void LoadTable()
+        private void LoadAssetAllocationTable()
         {
             TableUtility tableUtility = new TableUtility();
             List<AssetClass> assetClasses = tableUtility.ConvertRangesToObjects<AssetClass>(tableUtility.ReadAllRows(AssetClass.GetDefaultValue()));
@@ -152,7 +159,7 @@ namespace Watchdog.Forms.FundAdministration
                     {
                         Margin = paddingOneLeft,
                         Height = 50,
-                        Width = 150
+                        Width = 150,
                     };
 
 
@@ -164,7 +171,7 @@ namespace Watchdog.Forms.FundAdministration
                             Width = 50,
                             Height = 50,
                             Margin = padding,
-                            BorderStyle = BorderStyle.None,
+                            BorderStyle = BorderStyle.FixedSingle,
                             TextAlign = HorizontalAlignment.Right
                         };
                         textBox.KeyUp += (tb, keyUp) =>
@@ -255,7 +262,7 @@ namespace Watchdog.Forms.FundAdministration
             Close();
         }
 
-        private void ButtonSubmit_Click(object sender, EventArgs e)
+        private bool MergeAssetAllocation()
         {
             TableUtility tableUtility = new TableUtility();
             tableUtility.CreateTable(AssetAllocationEntry.GetDefaultValue());
@@ -263,7 +270,7 @@ namespace Watchdog.Forms.FundAdministration
             if (totalRow != 100 || totalCol != 100)
             {
                 MessageBox.Show("Gesamttotal muss 100% sein.");
-                return;
+                return false;
             }
             for (int col = 1; col < tableLayoutPanel1.ColumnCount - 1; col++)
             {
@@ -281,13 +288,14 @@ namespace Watchdog.Forms.FundAdministration
                         }
                         assetAllocationRange[i] = value;
                     }
-                    
-                    
+
+
                     if (updateable)
                     {
                         AssetAllocationEntry entry = tableLayoutPanel1.GetControlFromPosition(col, row).DataBindings[0].DataSource as AssetAllocationEntry;
                         tableUtility.MergeTableRow(entry);
-                    } else
+                    }
+                    else
                     {
                         AssetAllocationEntry assetAllocationEntry = new AssetAllocationEntry
                         {
@@ -302,7 +310,38 @@ namespace Watchdog.Forms.FundAdministration
                     }
                 }
             }
-            Close();
+            return true;
+        }
+
+        private bool MergeFundProperties()
+        {
+            Fund newFund = new Fund
+            {
+                Index = fund.Index,
+                Name = textBoxFundName.Text,
+                CustodyAccountNumber = textBoxCustodyNr.Text,
+                Isin = textBoxIsin.Text,
+                Currency = new Currency
+                {
+                    IsoCode = fund.Currency.IsoCode
+                }
+            };
+            if (!fund.Equals(newFund))
+            {
+                TableUtility tableUtility = new TableUtility();
+                tableUtility.MergeTableRow(newFund);
+                return true;
+            }
+            return false;
+        }
+
+        private void ButtonSubmit_Click(object sender, EventArgs e)
+        {
+            if (MergeFundProperties() && MergeAssetAllocation())
+            {
+                passedForm.OnSubmit();
+                Close();
+            }
         }
     }
 }

@@ -9,7 +9,7 @@ using Watchdog.Persistence;
 
 namespace Watchdog.Forms.FundAdministration
 {
-    public partial class AddFundForm : Form
+    public partial class AddFundForm : Form, IPassedForm
     {
         private int currentRowIndex;
         public AddFundForm()
@@ -57,7 +57,7 @@ namespace Watchdog.Forms.FundAdministration
         private void EditFundClick(object sender, EventArgs e)
         {
             Fund fund = dataGridFunds.Rows[currentRowIndex].DataBoundItem as Fund;
-            _ = new EditFund(fund)
+            _ = new EditFund(this, fund)
             {
                 Visible = true
             };
@@ -78,6 +78,11 @@ namespace Watchdog.Forms.FundAdministration
             Persistable objectToDelete = dataGridFunds.Rows[currentRowIndex].DataBoundItem as Persistable;
             dataGridFunds.Rows.RemoveAt(currentRowIndex);
             tableUtility.DeleteTableRow(objectToDelete);
+        }
+
+        public void OnSubmit(List<string> passedValue = null, string reference = null)
+        {
+            LoadFundTable();
         }
     }
 }
