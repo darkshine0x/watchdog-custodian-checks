@@ -432,7 +432,15 @@ namespace Watchdog.Persistence
                 T generatedObject = (T) genericMethod.Invoke(this, parameters);
                 return generatedObject;
             }
-            obj.SetIndex(row.Cells[1, 1].Value);
+            bool isNaN = double.IsNaN(row.Cells[1, 1].Value);
+            if (!isNaN)
+            {
+                obj.SetIndex(row.Cells[1, 1].Value);
+            }
+            else
+            {
+                return default;
+            }
             List<PropertyInfo> persistableProperties = GetPropertiesByAttribute(obj, typeof(PersistableField));
             int col = 2;
             foreach (PropertyInfo property in persistableProperties)
