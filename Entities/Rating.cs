@@ -12,7 +12,7 @@ namespace Watchdog.Entities
         [TableHeader("RATING-CODE", 400)]
         public string RatingCode { get; set; }
         [PersistableField]
-        [TableHeader("WERT", 200)]
+        [TableHeader("WERT")]
         public double RatingNumericValue { get; set; }
         public double Index { get; set; }
         [PersistableField]
