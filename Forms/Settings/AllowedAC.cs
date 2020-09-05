@@ -26,12 +26,11 @@ namespace Watchdog.Forms.Settings
         {
             dataGridViewAssetClasses = FormUtility.CreateDataGridView(typeof(AssetClass), 80, 246, 600, 400);
             dataGridViewCurrencies = FormUtility.CreateDataGridView(typeof(Currency), 700, 246, 600, 200);
-            Controls.Add(dataGridViewCurrencies);
-            Controls.Add(dataGridViewAssetClasses);
             ToolStripMenuItem itemDeleteAssetClass = FormUtility.CreateContextMenuItem("Löschen", DeleteAssetClass);
             ToolStripMenuItem itemDeleteCurreny = FormUtility.CreateContextMenuItem("Löschen", DeleteCurrency);
             FormUtility.AddContextMenu(dataGridViewAssetClasses, itemDeleteAssetClass);
             FormUtility.AddContextMenu(dataGridViewCurrencies, itemDeleteCurreny);
+            FormUtility.AddControlsToForm(this, dataGridViewCurrencies, dataGridViewAssetClasses);
         }
 
         private void LoadCurrencies()

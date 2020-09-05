@@ -23,7 +23,6 @@ namespace Watchdog.Forms.FundAdministration
         private void InitializeCustomComponents()
         {
             dataGridFunds = FormUtility.CreateDataGridView(typeof(Fund), 80, 580);
-            Controls.Add(dataGridFunds);
             ToolStripMenuItem itemDelete = FormUtility.CreateContextMenuItem("Löschen", DeleteFundClick);
             ToolStripMenuItem itemEditFund = FormUtility.CreateContextMenuItem("Fonds bearbeiten", EditFundClick);
             FormUtility.AddContextMenu(dataGridFunds, itemDelete, itemEditFund);
@@ -47,6 +46,7 @@ namespace Watchdog.Forms.FundAdministration
                 FormUtility.GetBindingSource(dataGridFunds).Add(newFund);
                 return true;
             });
+            FormUtility.AddControlsToForm(this, dataGridFunds);
         }
 
         private void LoadFundTable()

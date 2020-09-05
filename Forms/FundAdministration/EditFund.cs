@@ -32,7 +32,6 @@ namespace Watchdog.Forms.FundAdministration
         private void InitializeCustomComponents()
         {
             tableLayoutPanelAA = FormUtility.CreateTableLayoutPanel(1000, 200);
-            Controls.Add(tableLayoutPanelAA);
             FormUtility.AddValidation(buttonSubmit, textBoxCurrency, () =>
             {
                 TableUtility tableUtility = new TableUtility();
@@ -53,6 +52,7 @@ namespace Watchdog.Forms.FundAdministration
                 }
                 return true;
             });
+            FormUtility.AddControlsToForm(this, tableLayoutPanelAA);
         }
 
         private void LoadFundProperties()

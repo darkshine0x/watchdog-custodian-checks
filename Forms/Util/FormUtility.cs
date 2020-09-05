@@ -122,7 +122,7 @@ namespace Watchdog.Forms.Util
             return new Font("Arial Narrow", size, fontStyle, GraphicsUnit.Point, 0);
         }
 
-        public static void AddControlsToForm(Form form, params Control[] controls)
+        public static void AddControlsToForm(ContainerControl form, params Control[] controls)
         {
             foreach (Control control in controls)
             {
