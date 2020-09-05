@@ -12,6 +12,9 @@ namespace Watchdog.Forms.Util
     public class FormUtility
     {
         public delegate void ContextMenuItemOnClick(object sender, EventArgs e);
+        public delegate void CatchCurrentRowState(object sender, DataGridViewCellStateChangedEventArgs e);
+        public delegate void RowValidated(object sender, DataGridViewCellEventArgs e);
+        public delegate void DeleteRow(object sender, KeyEventArgs e);
 
         public static int DataGridViewMouseDownContextMenu(DataGridView sender, MouseEventArgs e)
         {
@@ -260,6 +263,22 @@ namespace Watchdog.Forms.Util
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
             tableLayoutPanel.RowStyles.Add(new RowStyle());
             return tableLayoutPanel;
+        }
+
+        public static void AddDataGridViewEditingHandlers(DataGridView dataGridView, CatchCurrentRowState catchCurrentRowState, RowValidated rowValidated, DeleteRow deleteRow)
+        {
+            dataGridView.CellStateChanged += (sender, e) =>
+            {
+                catchCurrentRowState(sender, e);
+            };
+            dataGridView.RowValidated += (sender, e) =>
+            {
+                rowValidated(sender, e);
+            };
+            dataGridView.KeyUp += (sender, e) =>
+            {
+                deleteRow(sender, e);
+            };
         }
     }
 }

@@ -10,6 +10,8 @@ namespace Watchdog.Forms.Settings
 {
     public partial class Ratings : UserControl, IPassedForm
     {
+        private DataGridView dataGridViewRatingAgencies;
+        private DataGridView dataGridViewRatingCodes;
         private int ratingsCurrentRowIndex;
         private int ratingAgenciesRowIndex;
         private Rating currentRow;
@@ -18,11 +20,32 @@ namespace Watchdog.Forms.Settings
         public Ratings()
         {
             InitializeComponent();
+            InitializeCustomComponents();
             TableUtility tableUtility = new TableUtility();
             tableUtility.CreateTable(Rating.GetDefaultValue());
             tableUtility.CreateTable(RatingAgency.GetDefaultValue());
             ratingAgenciesRowIndex = 0;
             LoadRatingAgencies();
+        }
+
+        private void InitializeCustomComponents()
+        {
+            dataGridViewRatingAgencies = FormUtility.CreateDataGridView(typeof(RatingAgency), 55, 308, 600, 400);
+            dataGridViewRatingCodes = FormUtility.CreateDataGridView(typeof(Rating), 650, 308, 600, 600);
+            dataGridViewRatingCodes.AllowUserToAddRows = true;
+            ToolStripMenuItem deleteAgency = FormUtility.CreateContextMenuItem("Löschen", DeleteRatingAgencyClick);
+            FormUtility.AddContextMenu(dataGridViewRatingAgencies, deleteAgency);
+            FormUtility.AddDataGridViewEditingHandlers(dataGridViewRatingCodes, CatchCurrentRowState, RowValidatedRatings, DeleteRow);
+            dataGridViewRatingAgencies.MouseClick += (sender, e) =>
+            {
+                ClickRatingAgencies(sender, e);
+            };
+            dataGridViewRatingAgencies.MouseDown += (sender, e) =>
+            {
+                DataGridRatingAgenciesMouseDown(sender, e);
+            };
+            Controls.Add(dataGridViewRatingAgencies);
+            Controls.Add(dataGridViewRatingCodes);
         }
 
         private void LoadRatingAgencies()
@@ -31,7 +54,7 @@ namespace Watchdog.Forms.Settings
             List<RatingAgency> agencyList = tableUtility.ConvertRangesToObjects<RatingAgency>(tableUtility.ReadAllRows(RatingAgency.GetDefaultValue()));
             foreach (RatingAgency agency in agencyList)
             {
-                ratingAgencyBindingSource.Add(agency);
+                FormUtility.GetBindingSource(dataGridViewRatingAgencies).Add(agency);
             }
         }
 
@@ -41,7 +64,7 @@ namespace Watchdog.Forms.Settings
             TableUtility tableUtility = new TableUtility();
             RatingAgency ratingAgency = new RatingAgency(passedValue[0]);
             tableUtility.InsertTableRow(ratingAgency);
-            int index = ratingAgencyBindingSource.Add(ratingAgency);
+            int index = FormUtility.GetBindingSource(dataGridViewRatingAgencies).Add(ratingAgency);
             dataGridViewRatingAgencies.Rows[index].Selected = true;
             currentRatingAgency = ratingAgency;
             ratingAgenciesRowIndex = index;
@@ -149,9 +172,9 @@ namespace Watchdog.Forms.Settings
                 tableUtility.DeleteTableRow(rating);
             }
             tableUtility.DeleteTableRow(ratingAgencyToDelete);
-            ratingAgencyBindingSource.RemoveAt(ratingAgenciesRowIndex);
+            FormUtility.GetBindingSource(dataGridViewRatingAgencies).RemoveAt(ratingAgenciesRowIndex);
             LoadRatings(ratingAgenciesRowIndex);
-            if (ratingAgencyBindingSource.Count == 0)
+            if (FormUtility.GetBindingSource(dataGridViewRatingAgencies).Count == 0)
             {
                 currentRatingAgency = null;
             }
@@ -165,7 +188,7 @@ namespace Watchdog.Forms.Settings
             {
                 return;
             }
-            currentRatingAgency = ratingAgencyBindingSource[ratingAgenciesRowIndex] as RatingAgency;
+            currentRatingAgency = FormUtility.GetBindingSource(dataGridViewRatingAgencies)[ratingAgenciesRowIndex] as RatingAgency;
         }
 
         private void ClickRatingAgencies(object sender, MouseEventArgs e)
@@ -180,10 +203,10 @@ namespace Watchdog.Forms.Settings
         {
             if (index < 0)
             {
-                ratingBindingSource.Clear();
+                FormUtility.GetBindingSource(dataGridViewRatingCodes).Clear();
                 return;
             }
-            ratingBindingSource.Clear();
+            FormUtility.GetBindingSource(dataGridViewRatingCodes).Clear();
             if (currentRatingAgency == null)
             {
                 return;
@@ -203,7 +226,7 @@ namespace Watchdog.Forms.Settings
             List<Rating> ratings = tableUtility.ConvertRangesToObjects<Rating>(agencyRanges);
             foreach (Rating rating in ratings)
             {
-                ratingBindingSource.Add(rating);
+                FormUtility.GetBindingSource(dataGridViewRatingCodes).Add(rating);
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Watchdog.Forms.Util;
 using Watchdog.Persistence;
 
 namespace Watchdog.Entities
@@ -8,8 +9,10 @@ namespace Watchdog.Entities
         private static readonly string tableName = "wdt_ratings";
         private static readonly Rating defaultValue = new Rating();
         [PersistableField]
+        [TableHeader("RATING-CODE", 400)]
         public string RatingCode { get; set; }
         [PersistableField]
+        [TableHeader("WERT", 200)]
         public double RatingNumericValue { get; set; }
         public double Index { get; set; }
         [PersistableField]
