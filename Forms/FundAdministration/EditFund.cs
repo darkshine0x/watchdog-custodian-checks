@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Range = Microsoft.Office.Interop.Excel.Range;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -11,9 +12,9 @@ namespace Watchdog.Forms.FundAdministration
 {
     public partial class EditFund : Form
     {
+        private TableLayoutPanel tableLayoutPanelAA;
         private readonly Fund fund;
         private readonly IPassedForm passedForm;
-        private bool updateable;
         private double totalRow;
         private double totalCol;
 
@@ -22,10 +23,36 @@ namespace Watchdog.Forms.FundAdministration
             InitializeComponent();
             this.fund = fund;
             this.passedForm = passedForm;
+            InitializeCustomComponents();
             LoadFundProperties();
             LoadAssetAllocationTable();
             CalcTotals();
-            
+        }
+
+        private void InitializeCustomComponents()
+        {
+            tableLayoutPanelAA = FormUtility.CreateTableLayoutPanel(1000, 200);
+            Controls.Add(tableLayoutPanelAA);
+            FormUtility.AddValidation(buttonSubmit, textBoxCurrency, () =>
+            {
+                TableUtility tableUtility = new TableUtility();
+                List<Range> currencyRange = tableUtility.ReadTableRow(Currency.GetDefaultValue(), new Dictionary<string, string>
+                {
+                    {"IsoCode", textBoxCurrency.Text.ToUpper() }
+                }, QueryOperator.OR);
+
+                if (currencyRange.Count == 0 || currencyRange.Count > 1)
+                {
+                    textBoxCurrency.BackColor = Color.Red;
+                    return false;
+                }
+                if (MergeFundProperties() && MergeAssetAllocation())
+                {
+                    passedForm.OnSubmit();
+                    Close();
+                }
+                return true;
+            });
         }
 
         private void LoadFundProperties()
@@ -58,9 +85,9 @@ namespace Watchdog.Forms.FundAdministration
         private double GetColumnSum(int col)
         {
             double sum = 0;
-            for (int row = 1; row < tableLayoutPanel1.RowCount - 1; row++)
+            for (int row = 1; row < tableLayoutPanelAA.RowCount - 1; row++)
             {
-                FlowLayoutPanel panel = tableLayoutPanel1.GetControlFromPosition(col, row) as FlowLayoutPanel;
+                FlowLayoutPanel panel = tableLayoutPanelAA.GetControlFromPosition(col, row) as FlowLayoutPanel;
                 double.TryParse(panel.Controls[1].Text, out double number);
                 sum += number;
             }
@@ -70,9 +97,9 @@ namespace Watchdog.Forms.FundAdministration
         private double GetRowSum(int row)
         {
             double sum = 0;
-            for (int col = 1; col < tableLayoutPanel1.ColumnCount - 1; col++)
+            for (int col = 1; col < tableLayoutPanelAA.ColumnCount - 1; col++)
             {
-                FlowLayoutPanel panel = tableLayoutPanel1.GetControlFromPosition(col, row) as FlowLayoutPanel;
+                FlowLayoutPanel panel = tableLayoutPanelAA.GetControlFromPosition(col, row) as FlowLayoutPanel;
                 double.TryParse(panel.Controls[1].Text, out double number);
                 sum += number;
             }
@@ -82,10 +109,10 @@ namespace Watchdog.Forms.FundAdministration
         private double GetTotalSum()
         {
             double sum = 0;
-            for (int row = 1; row < tableLayoutPanel1.RowCount - 1; row++)
+            for (int row = 1; row < tableLayoutPanelAA.RowCount - 1; row++)
             {
-                int col = tableLayoutPanel1.ColumnCount - 1;
-                Label rowSum = tableLayoutPanel1.GetControlFromPosition(col, row) as Label;
+                int col = tableLayoutPanelAA.ColumnCount - 1;
+                Label rowSum = tableLayoutPanelAA.GetControlFromPosition(col, row) as Label;
                 double.TryParse(rowSum.Text, out double number);
                 sum += number;
             }
@@ -117,11 +144,11 @@ namespace Watchdog.Forms.FundAdministration
             List<Currency> currencies = tableUtility.ConvertRangesToObjects<Currency>(tableUtility.ReadAllRows(Currency.GetDefaultValue()));
             int numberOfColumns = assetClasses.Count + 1;
             int numberOfRows = currencies.Count + 1;
-            tableLayoutPanel1.ColumnCount = numberOfColumns + 1;
-            tableLayoutPanel1.RowCount = numberOfRows + 1;
+            tableLayoutPanelAA.ColumnCount = numberOfColumns + 1;
+            tableLayoutPanelAA.RowCount = numberOfRows + 1;
 
             // First cell, should be empty
-            tableLayoutPanel1.Controls.Add(GenerateLabel(string.Empty, null), 0, 0);
+            tableLayoutPanelAA.Controls.Add(GenerateLabel(string.Empty, null), 0, 0);
 
             Padding padding = Padding.Empty;
 
@@ -130,30 +157,30 @@ namespace Watchdog.Forms.FundAdministration
             {
                 AssetClass assetClass = assetClasses[col - 1];
                 Label columnLabel = GenerateLabel(assetClass.Name, assetClass);
-                tableLayoutPanel1.Controls.Add(columnLabel, col, 0);
+                tableLayoutPanelAA.Controls.Add(columnLabel, col, 0);
             }
 
             // Add total column
-            tableLayoutPanel1.Controls.Add(GenerateLabel("Total", null), numberOfColumns, 0);
+            tableLayoutPanelAA.Controls.Add(GenerateLabel("Total", null), numberOfColumns, 0);
 
             // Add row labels for currencies
             for (int row = 1; row < numberOfRows; row++)
             {
                 Currency currency = currencies[row - 1];
                 Label rowLabel = GenerateLabel(currency.IsoCode, currency);
-                tableLayoutPanel1.Controls.Add(rowLabel, 0, row);
+                tableLayoutPanelAA.Controls.Add(rowLabel, 0, row);
             }
 
             // Add total row
-            tableLayoutPanel1.Controls.Add(GenerateLabel("Total", null), 0, numberOfRows);
+            tableLayoutPanelAA.Controls.Add(GenerateLabel("Total", null), 0, numberOfRows);
 
             // Add text boxes
             for (int row = 1; row < numberOfRows; row++)
             {
                 for (int col = 1; col < numberOfColumns; col++)
                 {
-                    AssetClass assetClass = tableLayoutPanel1.GetControlFromPosition(col, 0).DataBindings[0].DataSource as AssetClass;
-                    Currency currency = tableLayoutPanel1.GetControlFromPosition(0, row).DataBindings[0].DataSource as Currency;
+                    AssetClass assetClass = tableLayoutPanelAA.GetControlFromPosition(col, 0).DataBindings[0].DataSource as AssetClass;
+                    Currency currency = tableLayoutPanelAA.GetControlFromPosition(0, row).DataBindings[0].DataSource as Currency;
                     Padding paddingOneLeft = new Padding(1, 0, 0, 0);
                     FlowLayoutPanel panel = new FlowLayoutPanel
                     {
@@ -161,7 +188,6 @@ namespace Watchdog.Forms.FundAdministration
                         Height = 50,
                         Width = 150,
                     };
-
 
                     for (int i = 0; i < 3; i++)
                     {
@@ -195,39 +221,38 @@ namespace Watchdog.Forms.FundAdministration
                     AssetAllocationEntry entry = GetAssetAllocationEntry(assetClass, currency);
                     if (entry != null)
                     {
-                        updateable = true;
                         panel.Controls[0].Text = entry.StrategicMinValue.ToString();
                         panel.Controls[1].Text = entry.StrategicOptValue.ToString();
                         panel.Controls[2].Text = entry.StrategicMaxValue.ToString();
                         FormUtility.BindObjectToControl(panel, entry);
                     }
 
-                    
-                    tableLayoutPanel1.Controls.Add(panel);
+
+                    tableLayoutPanelAA.Controls.Add(panel);
                 }
             }
 
             // Add total labels in last column
             for (int row = 1; row < numberOfRows + 1; row++)
             {
-                tableLayoutPanel1.Controls.Add(GenerateLabel("", null), numberOfColumns, row);
+                tableLayoutPanelAA.Controls.Add(GenerateLabel("", null), numberOfColumns, row);
             }
 
             // Add total labels in last row
             for (int col = 1; col < numberOfColumns; col++)
             {
-                tableLayoutPanel1.Controls.Add(GenerateLabel("", null), col, numberOfRows);
+                tableLayoutPanelAA.Controls.Add(GenerateLabel("", null), col, numberOfRows);
             }
         }
 
         private void CalcTotals(object tb)
         {
-            int numberOfRows = tableLayoutPanel1.RowCount - 1;
-            int numberOfColumns = tableLayoutPanel1.ColumnCount - 1;
-            TableLayoutPanelCellPosition position = tableLayoutPanel1.GetPositionFromControl(tb as FlowLayoutPanel);
-            Label totalAssetClass = tableLayoutPanel1.GetControlFromPosition(position.Column, numberOfRows) as Label;
-            Label totalCurrency = tableLayoutPanel1.GetControlFromPosition(numberOfColumns, position.Row) as Label;
-            Label total = tableLayoutPanel1.GetControlFromPosition(numberOfColumns, numberOfRows) as Label;
+            int numberOfRows = tableLayoutPanelAA.RowCount - 1;
+            int numberOfColumns = tableLayoutPanelAA.ColumnCount - 1;
+            TableLayoutPanelCellPosition position = tableLayoutPanelAA.GetPositionFromControl(tb as FlowLayoutPanel);
+            Label totalAssetClass = tableLayoutPanelAA.GetControlFromPosition(position.Column, numberOfRows) as Label;
+            Label totalCurrency = tableLayoutPanelAA.GetControlFromPosition(numberOfColumns, position.Row) as Label;
+            Label total = tableLayoutPanelAA.GetControlFromPosition(numberOfColumns, numberOfRows) as Label;
             double rowSum = GetRowSum(position.Row);
             double columnSum = GetColumnSum(position.Column);
             totalCurrency.Text = rowSum.ToString();
@@ -240,21 +265,21 @@ namespace Watchdog.Forms.FundAdministration
         {
             totalCol = 0;
             totalRow = 0;
-            for (int col = 1; col < tableLayoutPanel1.ColumnCount - 1; col++)
+            for (int col = 1; col < tableLayoutPanelAA.ColumnCount - 1; col++)
             {
                 double colSum = GetColumnSum(col);
                 totalCol += colSum;
-                Label label = tableLayoutPanel1.GetControlFromPosition(col, tableLayoutPanel1.RowCount - 1) as Label;
+                Label label = tableLayoutPanelAA.GetControlFromPosition(col, tableLayoutPanelAA.RowCount - 1) as Label;
                 label.Text = colSum.ToString();
             }
-            for (int row = 1; row < tableLayoutPanel1.RowCount - 1; row++)
+            for (int row = 1; row < tableLayoutPanelAA.RowCount - 1; row++)
             {
                 double rowSum = GetRowSum(row);
                 totalRow += rowSum;
-                Label label = tableLayoutPanel1.GetControlFromPosition(tableLayoutPanel1.ColumnCount - 1, row) as Label;
+                Label label = tableLayoutPanelAA.GetControlFromPosition(tableLayoutPanelAA.ColumnCount - 1, row) as Label;
                 label.Text = rowSum.ToString();
             }
-            tableLayoutPanel1.GetControlFromPosition(tableLayoutPanel1.ColumnCount - 1, tableLayoutPanel1.RowCount - 1).Text = totalCol.ToString();
+            tableLayoutPanelAA.GetControlFromPosition(tableLayoutPanelAA.ColumnCount - 1, tableLayoutPanelAA.RowCount - 1).Text = totalCol.ToString();
         }
 
         private void CancelButtonClick(object sender, EventArgs e)
@@ -272,11 +297,11 @@ namespace Watchdog.Forms.FundAdministration
                 MessageBox.Show("Gesamttotal muss 100% sein.");
                 return false;
             }
-            for (int col = 1; col < tableLayoutPanel1.ColumnCount - 1; col++)
+            for (int col = 1; col < tableLayoutPanelAA.ColumnCount - 1; col++)
             {
-                for (int row = 1; row < tableLayoutPanel1.RowCount - 1; row++)
+                for (int row = 1; row < tableLayoutPanelAA.RowCount - 1; row++)
                 {
-                    FlowLayoutPanel panel = tableLayoutPanel1.GetControlFromPosition(col, row) as FlowLayoutPanel;
+                    FlowLayoutPanel panel = tableLayoutPanelAA.GetControlFromPosition(col, row) as FlowLayoutPanel;
                     double[] assetAllocationRange = new double[3];
 
                     for (int i = 0; i < 3; i++)
@@ -289,18 +314,17 @@ namespace Watchdog.Forms.FundAdministration
                         assetAllocationRange[i] = value;
                     }
 
-
-                    if (updateable)
+                    try
                     {
-                        AssetAllocationEntry entry = tableLayoutPanel1.GetControlFromPosition(col, row).DataBindings[0].DataSource as AssetAllocationEntry;
+                        AssetAllocationEntry entry = panel.DataBindings[0].DataSource as AssetAllocationEntry;
                         tableUtility.MergeTableRow(entry);
                     }
-                    else
+                    catch (ArgumentOutOfRangeException)
                     {
                         AssetAllocationEntry assetAllocationEntry = new AssetAllocationEntry
                         {
-                            AssetClass = tableLayoutPanel1.GetControlFromPosition(col, 0).DataBindings[0].DataSource as AssetClass,
-                            Currency = tableLayoutPanel1.GetControlFromPosition(0, row).DataBindings[0].DataSource as Currency,
+                            AssetClass = tableLayoutPanelAA.GetControlFromPosition(col, 0).DataBindings[0].DataSource as AssetClass,
+                            Currency = tableLayoutPanelAA.GetControlFromPosition(0, row).DataBindings[0].DataSource as Currency,
                             StrategicMinValue = assetAllocationRange[0],
                             StrategicOptValue = assetAllocationRange[1],
                             StrategicMaxValue = assetAllocationRange[2],
@@ -315,33 +339,35 @@ namespace Watchdog.Forms.FundAdministration
 
         private bool MergeFundProperties()
         {
+            TableUtility tableUtility = new TableUtility();
             Fund newFund = new Fund
             {
                 Index = fund.Index,
                 Name = textBoxFundName.Text,
                 CustodyAccountNumber = textBoxCustodyNr.Text,
-                Isin = textBoxIsin.Text,
-                Currency = new Currency
-                {
-                    IsoCode = fund.Currency.IsoCode
-                }
+                Isin = textBoxIsin.Text
             };
+            List<Range> currencyRange = tableUtility.ReadTableRow(Currency.GetDefaultValue(), new Dictionary<string, string>
+            {
+                {"IsoCode", textBoxCurrency.Text.ToUpper() }
+            }, QueryOperator.OR);
+
+            if (currencyRange.Count != 0)
+            {
+                Currency currency = tableUtility.ConvertRangesToObjects<Currency>(currencyRange)[0];
+                newFund.Currency = currency;
+            }
+            else
+            {
+                newFund.Currency = fund.Currency;
+            }
+
             if (!fund.Equals(newFund))
             {
-                TableUtility tableUtility = new TableUtility();
                 tableUtility.MergeTableRow(newFund);
                 return true;
             }
-            return false;
-        }
-
-        private void ButtonSubmit_Click(object sender, EventArgs e)
-        {
-            if (MergeFundProperties() && MergeAssetAllocation())
-            {
-                passedForm.OnSubmit();
-                Close();
-            }
+            return true;
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using Watchdog.Entities;
 using Watchdog.Forms.Util;
 using Watchdog.Persistence;

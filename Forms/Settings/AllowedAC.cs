@@ -9,14 +9,29 @@ namespace Watchdog.Forms.Settings
 {
     public partial class UserControlAllowedACAndCurrencies : UserControl, IPassedForm
     {
+        private DataGridView dataGridViewCurrencies;
+        private DataGridView dataGridViewAssetClasses;
         private int currentRowIndex;
         private DataGridView currentDataGridView;
 
         public UserControlAllowedACAndCurrencies()
         {
             InitializeComponent();
+            InitializeCustomComponents();
             LoadAssetClasses();
             LoadCurrencies();
+        }
+
+        private void InitializeCustomComponents()
+        {
+            dataGridViewAssetClasses = FormUtility.CreateDataGridView(typeof(AssetClass), 80, 246, 600, 400);
+            dataGridViewCurrencies = FormUtility.CreateDataGridView(typeof(Currency), 700, 246, 600, 200);
+            Controls.Add(dataGridViewCurrencies);
+            Controls.Add(dataGridViewAssetClasses);
+            ToolStripMenuItem itemDeleteAssetClass = FormUtility.CreateContextMenuItem("Löschen", DeleteAssetClass);
+            ToolStripMenuItem itemDeleteCurreny = FormUtility.CreateContextMenuItem("Löschen", DeleteCurrency);
+            FormUtility.AddContextMenu(dataGridViewAssetClasses, itemDeleteAssetClass);
+            FormUtility.AddContextMenu(dataGridViewCurrencies, itemDeleteCurreny);
         }
 
         private void LoadCurrencies()
@@ -25,7 +40,7 @@ namespace Watchdog.Forms.Settings
             List<Currency> currencyList = tableUtility.ConvertRangesToObjects<Currency>(tableUtility.ReadAllRows(Currency.GetDefaultValue()));
             foreach (Currency currency in currencyList)
             {
-                currencyBindingSource.Add(currency);
+                FormUtility.GetBindingSource(dataGridViewCurrencies).Add(currency);
             }
         }
 
@@ -35,7 +50,7 @@ namespace Watchdog.Forms.Settings
             List<AssetClass> assetClassList = tableUtility.ConvertRangesToObjects<AssetClass>(tableUtility.ReadAllRows(AssetClass.GetDefaultValue()));
             foreach (AssetClass assetClass in assetClassList)
             {
-                assetClassBindingSource.Add(assetClass);
+                FormUtility.GetBindingSource(dataGridViewAssetClasses).Add(assetClass);
             }
         }
 
@@ -48,7 +63,7 @@ namespace Watchdog.Forms.Settings
                 Name = assetClassName
             };
             tableUtility.InsertTableRow(assetClass);
-            assetClassBindingSource.Add(assetClass);
+            FormUtility.GetBindingSource(dataGridViewAssetClasses).Add(assetClass);
         }
 
         private void AddCurrency(string currencyIsoCode)
@@ -60,10 +75,10 @@ namespace Watchdog.Forms.Settings
                 IsoCode = currencyIsoCode
             };
             tableUtility.InsertTableRow(currency);
-            currencyBindingSource.Add(currency);
+            FormUtility.GetBindingSource(dataGridViewCurrencies).Add(currency);
         }
 
-        private void ButtonNewAssetClass_Click(object sender, EventArgs e)
+        private void ButtonNewAssetClassClick(object sender, EventArgs e)
         {
             _ = new OneAttributeForm(this, "Asset-Klasse", "asset_class")
             {
@@ -85,7 +100,7 @@ namespace Watchdog.Forms.Settings
             }
         }
 
-        private void ButtonNewCurrency_Click(object sender, EventArgs e)
+        private void ButtonNewCurrencyClick(object sender, EventArgs e)
         {
             _ = new OneAttributeForm(this, "Währung", "currency")
             {
@@ -98,6 +113,24 @@ namespace Watchdog.Forms.Settings
             TableUtility tableUtility = new TableUtility();
             Persistable objectToDelete = currentDataGridView.Rows[currentRowIndex].DataBoundItem as Persistable;
             currentDataGridView.Rows.RemoveAt(currentRowIndex);
+            tableUtility.DeleteTableRow(objectToDelete);
+        }
+
+        private void DeleteAssetClass(object sender, EventArgs e)
+        {
+            TableUtility tableUtility = new TableUtility();
+            DataGridViewRow selectedRow = dataGridViewAssetClasses.SelectedRows[0];
+            Persistable objectToDelete = selectedRow.DataBoundItem as Persistable;
+            dataGridViewAssetClasses.Rows.RemoveAt(selectedRow.Index);
+            tableUtility.DeleteTableRow(objectToDelete);
+        }
+
+        private void DeleteCurrency(object sender, EventArgs e)
+        {
+            TableUtility tableUtility = new TableUtility();
+            DataGridViewRow selectedRow = dataGridViewCurrencies.SelectedRows[0];
+            Persistable objectToDelete = selectedRow.DataBoundItem as Persistable;
+            dataGridViewCurrencies.Rows.RemoveAt(selectedRow.Index);
             tableUtility.DeleteTableRow(objectToDelete);
         }
 

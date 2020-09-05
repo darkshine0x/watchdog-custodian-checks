@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using Watchdog.Forms.Util;
 using Watchdog.Persistence;
 
 namespace Watchdog.Entities
@@ -9,6 +9,7 @@ namespace Watchdog.Entities
         private static readonly AssetClass defaultAssetClass = new AssetClass();
 
         [PersistableField]
+        [TableHeader("ASSET-KLASSE", 400)]
         public string Name { get; set; }
         public double Index { get; set; }
 

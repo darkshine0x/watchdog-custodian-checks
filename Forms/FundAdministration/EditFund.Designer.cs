@@ -32,7 +32,6 @@
             this.buttonCancel = new System.Windows.Forms.Button();
             this.labelTitle = new System.Windows.Forms.Label();
             this.labelFundName = new System.Windows.Forms.Label();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.labelIsin = new System.Windows.Forms.Label();
             this.labelCustodyNr = new System.Windows.Forms.Label();
             this.labelCurrency = new System.Windows.Forms.Label();
@@ -52,7 +51,6 @@
             this.buttonSubmit.TabIndex = 1;
             this.buttonSubmit.Text = "Bestätigen";
             this.buttonSubmit.UseVisualStyleBackColor = true;
-            this.buttonSubmit.Click += new System.EventHandler(this.ButtonSubmit_Click);
             // 
             // buttonCancel
             // 
@@ -83,20 +81,6 @@
             this.labelFundName.Size = new System.Drawing.Size(92, 40);
             this.labelFundName.TabIndex = 4;
             this.labelFundName.Text = "Name";
-            // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.AutoScroll = true;
-            this.tableLayoutPanel1.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.tableLayoutPanel1.ColumnCount = 1;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(985, 244);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 1;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1621, 822);
-            this.tableLayoutPanel1.TabIndex = 5;
             // 
             // labelIsin
             // 
@@ -186,7 +170,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(2686, 1284);
             this.Controls.Add(this.tableLayoutPanelFundProperties);
-            this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.labelTitle);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonSubmit);
@@ -204,7 +187,6 @@
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.Label labelTitle;
         private System.Windows.Forms.Label labelFundName;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Label labelIsin;
         private System.Windows.Forms.Label labelCustodyNr;
         private System.Windows.Forms.Label labelCurrency;

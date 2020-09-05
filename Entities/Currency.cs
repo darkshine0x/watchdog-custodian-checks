@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Watchdog.Forms.Util;
 using Watchdog.Persistence;
 
 namespace Watchdog.Entities
@@ -8,6 +9,7 @@ namespace Watchdog.Entities
         public static readonly string tableName = "wdt_currencies";
         public static readonly Currency defaultCurrency = new Currency();
         [PersistableField]
+        [TableHeader("ISO-CODE")]
         public string IsoCode { get; set; }
         public double Index { get; set; }
 
@@ -49,16 +51,12 @@ namespace Watchdog.Entities
         public override bool Equals(object obj)
         {
             return obj is Currency currency &&
-                   IsoCode == currency.IsoCode &&
-                   Index == currency.Index;
+                   IsoCode == currency.IsoCode;
         }
 
         public override int GetHashCode()
         {
-            int hashCode = -1928339242;
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(IsoCode);
-            hashCode = hashCode * -1521134295 + Index.GetHashCode();
-            return hashCode;
+            return -565693813 + EqualityComparer<string>.Default.GetHashCode(IsoCode);
         }
     }
 }

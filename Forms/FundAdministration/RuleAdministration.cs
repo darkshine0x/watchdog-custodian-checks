@@ -10,15 +10,40 @@ namespace Watchdog.Forms.FundAdministration
 {
     public partial class RuleAdministration : Form, IPassedObject<Rule>
     {
+        private TableLayoutPanel tableLayoutPanel;
+        private Label title;
+        private Button submitButton;
+        private Button cancelButton;
+        private Button addNewRuleButton;
+
         public RuleAdministration()
         {
             InitializeComponent();
+            InitializeCustomComponents();
             LoadRules();
+        }
+
+        private void InitializeCustomComponents()
+        {
+            title = FormUtility.CreateTitle("Regelverwaltung");
+            tableLayoutPanel = FormUtility.CreateTableLayoutPanel(1060, 2980, 43, 180);
+            submitButton = FormUtility.CreateButton("Bestätigen");
+            submitButton.Location = new Point(ClientSize.Width - submitButton.Width - 500, ClientSize.Height - submitButton.Height - 30);
+            submitButton.Click += new EventHandler(ButtonCloseClick);
+
+            cancelButton = FormUtility.CreateButton("Abbrechen");
+            cancelButton.Location = new Point(ClientSize.Width - cancelButton.Width - 30, ClientSize.Height - cancelButton.Height - 30);
+            cancelButton.Click += new EventHandler(ButtonCloseClick);
+
+            addNewRuleButton = FormUtility.CreateButton("Neue Regel hinzufügen");
+            addNewRuleButton.Location = new Point(ClientSize.Width - addNewRuleButton.Width - 30, 30);
+            addNewRuleButton.Click += new EventHandler(AddNewRuleClick);
+            FormUtility.AddControlsToForm(this, title, tableLayoutPanel, submitButton, cancelButton, addNewRuleButton);
         }
 
         private void AddRule(Rule rule)
         {
-            int rowCount = tableLayoutPanel1.RowCount++;
+            int rowCount = tableLayoutPanel.RowCount++;
             Padding margin = new Padding(1, 0, 0, 1);
             Label ruleLabel = new Label
             {
@@ -31,9 +56,9 @@ namespace Watchdog.Forms.FundAdministration
                 Margin = margin
             };
 
-            for (int col = 1; col < tableLayoutPanel1.ColumnCount; col++)
+            for (int col = 1; col < tableLayoutPanel.ColumnCount; col++)
             {
-                tableLayoutPanel1.Controls.Add(new CheckBox
+                tableLayoutPanel.Controls.Add(new CheckBox
                 {
                     AutoSize = false,
                     Height = 50,
@@ -45,7 +70,7 @@ namespace Watchdog.Forms.FundAdministration
             }
 
             FormUtility.BindObjectToControl(ruleLabel, rule);
-            tableLayoutPanel1.Controls.Add(ruleLabel, 0, rowCount);
+            tableLayoutPanel.Controls.Add(ruleLabel, 0, rowCount);
         }
 
         private void LoadRules()
@@ -53,10 +78,10 @@ namespace Watchdog.Forms.FundAdministration
             TableUtility tableUtility = new TableUtility();
             List<Fund> fundList = tableUtility.ConvertRangesToObjects<Fund>(tableUtility.ReadAllRows(Fund.GetDefaultValue()));
             List<Rule> ruleList = tableUtility.ConvertRangesToObjects<Rule>(tableUtility.ReadAllRows(Rule.GetDefaultValue()));
-            tableLayoutPanel1.ColumnCount = fundList.Count + 1;
+            tableLayoutPanel.ColumnCount = fundList.Count + 1;
             Padding margin = new Padding(1, 0, 0, 1);
 
-            tableLayoutPanel1.Controls.Add(new Label
+            tableLayoutPanel.Controls.Add(new Label
             {
                 AutoSize = false,
                 BackColor = Color.White,
@@ -79,7 +104,7 @@ namespace Watchdog.Forms.FundAdministration
                     Margin = margin
                 };
                 FormUtility.BindObjectToControl(fundLabel, fundList[col]);
-                tableLayoutPanel1.Controls.Add(fundLabel, col + 1, 0);
+                tableLayoutPanel.Controls.Add(fundLabel, col + 1, 0);
             }
 
             foreach (Rule rule in ruleList)
@@ -96,12 +121,7 @@ namespace Watchdog.Forms.FundAdministration
             };
         }
 
-        private void SubmitClick(object sender, EventArgs e)
-        {
-
-        }
-
-        private void CancelClick(object sender, EventArgs e)
+        private void ButtonCloseClick(object sender, EventArgs e)
         {
             Close();
         }

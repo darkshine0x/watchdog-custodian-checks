@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Watchdog.Forms.Util;
 using Watchdog.Persistence;
 
 namespace Watchdog.Entities
@@ -9,12 +10,16 @@ namespace Watchdog.Entities
         private static readonly Fund defaultFund = new Fund();
         public double Index { get; set; }
         [PersistableField]
+        [TableHeader("NAME", 700)]
         public string Name { get; set; }
         [PersistableField]
+        [TableHeader("ISIN", 350)]
         public string Isin { get; set; }
         [PersistableField]
+        [TableHeader("DEPOT-NR.", 350)]
         public string CustodyAccountNumber { get; set; }
         [PersistableField]
+        [TableHeader("WÄHRUNG")]
         public Currency Currency { get; set; }
         public List<Position> Positions { get; }
 
@@ -54,7 +59,6 @@ namespace Watchdog.Entities
         public override bool Equals(object obj)
         {
             return obj is Fund fund &&
-                   Index == fund.Index &&
                    Name == fund.Name &&
                    Isin == fund.Isin &&
                    CustodyAccountNumber == fund.CustodyAccountNumber &&
@@ -63,8 +67,7 @@ namespace Watchdog.Entities
 
         public override int GetHashCode()
         {
-            int hashCode = 1867242755;
-            hashCode = hashCode * -1521134295 + Index.GetHashCode();
+            int hashCode = -620175528;
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Name);
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Isin);
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(CustodyAccountNumber);

@@ -229,6 +229,7 @@
     <Compile Include="Forms\Settings\AllowedAC.Designer.cs">
       <DependentUpon>AllowedAC.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Util\TableHeader.cs" />
     <Compile Include="Forms\Util\VerticalLabel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -291,9 +292,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\DataSources\Watchdog.Entities.AssetAllocation.datasource" />
-    <None Include="Properties\DataSources\Watchdog.Entities.AssetClass.datasource" />
-    <None Include="Properties\DataSources\Watchdog.Entities.Currency.datasource" />
-    <None Include="Properties\DataSources\Watchdog.Entities.Fund.datasource" />
     <None Include="Properties\DataSources\Watchdog.Entities.Rating.datasource" />
     <None Include="Properties\DataSources\Watchdog.Entities.RatingAgency.datasource" />
     <None Include="Properties\DataSources\Watchdog.Entities.RuleKind.datasource" />
