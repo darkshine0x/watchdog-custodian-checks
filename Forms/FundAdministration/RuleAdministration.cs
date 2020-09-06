@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*
+ * Author: Jan Baumann
+ * Version: 06.09.2020
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -8,14 +13,26 @@ using Watchdog.Persistence;
 
 namespace Watchdog.Forms.FundAdministration
 {
+    /// <summary>
+    /// Form for administrating investment rules.
+    /// 
+    /// Functions:
+    /// <para>- Adding new rules</para>
+    /// <para>- Edit rules</para>
+    /// <para>- Deleting rules</para>
+    /// </summary>
     public partial class RuleAdministration : Form, IPassedObject<Rule>
     {
         private TableLayoutPanel tableLayoutPanel;
+        private ContextMenuStrip contextMenu;
         private Label title;
         private Button submitButton;
         private Button cancelButton;
         private Button addNewRuleButton;
 
+        /// <summary>
+        /// Form constructor.
+        /// </summary>
         public RuleAdministration()
         {
             InitializeComponent();
@@ -23,14 +40,19 @@ namespace Watchdog.Forms.FundAdministration
             LoadRules();
         }
 
+        /// <summary>
+        /// Initialization of components, which are added programmatically and not via Designer.
+        /// </summary>
         private void InitializeCustomComponents()
         {
             title = FormUtility.CreateTitle("Regelverwaltung");
             tableLayoutPanel = FormUtility.CreateTableLayoutPanel(43, 180, 1060, 2980);
+            ToolStripMenuItem itemDelete = FormUtility.CreateContextMenuItem("Löschen", DeleteRuleRow);
+            contextMenu = contextMenu = FormUtility.CreateContextMenu(itemDelete);
 
             submitButton = FormUtility.CreateButton("Bestätigen");
             submitButton.Location = new Point(ClientSize.Width - submitButton.Width - 500, ClientSize.Height - submitButton.Height - 30);
-            submitButton.Click += new EventHandler(ButtonCloseClick);
+            submitButton.Click += new EventHandler(ButtonSubmitClick);
 
             cancelButton = FormUtility.CreateButton("Abbrechen");
             cancelButton.Location = new Point(ClientSize.Width - cancelButton.Width - 30, ClientSize.Height - cancelButton.Height - 30);
@@ -43,6 +65,10 @@ namespace Watchdog.Forms.FundAdministration
             FormUtility.AddControlsToForm(this, title, tableLayoutPanel, submitButton, cancelButton, addNewRuleButton);
         }
 
+        /// <summary>
+        /// Adds a new <see cref="Rule"/> to the table (including checkboxes). 
+        /// </summary>
+        /// <param name="rule"><see cref="Rule"/></param>
         private void AddRule(Rule rule)
         {
             int rowCount = tableLayoutPanel.RowCount++;
@@ -60,7 +86,7 @@ namespace Watchdog.Forms.FundAdministration
 
             for (int col = 1; col < tableLayoutPanel.ColumnCount; col++)
             {
-                tableLayoutPanel.Controls.Add(new CheckBox
+                CheckBox checkBox = new CheckBox
                 {
                     AutoSize = false,
                     Height = 50,
@@ -68,13 +94,22 @@ namespace Watchdog.Forms.FundAdministration
                     BackColor = Color.White,
                     CheckAlign = ContentAlignment.MiddleCenter,
                     Margin = margin
-                }, col, rowCount);
+                };
+                Fund columnFund = tableLayoutPanel.GetControlFromPosition(col, 0).DataBindings[0].DataSource as Fund;
+                if (rule.FundList.Contains(columnFund))
+                {
+                    checkBox.Checked = true;
+                }
+                FormUtility.AddControlWithContextMenu(tableLayoutPanel, contextMenu, checkBox, col, rowCount);
             }
 
             FormUtility.BindObjectToControl(ruleLabel, rule);
-            tableLayoutPanel.Controls.Add(ruleLabel, 0, rowCount);
+            FormUtility.AddControlWithContextMenu(tableLayoutPanel, contextMenu, ruleLabel, 0, rowCount);
         }
 
+        /// <summary>
+        /// Loading of the table content. 1st dimension <see cref="Rule"/>, 2nd dimension <see cref="Fund"/>
+        /// </summary>
         private void LoadRules()
         {
             TableUtility tableUtility = new TableUtility();
@@ -115,6 +150,28 @@ namespace Watchdog.Forms.FundAdministration
             }
         }
 
+        /// <summary>
+        /// Deletes rule from the table and database.
+        /// </summary>
+        /// <param name="sender"><see cref="ToolStripMenuItem"/> Clicked menu item</param>
+        /// <param name="e"><see cref="EventArgs"/></param>
+        public void DeleteRuleRow(object sender, EventArgs e)
+        {
+            ToolStripMenuItem menuItem = sender as ToolStripMenuItem;
+            ContextMenuStrip contextMenu = menuItem.Owner as ContextMenuStrip;
+            int row = tableLayoutPanel.GetRow(contextMenu.SourceControl);
+            Control firstElement = tableLayoutPanel.GetControlFromPosition(0, row);
+            TableUtility tableUtility = new TableUtility();
+            tableUtility.DeleteTableRow(firstElement.DataBindings[0].DataSource as Rule);
+            FormUtility.DeleteTableRow(tableLayoutPanel, firstElement);
+        }
+
+        /// <summary>
+        /// Called method when the user clicks on the button for adding a new rule.
+        /// After that, a new form opens.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"><see cref="EventArgs"/></param>
         private void AddNewRuleClick(object sender, EventArgs e)
         {
             _ = new AddRule(this)
@@ -123,11 +180,50 @@ namespace Watchdog.Forms.FundAdministration
             };
         }
 
+        /// <summary>
+        /// Called method when the user clicks on the cancel button.
+        /// </summary>
+        /// <param name="sender">Clicked Button</param>
+        /// <param name="e"><see cref="EventArgs"/></param>
         private void ButtonCloseClick(object sender, EventArgs e)
         {
             Close();
         }
 
+        /// <summary>
+        /// Called method when the user clicks on the submit button.
+        /// At first, all checkboxes are inspected, if they are checked or not. Then the rules will be merged in the database.
+        /// They can be merged directly. It is imopossible to add new rules directly in the table. Therefore they must already 
+        /// be persisted.
+        /// </summary>
+        /// <param name="sender">Clicked button</param>
+        /// <param name="e"><see cref="EventArgs"/></param>
+        private void ButtonSubmitClick(object sender, EventArgs e)
+        {
+            TableUtility tableUtility = new TableUtility();
+            for (int row = 1; row < tableLayoutPanel.RowCount; row++)
+            {
+                Rule boundRule = tableLayoutPanel.GetControlFromPosition(0, row).DataBindings[0].DataSource as Rule;
+                boundRule.FundList.Clear();
+
+                for (int col = 1; col < tableLayoutPanel.ColumnCount; col++)
+                {
+                    Fund boundFund = tableLayoutPanel.GetControlFromPosition(col, 0).DataBindings[0].DataSource as Fund;
+                    CheckBox checkBox = tableLayoutPanel.GetControlFromPosition(col, row) as CheckBox;
+                    if (checkBox.Checked)
+                    {
+                        boundRule.FundList.Add(boundFund);
+                    }
+                }
+                tableUtility.MergeTableRow(boundRule);
+            }
+            Close();
+        }
+
+        /// <summary>
+        /// Implementation of <see cref="IPassedObject{T}"/>.
+        /// </summary>
+        /// <param name="obj">Passed object from the calling form</param>
         public void OnSubmit(Rule obj)
         {
             AddRule(obj);

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using Watchdog.Persistence;
@@ -172,6 +171,23 @@ namespace Watchdog.Forms.Util
             };
         }
 
+        public static void AddControlWithContextMenu(TableLayoutPanel tableLayoutPanel, ContextMenuStrip contextMenu, Control control, int col, int row)
+        {
+            tableLayoutPanel.Controls.Add(control, col, row);
+            control.ContextMenuStrip = contextMenu;
+        }
+
+        public static ContextMenuStrip CreateContextMenu(params ToolStripMenuItem[] contextMenuItems)
+        {
+            if (contextMenuItems.Length == 0)
+            {
+                return null;
+            }
+            ContextMenuStrip contextMenu = new ContextMenuStrip();
+            contextMenu.Items.AddRange(contextMenuItems);
+            return contextMenu;
+        }
+
         public static DataGridViewTextBoxColumn CreateDataGridViewColumn(string dataProperty, string headerText, int width = 200)
         {
             DataGridViewTextBoxColumn column = new DataGridViewTextBoxColumn
@@ -279,6 +295,16 @@ namespace Watchdog.Forms.Util
             {
                 deleteRow(sender, e);
             };
+        }
+
+        public static void DeleteTableRow(TableLayoutPanel tableLayoutPanel, Control control)
+        {
+            int row = tableLayoutPanel.GetRow(control);
+            for (int col = 0; col < tableLayoutPanel.ColumnCount; col++)
+            {
+                tableLayoutPanel.Controls.Remove(tableLayoutPanel.GetControlFromPosition(col, row));
+            }
+            tableLayoutPanel.RowCount--;
         }
     }
 }
