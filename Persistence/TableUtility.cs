@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace Watchdog.Persistence
 {
@@ -203,7 +204,10 @@ namespace Watchdog.Persistence
                         string content = "";
                         foreach (Persistable item in items as IEnumerable<Persistable>)
                         {
-                            content += item.GetIndex() + ";";
+                            if (item.GetIndex() != 0)
+                            {
+                                content += item.GetIndex() + ";";
+                            }
                         }
                         row.Cells[1, colCounter].Value = content;
                     }
@@ -469,21 +473,31 @@ namespace Watchdog.Persistence
                         if (content != null)
                         {
                             string[] splitContent = content.Split(';');
-                            foreach (string stringIndex in splitContent)
+                            for (int arrayIndex = 0; arrayIndex < splitContent.Length; arrayIndex++)
                             {
+                                string stringIndex = splitContent[arrayIndex];
                                 if (string.IsNullOrEmpty(stringIndex))
                                 {
-                                    break;
+                                    continue;
                                 }
-                                double.TryParse(stringIndex, out double index);
+                                double.TryParse(splitContent[arrayIndex], out double index);
                                 Persistable searchObject = GetDefaultObject(genericType);
                                 searchObject.SetIndex(index);
+                                Range foundRow = ReadTableRow(searchObject);
+                                if (foundRow == null || double.IsNaN(foundRow.Cells[1, 1].Value))
+                                {
+                                    splitContent[arrayIndex] = string.Empty;
+                                    continue;
+                                }
                                 parameters[0] = ReadTableRow(searchObject);
                                 MethodInfo recMethod = typeof(TableUtility).GetMethod("RowToObject");
                                 MethodInfo recGenericMethod = recMethod.MakeGenericMethod(genericType);
                                 Persistable generatedListItem = recGenericMethod.Invoke(this, parameters) as Persistable;
                                 ((IList)propertyList).Add(generatedListItem);
                             }
+                            content = string.Join(";", splitContent);
+                            content += ";";
+                            row.Cells[1, col].Value = content;
                         }
                         property.SetValue(obj, propertyList);
                         continue;
@@ -494,6 +508,10 @@ namespace Watchdog.Persistence
                     double foreignKey = row.Cells[1, col].Value;
                     foreignObject.SetIndex(row.Cells[1, col].Value);
                     Range foreignRow = ReadTableRow(foreignObject);
+                    if (foreignRow == null || double.IsNaN(foreignRow.Cells[1, 1].Value))
+                    {
+                        break;
+                    }
                     parameters[0] = foreignRow;
                     Persistable generatedObject = genericMethod.Invoke(this, parameters) as Persistable;
                     property.SetValue(obj, generatedObject);
