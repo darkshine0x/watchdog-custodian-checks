@@ -26,7 +26,8 @@ namespace Watchdog.Forms.FundAdministration
         private void InitializeCustomComponents()
         {
             title = FormUtility.CreateTitle("Regelverwaltung");
-            tableLayoutPanel = FormUtility.CreateTableLayoutPanel(1060, 2980, 43, 180);
+            tableLayoutPanel = FormUtility.CreateTableLayoutPanel(43, 180, 1060, 2980);
+
             submitButton = FormUtility.CreateButton("Bestätigen");
             submitButton.Location = new Point(ClientSize.Width - submitButton.Width - 500, ClientSize.Height - submitButton.Height - 30);
             submitButton.Click += new EventHandler(ButtonCloseClick);
@@ -38,6 +39,7 @@ namespace Watchdog.Forms.FundAdministration
             addNewRuleButton = FormUtility.CreateButton("Neue Regel hinzufügen");
             addNewRuleButton.Location = new Point(ClientSize.Width - addNewRuleButton.Width - 30, 30);
             addNewRuleButton.Click += new EventHandler(AddNewRuleClick);
+
             FormUtility.AddControlsToForm(this, title, tableLayoutPanel, submitButton, cancelButton, addNewRuleButton);
         }
 

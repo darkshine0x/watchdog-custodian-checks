@@ -44,8 +44,7 @@ namespace Watchdog.Forms.Settings
             {
                 DataGridRatingAgenciesMouseDown(sender, e);
             };
-            Controls.Add(dataGridViewRatingAgencies);
-            Controls.Add(dataGridViewRatingCodes);
+            FormUtility.AddControlsToForm(this, dataGridViewRatingAgencies, dataGridViewRatingCodes);
         }
 
         private void LoadRatingAgencies()

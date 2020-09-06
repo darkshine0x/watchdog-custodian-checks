@@ -40,7 +40,6 @@
             this.Name = "RuleAdministration";
             this.Text = "Regelverwaltung";
             this.ResumeLayout(false);
-
         }
 
         #endregion
