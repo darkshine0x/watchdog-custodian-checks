@@ -37,7 +37,6 @@ namespace Watchdog.Forms.FundAdministration
 
                 if (currencyRange.Count == 0 || currencyRange.Count > 1)
                 {
-                    textBoxCurrency.BackColor = Color.Red;
                     return false;
                 }
                 Currency currency = tableUtility.ConvertRangesToObjects<Currency>(currencyRange)[0];
