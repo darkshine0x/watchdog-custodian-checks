@@ -13,6 +13,7 @@ namespace Watchdog.Entities
         public string RatingCode { get; set; }
         [PersistableField]
         [TableHeader("WERT")]
+        // Rating class according to concordance table of federal authorities
         public double RatingNumericValue { get; set; }
         public double Index { get; set; }
         [PersistableField]
