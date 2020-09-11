@@ -1,28 +1,61 @@
-﻿using Microsoft.Office.Interop.Excel;
+﻿/*
+ * Author: Jan Baumann
+ * Version: 11.09.2020
+ */
+
+using Microsoft.Office.Interop.Excel;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace Watchdog.Persistence
 {
+    /// <summary>
+    /// This class contains all the persistence functionality.
+    /// 
+    /// By default, the current active workbook you're working on will be used
+    /// for applying the persistence functions.
+    /// 
+    /// There is an in-built object mapper. Important: The corresponding classes
+    /// have to be implement the <see cref="Persistable"/> interface. All properties
+    /// that have to be persisted need be marked correctly and need to have a getter
+    /// and setter. Also they need be marked with the correct attribute. For lists 
+    /// you need to use the <see cref="MultiValue"/> attribute. For properties with a 
+    /// single value, use the <see cref="PersistableField"/> property.
+    /// 
+    /// There are a few limitations. Generic classes cannot be handled by the object 
+    /// mapper at the moment. Dictionaries also lead to unexpected errors. If an operation 
+    /// fails, there will be no rollback.
+    /// </summary>
     public class TableUtility
     {
         private readonly string sequenceTableName = "wdt_sequence";
         private readonly Workbook workbook;
 
+        /// <summary>
+        /// Default constructor, which selects the current active workbook.
+        /// </summary>
         public TableUtility() : this(Globals.WatchdogAddIn.Application.ActiveWorkbook)
         {
 
         }
 
+        /// <summary>
+        /// Default with customizable workbook.
+        /// </summary>
+        /// <param name="workbook">Workbook, in which the operations should take place</param>
         public TableUtility(Workbook workbook)
         {
             this.workbook = workbook;
         }
 
+        /// <summary>
+        /// Checks if there is already an exisiting table (<see cref="Worksheet"/>) according to the object, which needs to persisted.
+        /// If not, a table will be created.
+        /// </summary>
+        /// <param name="persistable"><see cref="Persistable"/> default object</param>
         public void CreateTable(Persistable persistable)
         {
             string joinedTable = IsJoinedTable(persistable);
@@ -42,7 +75,11 @@ namespace Watchdog.Persistence
             CreateTableWorksheet(persistable);
         }
 
-        private  Worksheet CreateSequenceTable()
+        /// <summary>
+        /// Creates a sequence table which holds the index counter and the row counters for the data tables.
+        /// </summary>
+        /// <returns>Sequence <see cref="Worksheet"/></returns>
+        private Worksheet CreateSequenceTable()
         {
             Worksheet ws = FindWorksheet(sequenceTableName);
             if (ws != null)
@@ -56,7 +93,12 @@ namespace Watchdog.Persistence
             return createdSheet;
         }
 
-        private  int InsertRowCounter(string tableName)
+        /// <summary>
+        /// Inserts a new row counter column in the sequence table.
+        /// </summary>
+        /// <param name="tableName">Table name</param>
+        /// <returns></returns>
+        private int InsertRowCounter(string tableName)
         {
             Worksheet ws = FindWorksheet(sequenceTableName);
             if (ws == null)
@@ -69,21 +111,25 @@ namespace Watchdog.Persistence
             return emptyColumn;
         }
 
-        private  int FindFirstEmtpyColumn(string tableName)
+        /// <summary>
+        /// Finds the first emtpy column in a worksheet.
+        /// </summary>
+        /// <param name="tableName">Table name</param>
+        /// <returns>Column index</returns>
+        private int FindFirstEmtpyColumn(string tableName)
         {
             Worksheet ws = FindWorksheet(tableName);
-            int c = 1;
-            while (true)
-            {
-                if (ws.Cells[1, c].Value == null)
-                {
-                    return c;
-                }
-                c++;
-            }
+            return ws.UsedRange.Rows[1].Cells.Count + 1;
         }
 
-        private  int FindColumn(Worksheet worksheet, string columnName)
+        /// <summary>
+        /// Finds certain column by it's name (value in the first row).
+        /// The column name is usually the property name.
+        /// </summary>
+        /// <param name="worksheet"><see cref="Worksheet"/></param>
+        /// <param name="columnName">Column name</param>
+        /// <returns>Column index</returns>
+        private int FindColumn(Worksheet worksheet, string columnName)
         {
             int i = 1;
             foreach (Range cell in worksheet.UsedRange.Rows[1].Cells)
@@ -104,6 +150,11 @@ namespace Watchdog.Persistence
             return i;
         }
 
+        /// <summary>
+        /// Finds the row counter, if there isn't any, a new will be created.
+        /// </summary>
+        /// <param name="tableName">Table name</param>
+        /// <returns>Row index</returns>
         private int FindOrCreateRowCounterColumn(string tableName)
         {
             Worksheet ws = FindWorksheet(sequenceTableName);
@@ -127,7 +178,11 @@ namespace Watchdog.Persistence
             }
         }
 
-        private  double IncrementSequence()
+        /// <summary>
+        /// Increments the the sequence by one.
+        /// </summary>
+        /// <returns>Incremented sequence value</returns>
+        private double IncrementSequence()
         {
             Worksheet sequenceTable = CreateSequenceTable();
             double sequence = sequenceTable.Cells[2, 2].Value + 1;
@@ -135,7 +190,13 @@ namespace Watchdog.Persistence
             return sequence;
         }
 
-        private  double ChangeRowCounter(string tableName, bool decrement)
+        /// <summary>
+        /// Increments or decrements the corresponding row counter by one.
+        /// </summary>
+        /// <param name="tableName">Table name</param>
+        /// <param name="decrement"><code>true</code> if it should decrement, else <code>false</code></param>
+        /// <returns></returns>
+        private double ChangeRowCounter(string tableName, bool decrement)
         {
             int column = FindOrCreateRowCounterColumn(tableName);
             Worksheet ws = FindWorksheet(sequenceTableName);
@@ -151,7 +212,12 @@ namespace Watchdog.Persistence
             return counter;
         }
 
-        public  Worksheet FindWorksheet(string name)
+        /// <summary>
+        /// Finds a worksheet by name.
+        /// </summary>
+        /// <param name="name">Worksheet name</param>
+        /// <returns><see cref="Worksheet"/></returns>
+        public Worksheet FindWorksheet(string name)
         {
             try
             {
@@ -163,6 +229,12 @@ namespace Watchdog.Persistence
             }
         }
 
+        /// <summary>
+        /// Persists a new object.
+        /// The index will be set as well.
+        /// </summary>
+        /// <param name="persistable">Object to be persisted</param>
+        /// <returns>Index of the object</returns>
         public double InsertTableRow(Persistable persistable)
         {
             string tableName = IsJoinedTable(persistable);
@@ -180,6 +252,12 @@ namespace Watchdog.Persistence
             return sequence;
         }
 
+        /// <summary>
+        /// Refreshes an table row with the actual object data.
+        /// </summary>
+        /// <param name="persistable">Persisted object</param>
+        /// <param name="row">Row with the new data</param>
+        /// <returns><code>True</code> if update is successful, else <code>false</code></returns>
         private bool ReplaceRange(Persistable persistable, Range row)
         {
             string tableName = IsJoinedTable(persistable);
@@ -226,6 +304,11 @@ namespace Watchdog.Persistence
             return true;
         }
 
+        /// <summary>
+        /// Checks if the class of the passed object is a subclass.
+        /// </summary>
+        /// <param name="persistable"><see cref="Persistable"/> default object</param>
+        /// <returns>If subclass, then it returns the table name, else an empty string</returns>
         private string IsJoinedTable(Persistable persistable)
         {
             if (Attribute.GetCustomAttribute(persistable.GetType(), typeof(JoinedTable), false) is JoinedTable attribute)
@@ -235,6 +318,11 @@ namespace Watchdog.Persistence
             return "";
         }
 
+        /// <summary>
+        /// Checks if the class of the passed object is a base class
+        /// </summary>
+        /// <param name="type">Type to check</param>
+        /// <returns>Array of the derived types</returns>
         private Type[] IsJoinedTableBaseClass(Type type)
         {
             if (Attribute.GetCustomAttribute(type, typeof(JoinedTableBase), false) is JoinedTableBase attribute)
@@ -244,6 +332,12 @@ namespace Watchdog.Persistence
             return new Type[0];
         } 
 
+        /// <summary>
+        /// Gets a list of properties, which are marked with the specified attribute.
+        /// </summary>
+        /// <param name="persistable">Object to check (can be default object)</param>
+        /// <param name="attributeType">Type of the marking attribute</param>
+        /// <returns></returns>
         private List<PropertyInfo> GetPropertiesByAttribute(Persistable persistable, Type attributeType)
         {
             PropertyInfo[] properties = persistable.GetType().GetProperties();
@@ -258,12 +352,24 @@ namespace Watchdog.Persistence
             return multiValueProperties;
         }
 
+        /// <summary>
+        /// Creates an instance of the specified type.
+        /// </summary>
+        /// <param name="type">Type</param>
+        /// <returns>Object of type <see cref="Persistable"/></returns>
         private Persistable GetDefaultObject(Type type)
         {
             Persistable persistable = Activator.CreateInstance(type) as Persistable;
             return persistable;
         }
 
+        /// <summary>
+        /// Gets all the rows of a certain table.
+        /// If the type is a base class, the tables of the subclasses will also
+        /// be taken into account.
+        /// </summary>
+        /// <param name="persistable"><see cref="Persistable"/> object</param>
+        /// <returns></returns>
         public List<Range> ReadAllRows(Persistable persistable)
         {
             List<Range> searchResult = new List<Range>();
@@ -300,6 +406,15 @@ namespace Watchdog.Persistence
             return searchResult;
         }
 
+        /// <summary>
+        /// Searches a table row with search parameters.
+        /// The search parameters have to passed with a dictionary. The keys are the 
+        /// column names and the values are the search parameters.
+        /// </summary>
+        /// <param name="persistable"><see cref="Persistable"/>object (to get to the correct table)</param>
+        /// <param name="searchParameters">Search parameters</param>
+        /// <param name="queryOperator"><see cref="QueryOperator"/></param>
+        /// <returns>List with found rows</returns>
         public  List<Range> ReadTableRow(Persistable persistable, Dictionary<string, string> searchParameters, QueryOperator queryOperator)
         {
             List<Range> searchResult = new List<Range>();
@@ -366,6 +481,11 @@ namespace Watchdog.Persistence
             return searchResult;
         }
 
+        /// <summary>
+        /// Gets the table row of the specified object based on its index.
+        /// </summary>
+        /// <param name="persistable"><see cref="Persistable"/> object</param>
+        /// <returns>Table row</returns>
         public Range ReadTableRow(Persistable persistable)
         {
             string joinedTable = IsJoinedTable(persistable);
@@ -386,6 +506,11 @@ namespace Watchdog.Persistence
             return worksheet.UsedRange.Rows[rowIndex];
         }
 
+        /// <summary>
+        /// Binary search implementation for finding the table row based on the object index.
+        /// </summary>
+        /// <param name="persistable"></param>
+        /// <returns></returns>
         private int BinarySearchTable(Persistable persistable)
         {
             string joinedTable = IsJoinedTable(persistable);
@@ -421,6 +546,12 @@ namespace Watchdog.Persistence
             return -1;
         }
 
+        /// <summary>
+        /// Maps multiple table rows to objects.
+        /// </summary>
+        /// <typeparam name="T">Object type</typeparam>
+        /// <param name="ranges">Table rows</param>
+        /// <returns>Object list</returns>
         public List<T> ConvertRangesToObjects<T>(List<Range> ranges) where T : Persistable, new()
         {
             List<T> list = new List<T>();
@@ -435,6 +566,13 @@ namespace Watchdog.Persistence
             return list;
         }
 
+        /// <summary>
+        /// Gets object type based on the table name.
+        /// The table names will be cross checked with a subset of types.
+        /// </summary>
+        /// <param name="types">Types for cross check</param>
+        /// <param name="tableName">Table name</param>
+        /// <returns>Found type</returns>
         private Type GetTypeByTableName(Type[] types, string tableName)
         {
             foreach (Type type in types)
@@ -449,6 +587,15 @@ namespace Watchdog.Persistence
             return null;
         }
 
+        /// <summary>
+        /// Converts a single row to an object.
+        /// 
+        /// The method iterates over all marked properties. Is the property itself an 
+        /// object again, the object mapping is processed recursively.
+        /// </summary>
+        /// <typeparam name="T">Object type</typeparam>
+        /// <param name="row">Table row</param>
+        /// <returns>Object</returns>
         public T RowToObject<T>(Range row) where T : Persistable, new()
         {
             if (row == null)
@@ -557,6 +704,11 @@ namespace Watchdog.Persistence
             return obj;
         }
 
+        /// <summary>
+        /// Deletes the corresponding table row of the passed object.
+        /// </summary>
+        /// <param name="persistable"><see cref="Persistable"/> object</param>
+        /// <returns></returns>
         public bool DeleteTableRow(Persistable persistable)
         {
             string joinedTable = IsJoinedTable(persistable);
@@ -577,6 +729,11 @@ namespace Watchdog.Persistence
             return true;
         }
 
+        /// <summary>
+        /// Updates an existing row with the new object data.
+        /// </summary>
+        /// <param name="persistable"><see cref="Persistable"/> object with updated data</param>
+        /// <returns><code>True</code> if merge is successful, else <code>false</code></returns>
         public bool MergeTableRow(Persistable persistable)
         {
             Range searchResult = ReadTableRow(persistable);
@@ -591,6 +748,12 @@ namespace Watchdog.Persistence
             }
         }
 
+        /// <summary>
+        /// Creates a new worksheet with a custom header and table name.
+        /// </summary>
+        /// <param name="tableName">Table name</param>
+        /// <param name="tableHeader">Column headers</param>
+        /// <returns></returns>
         public Worksheet CreateWorksheet(string tableName, List<string> tableHeader)
         {
             Worksheet createdSheet = workbook.Sheets.Add();
@@ -608,6 +771,12 @@ namespace Watchdog.Persistence
             return createdSheet;
         }
 
+        /// <summary>
+        /// Creates a new worksheet based on the specified table namen given by the object.
+        /// For each marked property a column header will be inserted.
+        /// </summary>
+        /// <param name="persistable"><see cref="Persistable"/> default object</param>
+        /// <returns>New <see cref="Worksheet"/></returns>
         public Worksheet CreateTableWorksheet(Persistable persistable)
         {
             Worksheet newWorksheet = workbook.Sheets.Add();
