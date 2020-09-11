@@ -378,15 +378,47 @@ namespace Watchdog.Persistence
             {
                 worksheet = FindWorksheet(persistable.GetTableName());
             }
-            foreach (Range row in worksheet.UsedRange.Rows)
+            int rowIndex = BinarySearchTable(persistable);
+            if (rowIndex < 0)
             {
-                double.TryParse(row.Cells[1, 1].Value.ToString(), out double rowIndex);
-                if (rowIndex == persistable.GetIndex())
+                return null;
+            }
+            return worksheet.UsedRange.Rows[rowIndex];
+        }
+
+        private int BinarySearchTable(Persistable persistable)
+        {
+            string joinedTable = IsJoinedTable(persistable);
+            Worksheet worksheet;
+            if (joinedTable != "")
+            {
+                worksheet = FindWorksheet(joinedTable);
+            }
+            else
+            {
+                worksheet = FindWorksheet(persistable.GetTableName());
+            }
+
+            Range firstColumn = worksheet.UsedRange.Columns[1];
+            int left = 2, right = firstColumn.Cells.Count, mid = left + (right - left) / 2;
+            double target = persistable.GetIndex();
+            while (left <= right)
+            {
+                double cellValue = worksheet.Cells[mid, 1].Value;
+                if (target == cellValue)
                 {
-                    return row;
+                    return mid;
+                }
+                if (target < cellValue)
+                {
+                    right = mid - 1;
+                }
+                else
+                {
+                    left = mid + 1;
                 }
             }
-            return null;
+            return -1;
         }
 
         public List<T> ConvertRangesToObjects<T>(List<Range> ranges) where T : Persistable, new()
