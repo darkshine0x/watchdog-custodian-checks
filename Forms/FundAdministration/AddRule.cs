@@ -60,6 +60,10 @@ namespace Watchdog.Forms.FundAdministration
                 case RuleKind.MAX_LEVERAGE_CURRENCY:
                     panelUserControl.Controls.Add(new UserControlNumericOneValue());
                     break;
+
+                case RuleKind.RULE_EXCEPTION:
+                    panelUserControl.Controls.Add(new UserControlAllowListAssets());
+                    break;
             }
 
         }

@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
+using Watchdog.Persistence;
 
 namespace Watchdog.Entities
 {
-    public class AllowList<T> : Rule
+    [JoinedTable("wdt_allowlist")]
+    public class AllowList : Rule
     {
-        public List<T> Allowed { get; }
+        [MultiValue]
+        public List<Asset> Allowed { get; set; }
 
         public AllowList()
         {
@@ -13,7 +16,7 @@ namespace Watchdog.Entities
 
         public AllowList(RuleKind ruleKind, string name) : base(ruleKind, name)
         {
-            Allowed = new List<T>();
+            Allowed = new List<Asset>();
         }
     }
 }
