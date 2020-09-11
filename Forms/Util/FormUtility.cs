@@ -96,6 +96,16 @@ namespace Watchdog.Forms.Util
             return button;
         }
 
+        public static TextBox CreateTextBox(int xPos = 0, int yPos = 0, int width = 250)
+        {
+            TextBox textBox = new TextBox
+            {
+                Location = new Point(xPos, yPos),
+                Width = width
+            };
+            return textBox;
+        }
+
         public static Label CreateTitle(string text, Font font = null)
         {
             Label label = new Label
