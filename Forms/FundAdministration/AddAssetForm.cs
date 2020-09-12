@@ -1,4 +1,8 @@
-﻿using System;
+﻿/*
+ * Author: Jan Baumann
+ * Version: 12.09.2020
+ */
+
 using System.Drawing;
 using System.Windows.Forms;
 using Watchdog.Entities;
@@ -7,6 +11,9 @@ using Watchdog.Persistence;
 
 namespace Watchdog.Forms.FundAdministration
 {
+    /// <summary>
+    /// Form for entering properties for a new <see cref="Asset"/>
+    /// </summary>
     public partial class AddAssetForm : Form
     {
         private TableLayoutPanel tableLayoutPanel;
@@ -18,6 +25,10 @@ namespace Watchdog.Forms.FundAdministration
         private readonly IPassedObject<Asset> passedObject;
         private readonly Asset asset;
 
+        /// <summary>
+        /// Constructor with emty text boxes when a new asset has to be added.
+        /// </summary>
+        /// <param name="passedObject"><see cref="IPassedObject{T}"/></param>
         public AddAssetForm(IPassedObject<Asset> passedObject)
         {
             this.passedObject = passedObject;
@@ -25,6 +36,11 @@ namespace Watchdog.Forms.FundAdministration
             InitializeCustomComponents();
         }
 
+        /// <summary>
+        /// Constructor with pre-filled text boxes for editing an existing asset.
+        /// </summary>
+        /// <param name="asset"><see cref="Asset"/></param>
+        /// <param name="passedObject"><see cref="IPassedObject{T}"/></param>
         public AddAssetForm(Asset asset, IPassedObject<Asset> passedObject) : this(passedObject)
         {
             this.asset = asset;
@@ -33,6 +49,9 @@ namespace Watchdog.Forms.FundAdministration
             textBoxName.Text = asset.Name;
         }
 
+        /// <summary>
+        /// Initialization of self-added controls
+        /// </summary>
         private void InitializeCustomComponents()
         {
             tableLayoutPanel = FormUtility.CreateTableLayoutPanel(50, 80, 300, 800);
