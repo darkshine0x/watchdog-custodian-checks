@@ -31,7 +31,7 @@ namespace Watchdog.Forms.FundAdministration
                 tableUtility.DeleteTableRow(GetSelectedAsset());
                 dataGridView.Rows.Remove(dataGridView.SelectedRows[0]);
             });
-            ToolStripMenuItem contextMenuItemEdit = FormUtility.CreateContextMenuItem("Bearbeiten", (sende, e) =>
+            ToolStripMenuItem contextMenuItemEdit = FormUtility.CreateContextMenuItem("Bearbeiten", (sender, e) =>
             {
                 _ = new AddAssetForm(GetSelectedAsset(), this)
                 {
