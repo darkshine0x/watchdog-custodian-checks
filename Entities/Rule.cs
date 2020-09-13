@@ -3,15 +3,15 @@ using Watchdog.Persistence;
 
 namespace Watchdog.Entities
 {
-    [JoinedTableBase(typeof(NumericRule), typeof(AllowList), typeof(RatingQuoteRule))]
+    [JoinedTableBase(typeof(NumericRule), typeof(AllowList), typeof(RatingQuoteRule), typeof(BanList<AssetKind>))]
     public class Rule : Persistable
     {
         private static readonly string tableName = "wdt_rules";
-        [PersistableField]
+        [PersistableField(0)]
         public RuleKind RuleKind { get; set; }
-        [PersistableField]
+        [PersistableField(1)]
         public string Name { get; set; }
-        [PersistableField]
+        [PersistableField(2)]
         [MultiValue]
         public List<Fund> FundList { get; set; }
         public double Index { get; set; }

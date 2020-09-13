@@ -8,7 +8,7 @@ namespace Watchdog.Entities
     {
         public static readonly string tableName = "wdt_currencies";
         public static readonly Currency defaultCurrency = new Currency();
-        [PersistableField]
+        [PersistableField(0)]
         [TableHeader("ISO-CODE")]
         public string IsoCode { get; set; }
         public double Index { get; set; }

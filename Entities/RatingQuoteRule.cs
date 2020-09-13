@@ -5,7 +5,9 @@ namespace Watchdog.Entities
     [JoinedTable("wdt_rating_quote_rules")]
     class RatingQuoteRule : Rule
     {
+        [PersistableField(3)]
         public double RatingClass { get; set; }
+        [PersistableField(4)]
         public double MaxRatio { get; set; }
 
         public RatingQuoteRule()

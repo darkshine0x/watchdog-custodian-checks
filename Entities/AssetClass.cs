@@ -8,7 +8,7 @@ namespace Watchdog.Entities
         private static readonly string tableName = "wdt_asset_classes";
         private static readonly AssetClass defaultAssetClass = new AssetClass();
 
-        [PersistableField]
+        [PersistableField(0)]
         [TableHeader("ASSET-KLASSE", 400)]
         public string Name { get; set; }
         public double Index { get; set; }

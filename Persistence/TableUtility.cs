@@ -270,7 +270,8 @@ namespace Watchdog.Persistence
                 return false;
             }
             int colCounter = 2;
-            foreach (PropertyInfo property in GetPropertiesByAttribute(persistable, typeof(PersistableField)))
+            List<PropertyInfo> properties = SortPersistableFieldList(GetPropertiesByAttribute(persistable, typeof(PersistableField)));
+            foreach (PropertyInfo property in properties)
             {
                 Type propertyType = property.PropertyType;
                 if (!propertyType.IsPrimitive && propertyType != typeof(string) && !propertyType.IsEnum)
@@ -638,7 +639,7 @@ namespace Watchdog.Persistence
             {
                 return default;
             }
-            List<PropertyInfo> persistableProperties = GetPropertiesByAttribute(obj, typeof(PersistableField));
+            List<PropertyInfo> persistableProperties = SortPersistableFieldList(GetPropertiesByAttribute(obj, typeof(PersistableField)));
             int col = 2;
             foreach (PropertyInfo property in persistableProperties)
             {
@@ -693,6 +694,7 @@ namespace Watchdog.Persistence
                             row.Cells[1, col].Value = content;
                         }
                         property.SetValue(obj, propertyList);
+                        col++;
                         continue;
                     }
                     MethodInfo method = typeof(TableUtility).GetMethod("RowToObject");
@@ -807,7 +809,7 @@ namespace Watchdog.Persistence
             }
             newWorksheet.Cells[1, 1].Value = "index";
             int colCounter = 2;
-            List<PropertyInfo> persistableProperties = GetPropertiesByAttribute(persistable, typeof(PersistableField));
+            List<PropertyInfo> persistableProperties = SortPersistableFieldList(GetPropertiesByAttribute(persistable, typeof(PersistableField)));
             foreach (PropertyInfo property in persistableProperties)
             {
                 newWorksheet.Cells[1, colCounter].Value = property.Name;
@@ -819,6 +821,16 @@ namespace Watchdog.Persistence
             newWorksheet.Application.ActiveWindow.FreezePanes = true;
             newWorksheet.Visible = XlSheetVisibility.xlSheetHidden;
             return newWorksheet;
+        }
+
+        /// <summary>
+        /// Sort properties marked with the <see cref="PersistableField"/> attribute by its order number.
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns>Sorted list</returns>
+        private List<PropertyInfo> SortPersistableFieldList(List<PropertyInfo> list)
+        {
+            return list.OrderBy(property => property.GetCustomAttribute<PersistableField>(true).Order).ToList();
         }
     }
 }

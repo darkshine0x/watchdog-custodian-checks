@@ -8,13 +8,13 @@ namespace Watchdog.Entities
         private static readonly string tableName = "wdt_assets";
         private static readonly Persistable defaultValue = new Asset();
 
-        [PersistableField]
+        [PersistableField(0)]
         [TableHeader("ASSET-ID")]
-        public int AssetId { get; set; }
-        [PersistableField]
+        public double AssetId { get; set; }
+        [PersistableField(1)]
         [TableHeader("ISIN")]
         public string Isin { get; set; }
-        [PersistableField]
+        [PersistableField(2)]
         [TableHeader("NAME", 600)]
         public string Name { get; set; }
 
@@ -25,7 +25,7 @@ namespace Watchdog.Entities
 
         }
 
-        public Asset(int assetId, string isin, string name)
+        public Asset(double assetId, string isin, string name)
         {
             AssetId = assetId;
             Isin = isin;

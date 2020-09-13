@@ -6,6 +6,7 @@ namespace Watchdog.Entities
     [JoinedTable("wdt_allowlist")]
     public class AllowList : Rule
     {
+        [PersistableField(3)]
         [MultiValue]
         public List<Asset> Allowed { get; set; }
 

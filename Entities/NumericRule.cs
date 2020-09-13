@@ -5,7 +5,7 @@ namespace Watchdog.Entities
     [JoinedTable("wdt_numeric_rules")]
     public class NumericRule : Rule
     {
-        [PersistableField]
+        [PersistableField(3)]
         public double NumericValue { get; set; }
 
         public NumericRule()

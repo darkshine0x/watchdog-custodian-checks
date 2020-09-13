@@ -6,17 +6,17 @@ namespace Watchdog.Entities
     {
         private readonly string tableName = "wdt_asset_allocation_entries";
         private readonly static AssetAllocationEntry defaultValue = new AssetAllocationEntry();
-        [PersistableField]
+        [PersistableField(0)]
         public AssetClass AssetClass { get; set; }
-        [PersistableField]
+        [PersistableField(1)]
         public Currency Currency { get; set; }
-        [PersistableField]
+        [PersistableField(2)]
         public Fund Fund { get; set; }
-        [PersistableField]
+        [PersistableField(3)]
         public double StrategicMinValue { get; set; }
-        [PersistableField]
+        [PersistableField(4)]
         public double StrategicOptValue { get; set; }
-        [PersistableField]
+        [PersistableField(5)]
         public double StrategicMaxValue { get; set; }
         public double Index { get; set; }
 

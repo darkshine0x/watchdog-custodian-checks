@@ -9,16 +9,16 @@ namespace Watchdog.Entities
         private static readonly string tableName = "wdt_funds";
         private static readonly Fund defaultFund = new Fund();
         public double Index { get; set; }
-        [PersistableField]
+        [PersistableField(0)]
         [TableHeader("NAME", 700)]
         public string Name { get; set; }
-        [PersistableField]
+        [PersistableField(1)]
         [TableHeader("ISIN", 350)]
         public string Isin { get; set; }
-        [PersistableField]
+        [PersistableField(2)]
         [TableHeader("DEPOT-NR.", 350)]
         public string CustodyAccountNumber { get; set; }
-        [PersistableField]
+        [PersistableField(3)]
         [TableHeader("WÄHRUNG")]
         public Currency Currency { get; set; }
         public List<Position> Positions { get; }

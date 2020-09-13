@@ -8,15 +8,15 @@ namespace Watchdog.Entities
     {
         private static readonly string tableName = "wdt_ratings";
         private static readonly Rating defaultValue = new Rating();
-        [PersistableField]
+        [PersistableField(0)]
         [TableHeader("RATING-CODE", 400)]
         public string RatingCode { get; set; }
-        [PersistableField]
+        [PersistableField(1)]
         [TableHeader("WERT")]
         // Rating class according to concordance table of federal authorities
         public double RatingNumericValue { get; set; }
         public double Index { get; set; }
-        [PersistableField]
+        [PersistableField(2)]
         public RatingAgency Agency { get; set; }
 
         public Rating()
