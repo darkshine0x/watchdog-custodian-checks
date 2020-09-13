@@ -323,14 +323,23 @@ namespace Watchdog.Persistence
         /// </summary>
         /// <param name="type">Type to check</param>
         /// <returns>Array of the derived types</returns>
-        private Type[] IsJoinedTableBaseClass(Type type)
+        private Type[] JoinedTableBaseClassGetSubClasses(Type type)
         {
             if (Attribute.GetCustomAttribute(type, typeof(JoinedTableBase), false) is JoinedTableBase attribute)
             {
                 return attribute.DerivedTypes;
             }
             return new Type[0];
-        } 
+        }
+
+        private bool IsJoinedTableBaseClass(Type type)
+        {
+            if (Attribute.GetCustomAttribute(type, typeof(JoinedTableBase), false) is JoinedTableBase attribute)
+            {
+                return true;
+            }
+            return false;
+        }
 
         /// <summary>
         /// Gets a list of properties, which are marked with the specified attribute.
@@ -369,19 +378,19 @@ namespace Watchdog.Persistence
         /// be taken into account.
         /// </summary>
         /// <param name="persistable"><see cref="Persistable"/> object</param>
-        /// <returns></returns>
+        /// <returns>List of all ranges</returns>
         public List<Range> ReadAllRows(Persistable persistable)
         {
             List<Range> searchResult = new List<Range>();
-            Type[] derivedTypes = IsJoinedTableBaseClass(persistable.GetType());
-            if (derivedTypes.Length != 0)
+            bool isJoinedTableBaseClass = IsJoinedTableBaseClass(persistable.GetType());
+            if (isJoinedTableBaseClass)
             {
+                Type[] derivedTypes = JoinedTableBaseClassGetSubClasses(persistable.GetType());
                 foreach (Type derivedType in derivedTypes)
                 {
                     List<Range> subList = ReadAllRows(GetDefaultObject(derivedType));
                     searchResult.AddRange(subList);
                 }
-                return searchResult;
             }
 
             string joinedTable = IsJoinedTable(persistable);
@@ -603,18 +612,23 @@ namespace Watchdog.Persistence
                 return default;
             }
             T obj = new T();
-            Type[] derivedTypes = IsJoinedTableBaseClass(obj.GetType());
-            if (derivedTypes.Length != 0)
+            bool isJoinedTableBaseClass = IsJoinedTableBaseClass(obj.GetType());
+            if (isJoinedTableBaseClass)
             {
+                Type[] derivedTypes = JoinedTableBaseClassGetSubClasses(obj.GetType());
                 string tableName = row.Worksheet.Name;
                 Type type = GetTypeByTableName(derivedTypes, tableName);
-                MethodInfo method = typeof(TableUtility).GetMethod("RowToObject");
-                MethodInfo genericMethod = method.MakeGenericMethod(type);
-                Range[] parameters = new Range[1];
-                parameters[0] = row;
-                T generatedObject = (T) genericMethod.Invoke(this, parameters);
-                return generatedObject;
+                if (type != null)
+                {
+                    MethodInfo method = typeof(TableUtility).GetMethod("RowToObject");
+                    MethodInfo genericMethod = method.MakeGenericMethod(type);
+                    Range[] parameters = new Range[1];
+                    parameters[0] = row;
+                    T generatedObject = (T)genericMethod.Invoke(this, parameters);
+                    return generatedObject;
+                }
             }
+
             bool isNaN = double.IsNaN(row.Cells[1, 1].Value);
             if (!isNaN)
             {
