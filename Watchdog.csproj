@@ -161,7 +161,9 @@
     <Compile Include="Entities\AllowList.cs" />
     <Compile Include="Entities\AssetAllocationEntry.cs" />
     <Compile Include="Entities\AssetClass.cs" />
+    <Compile Include="Entities\AssetKind.cs" />
     <Compile Include="Entities\BanList.cs" />
+    <Compile Include="Entities\Country.cs" />
     <Compile Include="Entities\NumericRule.cs" />
     <Compile Include="Entities\RatingQuoteRule.cs" />
     <Compile Include="Entities\RuleKind.cs" />
@@ -213,6 +215,12 @@
     </Compile>
     <Compile Include="Forms\FundAdministration\UserControlStrategicBoundaries.Designer.cs">
       <DependentUpon>UserControlStrategicBoundaries.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FundAdministration\UserControlBanListAssetKinds.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\FundAdministration\UserControlBanListAssetKinds.Designer.cs">
+      <DependentUpon>UserControlBanListAssetKinds.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Util\DropDownItem.cs" />
     <Compile Include="Forms\Util\FormUtility.cs" />
@@ -297,6 +305,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FundAdministration\UserControlStrategicBoundaries.resx">
       <DependentUpon>UserControlStrategicBoundaries.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FundAdministration\UserControlBanListAssetKinds.resx">
+      <DependentUpon>UserControlBanListAssetKinds.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Util\OneAttributeForm.resx">
       <DependentUpon>OneAttributeForm.cs</DependentUpon>

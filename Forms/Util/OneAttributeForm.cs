@@ -18,6 +18,11 @@ namespace Watchdog.Forms.Util
             this.reference = reference;
         }
 
+        public OneAttributeForm(IPassedForm originalForm, string labelValue, string reference, string textBoxText) : this(originalForm, labelValue, reference)
+        {
+            textBox1.Text = textBoxText;
+        }
+
         private void ButtonOk_Click(object sender, EventArgs e)
         {
             if (textBox1.TextLength < 1)

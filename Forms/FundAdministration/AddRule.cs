@@ -74,6 +74,10 @@ namespace Watchdog.Forms.FundAdministration
                 case RuleKind.AA_MAX_DIFF_RANGES:
                     panelUserControl.Controls.Add(new UserControlStrategicBoundaries());
                     break;
+
+                case RuleKind.RESTRICTED_INSTRUMENT_TYPE:
+                    panelUserControl.Controls.Add(new UserControlBanListAssetKinds());
+                    break;
             }
 
         }
