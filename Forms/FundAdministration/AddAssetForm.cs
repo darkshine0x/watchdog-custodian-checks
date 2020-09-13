@@ -56,18 +56,9 @@ namespace Watchdog.Forms.FundAdministration
         {
             tableLayoutPanel = FormUtility.CreateTableLayoutPanel(50, 80, 300, 800);
             tableLayoutPanel.BackColor = SystemColors.Control;
-            textBoxAssetId = new TextBox
-            {
-                Width = 500
-            };
-            textBoxIsin = new TextBox
-            {
-                Width = 500
-            };
-            textBoxName = new TextBox
-            {
-                Width = 500
-            };
+            textBoxAssetId = FormUtility.CreateTextBox();
+            textBoxIsin = FormUtility.CreateTextBox();
+            textBoxName = FormUtility.CreateTextBox();
             submitButton = FormUtility.CreateButton("Bestätigen", 80, 460);
             cancelButton = FormUtility.CreateButton("Abbrechen", 780, 460);
             FormUtility.AddValidation(submitButton, textBoxAssetId, () =>
