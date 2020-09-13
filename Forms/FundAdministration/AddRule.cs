@@ -58,6 +58,7 @@ namespace Watchdog.Forms.FundAdministration
                 case RuleKind.MAX_ISSUER_LIMIT:
                 case RuleKind.MAX_LEVERAGE_ASSET_CLASS:
                 case RuleKind.MAX_LEVERAGE_CURRENCY:
+                case RuleKind.MIN_RATING:
                     panelUserControl.Controls.Add(new UserControlNumericOneValue());
                     break;
 
