@@ -208,6 +208,12 @@
     <Compile Include="Forms\FundAdministration\UserControlRatingQuote.Designer.cs">
       <DependentUpon>UserControlRatingQuote.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FundAdministration\UserControlStrategicBoundaries.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\FundAdministration\UserControlStrategicBoundaries.Designer.cs">
+      <DependentUpon>UserControlStrategicBoundaries.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Util\DropDownItem.cs" />
     <Compile Include="Forms\Util\FormUtility.cs" />
     <Compile Include="Forms\Util\IPassedObject.cs" />
@@ -288,6 +294,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FundAdministration\UserControlRatingQuote.resx">
       <DependentUpon>UserControlRatingQuote.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FundAdministration\UserControlStrategicBoundaries.resx">
+      <DependentUpon>UserControlStrategicBoundaries.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Util\OneAttributeForm.resx">
       <DependentUpon>OneAttributeForm.cs</DependentUpon>

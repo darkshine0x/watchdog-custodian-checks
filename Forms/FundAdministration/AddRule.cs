@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -68,6 +69,10 @@ namespace Watchdog.Forms.FundAdministration
 
                 case RuleKind.MAX_RATING_RATIO:
                     panelUserControl.Controls.Add(new UserControlRatingQuote());
+                    break;
+
+                case RuleKind.AA_MAX_DIFF_RANGES:
+                    panelUserControl.Controls.Add(new UserControlStrategicBoundaries());
                     break;
             }
 
