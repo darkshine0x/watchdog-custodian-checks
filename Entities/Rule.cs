@@ -3,7 +3,7 @@ using Watchdog.Persistence;
 
 namespace Watchdog.Entities
 {
-    [JoinedTableBase(typeof(NumericRule), typeof(AllowList))]
+    [JoinedTableBase(typeof(NumericRule), typeof(AllowList), typeof(RatingQuoteRule))]
     public class Rule : Persistable
     {
         private static readonly string tableName = "wdt_rules";

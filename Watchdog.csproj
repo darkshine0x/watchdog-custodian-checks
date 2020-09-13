@@ -163,6 +163,7 @@
     <Compile Include="Entities\AssetClass.cs" />
     <Compile Include="Entities\BanList.cs" />
     <Compile Include="Entities\NumericRule.cs" />
+    <Compile Include="Entities\RatingQuoteRule.cs" />
     <Compile Include="Entities\RuleKind.cs" />
     <Compile Include="Entities\Currency.cs" />
     <Compile Include="Entities\Fund.cs" />
@@ -200,6 +201,12 @@
     </Compile>
     <Compile Include="Forms\FundAdministration\UserControlNumericOneValue.Designer.cs">
       <DependentUpon>UserControlNumericOneValue.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FundAdministration\UserControlRatingQuote.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\FundAdministration\UserControlRatingQuote.Designer.cs">
+      <DependentUpon>UserControlRatingQuote.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Util\DropDownItem.cs" />
     <Compile Include="Forms\Util\FormUtility.cs" />
@@ -278,6 +285,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FundAdministration\UserControlNumericOneValue.resx">
       <DependentUpon>UserControlNumericOneValue.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FundAdministration\UserControlRatingQuote.resx">
+      <DependentUpon>UserControlRatingQuote.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Util\OneAttributeForm.resx">
       <DependentUpon>OneAttributeForm.cs</DependentUpon>

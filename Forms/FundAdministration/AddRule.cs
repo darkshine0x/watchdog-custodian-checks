@@ -65,6 +65,10 @@ namespace Watchdog.Forms.FundAdministration
                 case RuleKind.RULE_EXCEPTION:
                     panelUserControl.Controls.Add(new UserControlAllowListAssets());
                     break;
+
+                case RuleKind.MAX_RATING_RATIO:
+                    panelUserControl.Controls.Add(new UserControlRatingQuote());
+                    break;
             }
 
         }
