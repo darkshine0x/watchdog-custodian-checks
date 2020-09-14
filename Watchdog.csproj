@@ -180,6 +180,12 @@
     <Compile Include="Forms\FundAdministration\AddAssetForm.Designer.cs">
       <DependentUpon>AddAssetForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FundAdministration\AddCountryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FundAdministration\AddCountryForm.Designer.cs">
+      <DependentUpon>AddCountryForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FundAdministration\AddFund.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -197,6 +203,12 @@
     </Compile>
     <Compile Include="Forms\FundAdministration\UserControlAllowListAssets.Designer.cs">
       <DependentUpon>UserControlAllowListAssets.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FundAdministration\UserControlBanListCountries.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\FundAdministration\UserControlBanListCountries.Designer.cs">
+      <DependentUpon>UserControlBanListCountries.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FundAdministration\UserControlNumericOneValue.cs">
       <SubType>UserControl</SubType>
@@ -288,6 +300,9 @@
     <EmbeddedResource Include="Forms\FundAdministration\AddAssetForm.resx">
       <DependentUpon>AddAssetForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FundAdministration\AddCountryForm.resx">
+      <DependentUpon>AddCountryForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FundAdministration\AddFund.resx">
       <DependentUpon>AddFund.cs</DependentUpon>
     </EmbeddedResource>
@@ -296,6 +311,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FundAdministration\UserControlAllowListAssets.resx">
       <DependentUpon>UserControlAllowListAssets.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FundAdministration\UserControlBanListCountries.resx">
+      <DependentUpon>UserControlBanListCountries.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FundAdministration\UserControlNumericOneValue.resx">
       <DependentUpon>UserControlNumericOneValue.cs</DependentUpon>

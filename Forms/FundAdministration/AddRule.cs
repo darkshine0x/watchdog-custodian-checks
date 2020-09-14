@@ -1,5 +1,4 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -77,6 +76,10 @@ namespace Watchdog.Forms.FundAdministration
 
                 case RuleKind.RESTRICTED_INSTRUMENT_TYPE:
                     panelUserControl.Controls.Add(new UserControlBanListAssetKinds());
+                    break;
+
+                case RuleKind.RESTRICTED_COUNTRY:
+                    panelUserControl.Controls.Add(new UserControlBanListCountries());
                     break;
             }
 

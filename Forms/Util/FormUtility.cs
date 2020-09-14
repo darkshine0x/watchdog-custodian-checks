@@ -14,6 +14,8 @@ namespace Watchdog.Forms.Util
         public delegate void CatchCurrentRowState(object sender, DataGridViewCellStateChangedEventArgs e);
         public delegate void RowValidated(object sender, DataGridViewCellEventArgs e);
         public delegate void DeleteRow(object sender, KeyEventArgs e);
+        public delegate void ExecutingFunction();
+
 
         public static int DataGridViewMouseDownContextMenu(DataGridView sender, MouseEventArgs e)
         {
@@ -60,6 +62,28 @@ namespace Watchdog.Forms.Util
                 if (closeAfterValidation)
                 {
                     button.FindForm().Close();
+                }
+            };
+        }
+
+        public static void AddValidation(Button button, Dictionary<TextBox, Func<bool>> validatingFunctions, ExecutingFunction executingFunction)
+        {
+            IEnumerable<TextBox> keys = validatingFunctions.Keys;
+            bool validationComplete = true;
+            button.Click += (sender, e) =>
+            {
+                foreach (TextBox textBox in keys)
+                {
+                    bool textBoxValidation = validatingFunctions[textBox].Invoke();
+                    if (!textBoxValidation)
+                    {
+                        textBox.BackColor = Color.Red;
+                    }
+                    validationComplete = textBoxValidation;
+                }
+                if (validationComplete)
+                {
+                    executingFunction();
                 }
             };
         }
