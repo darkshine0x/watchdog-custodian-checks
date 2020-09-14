@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-
-namespace Watchdog.Persistence
+﻿namespace Watchdog.Persistence
 {
     public interface Persistable
     {
         string GetTableName();
+
+        string GetShortName();
 
         double GetIndex();
 

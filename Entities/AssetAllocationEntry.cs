@@ -4,8 +4,8 @@ namespace Watchdog.Entities
 {
     public class AssetAllocationEntry : Persistable
     {
-        private readonly string tableName = "wdt_asset_allocation_entries";
         private readonly static AssetAllocationEntry defaultValue = new AssetAllocationEntry();
+
         [PersistableField(0)]
         public AssetClass AssetClass { get; set; }
         [PersistableField(1)]
@@ -24,7 +24,7 @@ namespace Watchdog.Entities
 
         public string GetTableName()
         {
-            return tableName;
+            return "wdt_asset_allocation_entries";
         }
 
         public double GetIndex()
@@ -40,6 +40,11 @@ namespace Watchdog.Entities
         public static Persistable GetDefaultValue()
         {
             return defaultValue;
+        }
+
+        public string GetShortName()
+        {
+            return "ae";
         }
     }
 }

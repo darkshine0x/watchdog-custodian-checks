@@ -5,7 +5,6 @@ namespace Watchdog.Entities
 {
     public class Country : Persistable
     {
-        private static readonly string tableName = "wdt_countries";
         private static readonly Persistable defaultValue = new Country();
 
         [PersistableField(0)]
@@ -34,7 +33,7 @@ namespace Watchdog.Entities
 
         public string GetTableName()
         {
-            return tableName;
+            return "wdt_countries";
         }
 
         public void SetIndex(double index)
@@ -45,6 +44,11 @@ namespace Watchdog.Entities
         public static Persistable GetDefaultValue()
         {
             return defaultValue;
+        }
+
+        public string GetShortName()
+        {
+            return "co";
         }
     }
 }

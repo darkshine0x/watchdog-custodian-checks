@@ -6,7 +6,6 @@ namespace Watchdog.Entities
 {
     public class RatingAgency : Persistable
     {
-        private static readonly string tableName = "wdt_rating_agencies";
         private static readonly RatingAgency defaultValue = new RatingAgency();
         [PersistableField(0)]
         [TableHeader("AGENTUR")]
@@ -22,7 +21,7 @@ namespace Watchdog.Entities
 
         public string GetTableName()
         {
-            return tableName;
+            return "wdt_rating_agencies";
         }
 
         public double GetIndex()
@@ -56,6 +55,11 @@ namespace Watchdog.Entities
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Name);
             hashCode = hashCode * -1521134295 + Index.GetHashCode();
             return hashCode;
+        }
+
+        public string GetShortName()
+        {
+            return "ra";
         }
     }
 }

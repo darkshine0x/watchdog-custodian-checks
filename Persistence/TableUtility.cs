@@ -314,6 +314,10 @@ namespace Watchdog.Persistence
         {
             if (Attribute.GetCustomAttribute(persistable.GetType(), typeof(JoinedTable), false) is JoinedTable attribute)
             {
+                if (persistable.GetType().IsGenericType)
+                {
+                    return persistable.GetTableName();
+                }
                 return attribute.Name;
             }
             return "";

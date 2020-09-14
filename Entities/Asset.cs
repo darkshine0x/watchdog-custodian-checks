@@ -5,7 +5,6 @@ namespace Watchdog.Entities
 {
     public class Asset : Persistable
     {
-        private static readonly string tableName = "wdt_assets";
         private static readonly Persistable defaultValue = new Asset();
 
         [PersistableField(0)]
@@ -34,7 +33,7 @@ namespace Watchdog.Entities
 
         public string GetTableName()
         {
-            return tableName;
+            return "wdt_assets";
         }
 
         public double GetIndex()
@@ -50,6 +49,11 @@ namespace Watchdog.Entities
         public static Persistable GetDefaultValue()
         {
             return defaultValue;
+        }
+
+        public string GetShortName()
+        {
+            return "ass";
         }
     }
 }

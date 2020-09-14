@@ -6,7 +6,6 @@ namespace Watchdog.Entities
 {
     public class Fund : Persistable
     {
-        private static readonly string tableName = "wdt_funds";
         private static readonly Fund defaultFund = new Fund();
         public double Index { get; set; }
         [PersistableField(0)]
@@ -38,7 +37,7 @@ namespace Watchdog.Entities
 
         public string GetTableName()
         {
-            return tableName;
+            return "wdt_funds";
         }
 
         public static Persistable GetDefaultValue()
@@ -73,6 +72,11 @@ namespace Watchdog.Entities
             hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(CustodyAccountNumber);
             hashCode = hashCode * -1521134295 + EqualityComparer<Currency>.Default.GetHashCode(Currency);
             return hashCode;
+        }
+
+        public string GetShortName()
+        {
+            return "fund";
         }
     }
 }

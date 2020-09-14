@@ -6,7 +6,6 @@ namespace Watchdog.Entities
 {
     public class Currency : Persistable
     {
-        public static readonly string tableName = "wdt_currencies";
         public static readonly Currency defaultCurrency = new Currency();
         [PersistableField(0)]
         [TableHeader("ISO-CODE")]
@@ -30,7 +29,7 @@ namespace Watchdog.Entities
 
         public string GetTableName()
         {
-            return tableName;
+            return "wdt_currencies";
         }
 
         public static Persistable GetDefaultValue()
@@ -57,6 +56,11 @@ namespace Watchdog.Entities
         public override int GetHashCode()
         {
             return -565693813 + EqualityComparer<string>.Default.GetHashCode(IsoCode);
+        }
+
+        public string GetShortName()
+        {
+            return "cu";
         }
     }
 }

@@ -3,10 +3,9 @@ using Watchdog.Persistence;
 
 namespace Watchdog.Entities
 {
-    [JoinedTableBase(typeof(NumericRule), typeof(AllowList), typeof(RatingQuoteRule), typeof(BanList<AssetKind>))]
+    [JoinedTableBase(typeof(NumericRule), typeof(AllowList), typeof(RatingQuoteRule), typeof(BanList<AssetKind>), typeof(BanList<Country>))]
     public class Rule : Persistable
     {
-        private static readonly string tableName = "wdt_rules";
         [PersistableField(0)]
         public RuleKind RuleKind { get; set; }
         [PersistableField(1)]
@@ -28,9 +27,9 @@ namespace Watchdog.Entities
             FundList = new List<Fund>();
         }
 
-        public string GetTableName()
+        public virtual string GetTableName()
         {
-            return tableName;
+            return "wdt_rules";
         }
 
         public double GetIndex()
@@ -46,6 +45,11 @@ namespace Watchdog.Entities
         public static Persistable GetDefaultValue()
         {
             return new Rule();
+        }
+
+        public string GetShortName()
+        {
+            return "rule";
         }
     }
 }

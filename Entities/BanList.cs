@@ -3,8 +3,8 @@ using Watchdog.Persistence;
 
 namespace Watchdog.Entities
 {
-    [JoinedTable("wdt_ban_list")]
-    public class BanList<T> : Rule
+    [JoinedTable("wdt_bl")]
+    public class BanList<T> : Rule where T : Persistable, new()
     {
         [PersistableField(3)]
         [MultiValue]
@@ -18,6 +18,13 @@ namespace Watchdog.Entities
         public BanList(RuleKind ruleKind, string name) : base(ruleKind, name)
         {
             Banned = new List<T>();
+        }
+
+        public override string GetTableName()
+        {
+            T obj = new T();
+            string name = "wdt_bl" + "_" + obj.GetShortName();
+            return name;
         }
     }
 }
