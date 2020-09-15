@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 using Watchdog.Entities;
 using Watchdog.Forms.Util;
@@ -11,30 +12,44 @@ namespace Watchdog.Forms.FundAdministration
     public partial class AddRule : Form
     {
         private IPassedObject<Rule> parentForm;
+        private Rule rule;
 
-        public AddRule(IPassedObject<Rule> parentForm)
+        public AddRule(IPassedObject<Rule> parentForm, Rule rule = null)
         {
+            this.parentForm = parentForm;
+            this.rule = rule;
             InitializeComponent();
             LoadRuleKinds();
-            this.parentForm = parentForm;
         }
 
         private void LoadRuleKinds()
         {
             List<DropDownItem<RuleKind>> list = new List<DropDownItem<RuleKind>>();
-            foreach (RuleKind ruleKind in Enum.GetValues(typeof(RuleKind)))
+            if (rule != null)
             {
-                Type enumType = typeof(RuleKind);
-                object[] attributeList = enumType.GetMember(ruleKind.ToString()).FirstOrDefault(x => x.DeclaringType == enumType).GetCustomAttributes(typeof(DescriptionAttribute), false);
-                DescriptionAttribute attribute = attributeList[0] as DescriptionAttribute;
-                DropDownItem <RuleKind> item = new DropDownItem<RuleKind>
+                list.Add(GetDropDownItemFromRuleKind(rule.RuleKind));
+                comboBoxRuleKind.Enabled = false;
+            }
+            else
+            {
+                foreach (RuleKind ruleKind in Enum.GetValues(typeof(RuleKind)))
                 {
-                    Value = ruleKind,
-                    Description = attribute.Description
-                };
-                list.Add(item);
+                    list.Add(GetDropDownItemFromRuleKind(ruleKind));
+                }
             }
             ruleKindBindingSource.DataSource = list;
+        }
+
+        private DropDownItem<RuleKind> GetDropDownItemFromRuleKind(RuleKind ruleKind)
+        {
+            Type enumType = typeof(RuleKind);
+            DescriptionAttribute attribute = enumType.GetMember(ruleKind.ToString()).FirstOrDefault(x => x.DeclaringType == enumType).GetCustomAttribute<DescriptionAttribute>();
+            DropDownItem<RuleKind> item = new DropDownItem<RuleKind>
+            {
+                Value = ruleKind,
+                Description = attribute.Description
+            };
+            return item;
         }
 
         private void ButtonCancel_Click(object sender, EventArgs e)
@@ -59,7 +74,7 @@ namespace Watchdog.Forms.FundAdministration
                 case RuleKind.MAX_LEVERAGE_ASSET_CLASS:
                 case RuleKind.MAX_LEVERAGE_CURRENCY:
                 case RuleKind.MIN_RATING:
-                    panelUserControl.Controls.Add(new UserControlNumericOneValue());
+                    panelUserControl.Controls.Add(new UserControlNumericOneValue(rule as NumericRule));
                     break;
 
                 case RuleKind.RULE_EXCEPTION:

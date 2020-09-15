@@ -29,6 +29,7 @@ namespace Watchdog.Forms.FundAdministration
         private Button submitButton;
         private Button cancelButton;
         private Button addNewRuleButton;
+        private Rule passedRule;
 
         /// <summary>
         /// Form constructor.
@@ -48,7 +49,23 @@ namespace Watchdog.Forms.FundAdministration
             title = FormUtility.CreateTitle("Regelverwaltung");
             tableLayoutPanel = FormUtility.CreateTableLayoutPanel(43, 180, 1060, 2980);
             ToolStripMenuItem itemDelete = FormUtility.CreateContextMenuItem("Löschen", DeleteRuleRow);
-            contextMenu = contextMenu = FormUtility.CreateContextMenu(itemDelete);
+            ToolStripMenuItem itemEdit = FormUtility.CreateContextMenuItem("Bearbeiten", EditRuleRow);
+            contextMenu = contextMenu = FormUtility.CreateContextMenu(itemEdit, itemDelete);
+            contextMenu.Opening += (sender, e) =>
+            {
+                ContextMenuStrip ctxMenu = sender as ContextMenuStrip;
+                int row = tableLayoutPanel.GetRow(ctxMenu.SourceControl);
+                Rule rule = tableLayoutPanel.GetControlFromPosition(0, row).DataBindings[0].DataSource as Rule;
+                if (rule.RuleKind == RuleKind.AA_MAX_DIFF_RANGES)
+                {
+                    contextMenu.Items[0].Enabled = false;
+                }
+                else
+                {
+                    contextMenu.Items[0].Enabled = true;
+                }
+
+            };
 
             submitButton = FormUtility.CreateButton("Bestätigen");
             submitButton.Location = new Point(ClientSize.Width - submitButton.Width - 500, ClientSize.Height - submitButton.Height - 30);
@@ -100,7 +117,6 @@ namespace Watchdog.Forms.FundAdministration
                 {
                     checkBox.Checked = true;
                 }
-                FormUtility.AddControlWithContextMenu(tableLayoutPanel, contextMenu, checkBox, col, rowCount);
             }
 
             FormUtility.BindObjectToControl(ruleLabel, rule);
@@ -157,13 +173,28 @@ namespace Watchdog.Forms.FundAdministration
         /// <param name="e"><see cref="EventArgs"/></param>
         public void DeleteRuleRow(object sender, EventArgs e)
         {
+            Control firstControl = GetClickedRuleElement(sender);
+            TableUtility tableUtility = new TableUtility();
+            tableUtility.DeleteTableRow(firstControl.DataBindings[0].DataSource as Rule);
+            FormUtility.DeleteTableRow(tableLayoutPanel, firstControl);
+        }
+
+        public void EditRuleRow(object sender, EventArgs e)
+        {
+            Control firstControl = GetClickedRuleElement(sender);
+            passedRule = firstControl.DataBindings[0].DataSource as Rule;
+            _ = new AddRule(this, passedRule)
+            {
+                Visible = true
+            };
+        }
+
+        private Control GetClickedRuleElement(object sender)
+        {
             ToolStripMenuItem menuItem = sender as ToolStripMenuItem;
             ContextMenuStrip contextMenu = menuItem.Owner as ContextMenuStrip;
             int row = tableLayoutPanel.GetRow(contextMenu.SourceControl);
-            Control firstElement = tableLayoutPanel.GetControlFromPosition(0, row);
-            TableUtility tableUtility = new TableUtility();
-            tableUtility.DeleteTableRow(firstElement.DataBindings[0].DataSource as Rule);
-            FormUtility.DeleteTableRow(tableLayoutPanel, firstElement);
+            return tableLayoutPanel.GetControlFromPosition(0, row);
         }
 
         /// <summary>
@@ -226,7 +257,10 @@ namespace Watchdog.Forms.FundAdministration
         /// <param name="obj">Passed object from the calling form</param>
         public void OnSubmit(Rule obj)
         {
-            AddRule(obj);
+            if (obj != passedRule)
+            {
+                AddRule(obj);
+            }
         }
     }
 }
