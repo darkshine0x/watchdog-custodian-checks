@@ -90,11 +90,11 @@ namespace Watchdog.Forms.FundAdministration
                     break;
 
                 case RuleKind.RESTRICTED_INSTRUMENT_TYPE:
-                    panelUserControl.Controls.Add(new UserControlBanListAssetKinds());
+                    panelUserControl.Controls.Add(new UserControlBanListAssetKinds(rule as BanList<AssetKind>));
                     break;
 
                 case RuleKind.RESTRICTED_COUNTRY:
-                    panelUserControl.Controls.Add(new UserControlBanListCountries());
+                    panelUserControl.Controls.Add(new UserControlBanListCountries(rule as BanList<Country>));
                     break;
             }
 

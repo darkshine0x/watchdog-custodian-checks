@@ -1,4 +1,6 @@
-﻿using System.Windows.Forms;
+﻿using System.ComponentModel;
+using System.Linq;
+using System.Windows.Forms;
 using Watchdog.Entities;
 using Watchdog.Forms.Util;
 using Watchdog.Persistence;
@@ -10,13 +12,28 @@ namespace Watchdog.Forms.FundAdministration
         private DataGridView dataGridView;
         private Button addNewCountry;
         private TextBox ruleName;
+        private BanList<Country> passedRule;
 
-        public UserControlBanListCountries()
+        public UserControlBanListCountries(BanList<Country> passedRule)
         {
+            this.passedRule = passedRule;
             InitializeComponent();
             InitializeCustomComponents();
             TableUtility tableUtility = new TableUtility();
             tableUtility.CreateTable(Country.GetDefaultValue());
+            InitializePassedRule();
+        }
+
+        private void InitializePassedRule()
+        {
+            if (passedRule != null)
+            {
+                ruleName.Text = passedRule.Name;
+                foreach (Country country in passedRule.Banned)
+                {
+                    FormUtility.GetBindingSource(dataGridView).Add(country);
+                }
+            }
         }
 
         private void InitializeCustomComponents()
@@ -49,6 +66,13 @@ namespace Watchdog.Forms.FundAdministration
 
         public Rule InvokeSubmission(RuleKind ruleKind)
         {
+            if (passedRule != null)
+            {
+                passedRule.Name = ruleName.Text;
+                BindingList<Country> changedBanList = (BindingList<Country>) FormUtility.GetBindingSource(dataGridView).List;
+                passedRule.Banned = changedBanList.ToList();
+                return passedRule;
+            }
             BanList<Country> newBanList = new BanList<Country>(RuleKind.RESTRICTED_COUNTRY, ruleName.Text);
             foreach (DataGridViewRow row in dataGridView.Rows)
             {
