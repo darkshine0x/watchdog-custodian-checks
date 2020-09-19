@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Windows.Forms;
 using Watchdog.Entities;
 using Watchdog.Forms.Util;
@@ -12,11 +14,26 @@ namespace Watchdog.Forms.FundAdministration
         private Button addNewAssetKind;
         private TextBox ruleName;
         private AssetKind selectedAssetKind;
+        private BanList<AssetKind> passedRule;
 
-        public UserControlBanListAssetKinds()
+        public UserControlBanListAssetKinds(BanList<AssetKind> passedRule)
         {
+            this.passedRule = passedRule;
             InitializeComponent();
             InitializeCustomComponents();
+            InitializePassedRule();
+        }
+
+        private void InitializePassedRule()
+        {
+            if (passedRule != null)
+            {
+                ruleName.Text = passedRule.Name;
+                foreach (AssetKind assetKind in passedRule.Banned)
+                {
+                    FormUtility.GetBindingSource(dataGridView).Add(assetKind);
+                }
+            }
         }
 
         public void OnSubmit(List<string> passedValue = null, string reference = null)
@@ -69,6 +86,13 @@ namespace Watchdog.Forms.FundAdministration
 
         public Rule InvokeSubmission(RuleKind ruleKind)
         {
+            if (passedRule != null)
+            {
+                passedRule.Name = ruleName.Text;
+                BindingList<AssetKind> changedBanList = (BindingList<AssetKind>) FormUtility.GetBindingSource(dataGridView).List;
+                passedRule.Banned = changedBanList.ToList();
+                return passedRule;
+            }
             BanList<AssetKind> newBanList = new BanList<AssetKind>(RuleKind.RESTRICTED_INSTRUMENT_TYPE, ruleName.Text);
             foreach (DataGridViewRow row in dataGridView.Rows)
             {
