@@ -78,7 +78,7 @@ namespace Watchdog.Forms.FundAdministration
                     break;
 
                 case RuleKind.RULE_EXCEPTION:
-                    panelUserControl.Controls.Add(new UserControlAllowListAssets());
+                    panelUserControl.Controls.Add(new UserControlAllowListAssets(rule as AllowList));
                     break;
 
                 case RuleKind.MAX_RATING_RATIO:

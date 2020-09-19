@@ -3,6 +3,9 @@
  * Version: 15.09.2020
  */
 
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Windows.Forms;
 using Watchdog.Entities;
 using Watchdog.Forms.Util;
@@ -18,16 +21,31 @@ namespace Watchdog.Forms.FundAdministration
         private DataGridView dataGridView;
         private Button addNewAsset;
         private TextBox ruleName;
+        private AllowList passedRule;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public UserControlAllowListAssets()
+        public UserControlAllowListAssets(AllowList passedRule = null)
         {
+            this.passedRule = passedRule;
             InitializeComponent();
             InitializeCustomComponents();
             TableUtility tableUtility = new TableUtility();
             tableUtility.CreateTable(Asset.GetDefaultValue());
+            InitializePassedRule();
+        }
+
+        private void InitializePassedRule()
+        {
+            if (passedRule != null)
+            {
+                ruleName.Text = passedRule.Name;
+                foreach (Asset asset in passedRule.Allowed)
+                {
+                    FormUtility.GetBindingSource(dataGridView).Add(asset);
+                }
+            }
         }
 
         /// <summary>
@@ -83,6 +101,13 @@ namespace Watchdog.Forms.FundAdministration
         /// <returns>Newly created rule, in that case an <see cref="AllowList"/></returns>
         public Rule InvokeSubmission(RuleKind ruleKind)
         {
+            if (passedRule != null)
+            {
+                passedRule.Name = ruleName.Text;
+                BindingList<Asset> changedAllowList = (BindingList<Asset>) FormUtility.GetBindingSource(dataGridView).List;
+                passedRule.Allowed = changedAllowList.ToList();
+                return passedRule;
+            }
             AllowList newAllowList = new AllowList(RuleKind.RULE_EXCEPTION, ruleName.Text);
             foreach (DataGridViewRow row in dataGridView.Rows)
             {
