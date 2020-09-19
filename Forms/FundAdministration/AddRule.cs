@@ -82,7 +82,7 @@ namespace Watchdog.Forms.FundAdministration
                     break;
 
                 case RuleKind.MAX_RATING_RATIO:
-                    panelUserControl.Controls.Add(new UserControlRatingQuote());
+                    panelUserControl.Controls.Add(new UserControlRatingQuote(rule as RatingQuoteRule));
                     break;
 
                 case RuleKind.AA_MAX_DIFF_RANGES:

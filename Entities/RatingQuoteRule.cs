@@ -3,7 +3,7 @@
 namespace Watchdog.Entities
 {
     [JoinedTable("wdt_rating_quote_rules")]
-    class RatingQuoteRule : Rule
+    public class RatingQuoteRule : Rule
     {
         [PersistableField(3)]
         public double RatingClass { get; set; }
