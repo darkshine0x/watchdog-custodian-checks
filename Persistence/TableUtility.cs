@@ -539,10 +539,11 @@ namespace Watchdog.Persistence
             }
 
             Range firstColumn = worksheet.UsedRange.Columns[1];
-            int left = 2, right = firstColumn.Cells.Count, mid = left + (right - left) / 2;
+            int left = 2, right = firstColumn.Cells.Count, mid;
             double target = persistable.GetIndex();
             while (left <= right)
             {
+                mid = left + (right - left) / 2;
                 double cellValue = worksheet.Cells[mid, 1].Value;
                 if (target == cellValue)
                 {
