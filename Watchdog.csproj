@@ -164,6 +164,8 @@
     <Compile Include="Entities\AssetKind.cs" />
     <Compile Include="Entities\BanList.cs" />
     <Compile Include="Entities\Country.cs" />
+    <Compile Include="Entities\FieldMapping.cs" />
+    <Compile Include="Entities\FieldMappingType.cs" />
     <Compile Include="Entities\NumericRule.cs" />
     <Compile Include="Entities\RatingQuoteRule.cs" />
     <Compile Include="Entities\RuleKind.cs" />
@@ -233,6 +235,18 @@
     </Compile>
     <Compile Include="Forms\FundAdministration\UserControlBanListAssetKinds.Designer.cs">
       <DependentUpon>UserControlBanListAssetKinds.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Settings\AddDurationRecord.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Settings\AddDurationRecord.Designer.cs">
+      <DependentUpon>AddDurationRecord.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Settings\DurationSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Settings\DurationSettings.Designer.cs">
+      <DependentUpon>DurationSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Util\DropDownItem.cs" />
     <Compile Include="Forms\Util\FormUtility.cs" />
@@ -327,6 +341,12 @@
     <EmbeddedResource Include="Forms\FundAdministration\UserControlBanListAssetKinds.resx">
       <DependentUpon>UserControlBanListAssetKinds.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Settings\AddDurationRecord.resx">
+      <DependentUpon>AddDurationRecord.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Settings\DurationSettings.resx">
+      <DependentUpon>DurationSettings.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Util\OneAttributeForm.resx">
       <DependentUpon>OneAttributeForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -370,6 +390,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Reporting\Duration\DurationRecord.cs" />
     <Compile Include="WatchdogAddIn.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -394,6 +415,7 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

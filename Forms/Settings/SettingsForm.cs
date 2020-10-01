@@ -28,6 +28,10 @@ namespace Watchdog.Forms.Settings
                 case "Ratings":
                     panel1.Controls.Add(new Ratings());
                     break;
+
+                case "DurationControl":
+                    panel1.Controls.Add(new DurationSettings());
+                    break;
             }
         }
 
