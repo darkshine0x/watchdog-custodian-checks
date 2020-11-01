@@ -1,6 +1,10 @@
 ﻿using Microsoft.Office.Tools.Ribbon;
+using System.Data;
+using System.Windows.Forms;
+using Watchdog.Entities;
 using Watchdog.Forms.FundAdministration;
 using Watchdog.Forms.Settings;
+using Watchdog.Reporting.Util;
 
 namespace Watchdog.Forms
 {
