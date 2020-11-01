@@ -798,7 +798,7 @@ namespace Watchdog.Persistence
         /// </summary>
         /// <param name="persistable"><see cref="Persistable"/> default object</param>
         /// <returns>New <see cref="Worksheet"/></returns>
-        public Worksheet CreateTableWorksheet(Persistable persistable)
+        private Worksheet CreateTableWorksheet(Persistable persistable)
         {
             Worksheet newWorksheet = workbook.Sheets.Add();
             string joinedTable = IsJoinedTable(persistable);
