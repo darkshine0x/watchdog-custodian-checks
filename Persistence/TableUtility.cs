@@ -837,5 +837,23 @@ namespace Watchdog.Persistence
         {
             return list.OrderBy(property => property.GetCustomAttribute<PersistableField>(true).Order).ToList();
         }
+
+        /// <summary>
+        /// Creates an empty worksheet. If there is already a worksheet with specified name, the existing 
+        /// one will be returned.
+        /// </summary>
+        /// <param name="name">Worksheet name</param>
+        /// <returns>New empty worksheet if no duplicate exists</returns>
+        public Worksheet CreateEmptyWorksheet(string name)
+        {
+            Worksheet ws = FindWorksheet(name);
+            if (ws == null)
+            {
+                ws = workbook.Sheets.Add();
+                ws.Name = name;
+            }
+            return ws;
+
+        }
     }
 }
