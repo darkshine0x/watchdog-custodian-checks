@@ -42,8 +42,5 @@
         }
 
         #endregion
-        private System.Windows.Forms.TextBox durPosValue;
-        private System.Windows.Forms.TextBox durCurrency;
-        private System.Windows.Forms.TextBox durTargetDur;
     }
 }

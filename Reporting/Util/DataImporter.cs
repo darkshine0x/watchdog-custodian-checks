@@ -1,8 +1,5 @@
 ﻿using Microsoft.Office.Interop.Excel;
-using System.Collections.Generic;
 using System.Data;
-using System.Data.OleDb;
-using Watchdog.Entities;
 using Watchdog.Persistence;
 using DataTable = System.Data.DataTable;
 
@@ -12,24 +9,10 @@ namespace Watchdog.Reporting.Util
     {
         private readonly string inputTable;
         private DataSet data;
-        private List<FieldMapping> fieldMappings;
 
         public DataImporter(string inputTable = "INPUT")
         {
             this.inputTable = inputTable;
-        }
-
-        public void LoadFieldMappings(params FieldMappingType[] fm)
-        {
-            TableUtility tableUtility = new TableUtility();
-            List<FieldMapping> list = new List<FieldMapping>();
-            foreach (FieldMappingType fmt in fm)
-            {
-                Dictionary<string, string> query = new Dictionary<string, string>();
-                query.Add("FieldMappingType", System.Convert.ToInt32(fmt).ToString());
-                list.AddRange(tableUtility.ConvertRangesToObjects<FieldMapping>(tableUtility.ReadTableRow(FieldMapping.GetDefaultValue(), query, QueryOperator.OR)));
-            }
-            fieldMappings = list;
         }
 
         public void LoadTable()
