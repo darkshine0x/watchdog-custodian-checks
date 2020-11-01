@@ -102,6 +102,7 @@
   <ItemGroup>
     <Reference Include="Accessibility" />
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -248,7 +249,14 @@
     <Compile Include="Forms\Settings\DurationSettings.Designer.cs">
       <DependentUpon>DurationSettings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Settings\GeneralFieldSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Settings\GeneralFieldSettings.Designer.cs">
+      <DependentUpon>GeneralFieldSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Util\DropDownItem.cs" />
+    <Compile Include="Forms\Util\FieldMappingLoader.cs" />
     <Compile Include="Forms\Util\FormUtility.cs" />
     <Compile Include="Forms\Util\IPassedObject.cs" />
     <Compile Include="Forms\Util\IRuleUserControl.cs" />
@@ -347,6 +355,9 @@
     <EmbeddedResource Include="Forms\Settings\DurationSettings.resx">
       <DependentUpon>DurationSettings.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Settings\GeneralFieldSettings.resx">
+      <DependentUpon>GeneralFieldSettings.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Util\OneAttributeForm.resx">
       <DependentUpon>OneAttributeForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -391,6 +402,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Reporting\Duration\DurationRecord.cs" />
+    <Compile Include="Reporting\Util\DataImporter.cs" />
     <Compile Include="WatchdogAddIn.cs">
       <SubType>Code</SubType>
     </Compile>
