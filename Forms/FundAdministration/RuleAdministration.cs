@@ -117,6 +117,7 @@ namespace Watchdog.Forms.FundAdministration
                 {
                     checkBox.Checked = true;
                 }
+                tableLayoutPanel.Controls.Add(checkBox);
             }
 
             FormUtility.BindObjectToControl(ruleLabel, rule);
